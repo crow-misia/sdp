@@ -37,7 +37,7 @@ data class SdpTimeZones internal constructor(
                 }
                 SdpTimeZone.of(time, offset)
             }
-            return of(timeZones)
+            return SdpTimeZones(timeZones.toMutableList())
         }
     }
 }

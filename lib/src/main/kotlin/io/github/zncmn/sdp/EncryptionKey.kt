@@ -32,7 +32,7 @@ data class EncryptionKey internal constructor(
             if (size <= 0 || size > 2) {
                 throw SdpParseException("could not parse: $line as EncryptionKey")
             }
-            return of(values[0], if (size == 1) null else values[1])
+            return EncryptionKey(values[0], if (size == 1) null else values[1])
         }
     }
 }

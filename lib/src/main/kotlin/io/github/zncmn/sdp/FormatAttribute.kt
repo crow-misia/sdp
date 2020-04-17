@@ -4,11 +4,15 @@ package io.github.zncmn.sdp
 
 data class FormatAttribute internal constructor(
     var format: Int,
-    val parameters: MutableMap<String, String?>
+    internal var _parameters: MutableMap<String, String?>
 ) : SdpAttribute {
-    override val field = "fmtp"
+    override val field = FIELD_NAME
     override val value: String?
         get() = buildString { valueJoinTo(this) }
+
+    var parameters: Map<String, String?>
+        get() = _parameters
+        set(value) { _parameters = LinkedHashMap(value) }
 
     fun setParameter(parameters: String?) {
         if (parameters.isNullOrBlank()) {
@@ -18,21 +22,21 @@ data class FormatAttribute internal constructor(
             val values = parameter.split('=')
             val size = values.size
             check(size <= 2)
-            this.parameters[values[0].trim()] = if (size > 1) values[1] else null
+            _parameters[values[0].trim()] = if (size > 1) values[1] else null
         }
     }
 
     @JvmOverloads
     fun addParameter(key: String, value: String? = null) {
-        parameters[key.trim()] = value
+        _parameters[key.trim()] = value
     }
 
     fun addParameter(key: String, value: Int?) {
-        parameters[key.trim()] = value.toString()
+        _parameters[key.trim()] = value.toString()
     }
 
     fun removeParameter(key: String) {
-        parameters.remove(key.trim())
+        _parameters.remove(key.trim())
    }
 
     override fun toString(): String {
@@ -52,7 +56,7 @@ data class FormatAttribute internal constructor(
    private fun valueJoinTo(buffer: StringBuilder) {
         buffer.apply {
             append(format)
-            parameters.entries.forEachIndexed { index, entry ->
+            _parameters.entries.forEachIndexed { index, entry ->
                 if (index == 0) {
                     append(' ')
                 } else {
@@ -68,6 +72,8 @@ data class FormatAttribute internal constructor(
     }
 
     companion object {
+        internal const val FIELD_NAME = "fmtp"
+
         @JvmStatic @JvmOverloads
         fun of(format: Int, parameters: String? = null): FormatAttribute {
             return FormatAttribute(format, linkedMapOf()).also {

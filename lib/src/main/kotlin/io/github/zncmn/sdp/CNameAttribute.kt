@@ -3,7 +3,7 @@ package io.github.zncmn.sdp
 data class CNameAttribute internal constructor(
     var cname: String?
 ) : SdpAttribute {
-    override val field = "cname"
+    override val field = FIELD_NAME
     override val value: String?
         get() = cname
 
@@ -24,6 +24,8 @@ data class CNameAttribute internal constructor(
     }
 
     companion object {
+        internal const val FIELD_NAME = "cname"
+
         @JvmStatic
         fun of(value: String? = null): CNameAttribute {
             return CNameAttribute(value)

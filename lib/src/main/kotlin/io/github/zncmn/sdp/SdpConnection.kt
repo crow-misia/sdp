@@ -47,7 +47,7 @@ data class SdpConnection internal constructor(
             if (values.size != 3) {
                 throw SdpParseException("could not parse: $line as Connection")
             }
-            return of(values[0], values[1], values[2])
+            return SdpConnection(values[0], values[1], values[2], null, 1)
         }
     }
 }

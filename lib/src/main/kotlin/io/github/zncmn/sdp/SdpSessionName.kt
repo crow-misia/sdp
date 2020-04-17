@@ -22,7 +22,7 @@ data class SdpSessionName internal constructor(
         }
 
         internal fun parse(line: String): SdpSessionName {
-            return of(line.substring(2))
+            return SdpSessionName(line.substring(2))
         }
     }
 }

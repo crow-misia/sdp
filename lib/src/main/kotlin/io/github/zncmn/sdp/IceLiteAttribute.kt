@@ -1,7 +1,7 @@
 package io.github.zncmn.sdp
 
 class IceLiteAttribute private constructor(): SdpAttribute {
-    override val field = "ice-lite"
+    override val field = FIELD_NAME
     override val value: String? = null
 
     override fun toString(): String {
@@ -17,6 +17,8 @@ class IceLiteAttribute private constructor(): SdpAttribute {
     }
 
     companion object {
+        internal const val FIELD_NAME = "ice-lite"
+
         private val INSTANCE = IceLiteAttribute()
 
         @JvmStatic

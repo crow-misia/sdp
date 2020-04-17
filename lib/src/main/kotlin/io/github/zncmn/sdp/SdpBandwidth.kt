@@ -32,7 +32,7 @@ data class SdpBandwidth internal constructor(
             val bw = values[1].toIntOrNull() ?: run {
                 throw SdpParseException("could not parse: $line as Bandwidth")
             }
-            return of(values[0], bw)
+            return SdpBandwidth(values[0], bw)
         }
     }
 }

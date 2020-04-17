@@ -54,7 +54,7 @@ data class SdpOrigin internal constructor(
                 throw SdpParseException("could not parse: $line as Origin")
             }
 
-            return of(values[0], id, version, values[3], values[4], values[5])
+            return SdpOrigin(values[0], id, version, values[3], values[4], values[5])
         }
     }
 }

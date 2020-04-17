@@ -3,36 +3,65 @@
 package io.github.zncmn.sdp
 
 data class SdpMediaDescription internal constructor(
-    var media: String,
+    var type: String,
     var port: Int,
     var numberOfPorts: Int?,
-    val protos: MutableList<String>,
-    val formats: MutableList<String>,
     var information: SdpSessionInformation?,
-    val connections: MutableList<SdpConnection>,
-    val bandwidths: MutableList<SdpBandwidth>,
     var key: EncryptionKey?,
-    val attributes: MutableList<SdpAttribute>
+    internal var _protos: MutableList<String>,
+    internal var _formats: MutableList<String>,
+    internal var _connections: MutableList<SdpConnection>,
+    internal var _bandwidths: MutableList<SdpBandwidth>,
+    internal var _attributes: MutableList<SdpAttribute>
 ) : SdpElement {
+    var protos: List<String>
+        get() = _protos
+        set(value) { _protos = ArrayList(value) }
+
+    var formats: List<String>
+        get() = _formats
+        set(value) { _formats = ArrayList(value) }
+
+    var connections: List<SdpConnection>
+        get() = _connections
+        set(value) { _connections = ArrayList(value) }
+
+    var bandwidths: List<SdpBandwidth>
+        get() = _bandwidths
+        set(value) { _bandwidths = ArrayList(value) }
+
+    var attributes: List<SdpAttribute>
+        get() = _attributes
+        set(value) { _attributes = ArrayList(value) }
+
     fun setProto(proto: String) {
-        protos.addAll(proto.splitToSequence('/'))
+        _protos.addAll(proto.splitToSequence('/'))
     }
 
     fun addFormat(format: String) {
-        formats.add(format)
+        _formats.add(format)
     }
 
     fun addConnection(connection: SdpConnection) {
-        connections.add(connection)
+        _connections.add(connection)
     }
 
     fun addBandwidth(bandwidth: SdpBandwidth) {
-        bandwidths.add(bandwidth)
+        _bandwidths.add(bandwidth)
     }
 
     @JvmOverloads
     fun addRTPMapAttribute(payloadType: Int, encodingName: String, clockRate: Int, encodingParameters: String? = null) {
-        attributes.add(RTPMapAttribute.of(payloadType, encodingName, clockRate, encodingParameters))
+        _attributes.add(RTPMapAttribute.of(payloadType, encodingName, clockRate, encodingParameters))
+    }
+
+    fun getAttribute(name: String): SdpAttribute? {
+        val lowerName = name.toLowerCase()
+        return _attributes.find { lowerName == it.field }
+    }
+
+    fun <R : SdpAttribute> getAttributes(clazz: Class<R>): List<R> {
+        return _attributes.filterIsInstance(clazz)
     }
 
     @JvmOverloads
@@ -45,11 +74,11 @@ data class SdpMediaDescription internal constructor(
     }
 
     fun addAttribute(attribute: SdpAttribute) {
-        attributes.add(attribute)
+        _attributes.add(attribute)
     }
 
     fun hasAttribute(name: String): Boolean {
-        return attributes.find { name.equals(it.field, ignoreCase = true) } != null
+        return getAttribute(name) != null
     }
 
     @JvmOverloads
@@ -62,16 +91,18 @@ data class SdpMediaDescription internal constructor(
     }
 
     fun setAttribute(attribute: SdpAttribute) {
-        val index = attributes.indexOfFirst { attribute.field.equals(it.field, ignoreCase = true) }
+        val lowerName = attribute.field.toLowerCase()
+        val index = _attributes.indexOfFirst { lowerName == it.field }
         if (index < 0) {
             addAttribute(attribute)
         } else {
-            attributes[index] = attribute
+            _attributes[index] = attribute
         }
     }
 
     fun removeAttribute(name: String): Boolean {
-        return attributes.removeIf { name.equals(it.field, ignoreCase = true) }
+        val lowerName = name.toLowerCase()
+        return _attributes.removeIf { lowerName == it.field }
     }
 
     override fun toString(): String {
@@ -81,28 +112,28 @@ data class SdpMediaDescription internal constructor(
     override fun joinTo(buffer: StringBuilder) {
         buffer.apply {
             append("m=")
-            append(media)
+            append(type)
             append(' ')
             append(port)
             numberOfPorts?.also { append('/').append(it) }
             append(' ')
-            protos.joinTo(this, "/")
+            _protos.joinTo(this, "/")
             append(' ')
-            formats.joinTo(this, " ")
+            _formats.joinTo(this, " ")
             append("\r\n")
 
             // lines of media
             information?.also { it.joinTo(this) }
-            connections.forEach { it.joinTo(this) }
-            bandwidths.forEach { it.joinTo(this) }
+            _connections.forEach { it.joinTo(this) }
+            _bandwidths.forEach { it.joinTo(this) }
             key?.also { it.joinTo(this) }
-            attributes.forEach { it.joinTo(this) }
+            _attributes.forEach { it.joinTo(this) }
         }
     }
 
     companion object {
         @JvmStatic @JvmOverloads
-        fun of(media: String,
+        fun of(type: String,
                port: Int,
                numberOfPorts: Int? = null,
                protos: List<String> = emptyList(),
@@ -114,10 +145,16 @@ data class SdpMediaDescription internal constructor(
                attributes: List<SdpAttribute> = emptyList()
         ): SdpMediaDescription {
             return SdpMediaDescription(
-                media, port, numberOfPorts,
-                ArrayList(protos), ArrayList(formats), information,
-                ArrayList(connections), ArrayList(bandwidths), key,
-                ArrayList(attributes))
+                type = type,
+                port = port,
+                numberOfPorts = numberOfPorts,
+                information = information,
+                key = key,
+                _protos = ArrayList(protos),
+                _formats = ArrayList(formats),
+                _connections = ArrayList(connections),
+                _bandwidths = ArrayList(bandwidths),
+                _attributes = ArrayList(attributes))
         }
 
         internal fun parse(line: String): SdpMediaDescription {
@@ -135,9 +172,17 @@ data class SdpMediaDescription internal constructor(
             } else {
                 tmpPort[0] to null
             }
-            val description = of(values[0], port, numberOfPorts, formats = values[3].split(' '))
-            description.setProto(values[2])
-            return description
+            return SdpMediaDescription(
+                type = values[0],
+                port = port,
+                numberOfPorts = numberOfPorts,
+                information = null,
+                key = null,
+                _protos = values[2].splitToSequence('/').toMutableList(),
+                _formats = values[3].splitToSequence(' ').toMutableList(),
+                _connections = arrayListOf(),
+                _bandwidths = arrayListOf(),
+                _attributes = arrayListOf())
         }
     }
 }

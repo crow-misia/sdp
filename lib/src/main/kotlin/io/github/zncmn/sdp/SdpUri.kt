@@ -22,7 +22,7 @@ data class SdpUri internal constructor(
         }
 
         internal fun parse(line: String): SdpUri {
-            return of(line.substring(2))
+            return SdpUri(line.substring(2))
         }
     }
 }

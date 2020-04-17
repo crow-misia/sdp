@@ -6,7 +6,7 @@ data class RTPMapAttribute internal constructor(
     var clockRate: Int,
     var encodingParameters: String?
 ) : SdpAttribute {
-    override val field = "rtpmap"
+    override val field = FIELD_NAME
     override val value: String
         get() = buildString { valueJoinTo(this) }
 
@@ -39,6 +39,8 @@ data class RTPMapAttribute internal constructor(
     }
 
     companion object {
+        internal const val FIELD_NAME = "rtpmap"
+
         @JvmStatic @JvmOverloads
         fun of(payloadType: Int,
                encodingName: String,
@@ -69,7 +71,7 @@ data class RTPMapAttribute internal constructor(
             val clockRate = parameters[1].toIntOrNull() ?: run {
                 throw SdpParseException("could not parse: $value as RTPMapAttribute")
             }
-            return of(payloadType, parameters[0], clockRate, if (paramsSize > 2) parameters[2] else null)
+            return RTPMapAttribute(payloadType, parameters[0], clockRate, if (paramsSize > 2) parameters[2] else null)
         }
     }
 }

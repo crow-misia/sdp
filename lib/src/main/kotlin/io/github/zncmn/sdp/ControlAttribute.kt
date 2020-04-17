@@ -3,7 +3,7 @@ package io.github.zncmn.sdp
 data class ControlAttribute internal constructor(
     var streamId: Int
 ) : SdpAttribute {
-    override val field = "control"
+    override val field = FIELD_NAME
     override val value: String?
         get() = buildString { valueJoinTo(this) }
 
@@ -26,6 +26,8 @@ data class ControlAttribute internal constructor(
     }
 
     companion object {
+        internal const val FIELD_NAME = "control"
+
         @JvmStatic
         fun of(streamId: Int = 0): ControlAttribute {
             return ControlAttribute(streamId)
@@ -38,7 +40,7 @@ data class ControlAttribute internal constructor(
             val streamId = value.toIntOrNull() ?: run {
                 throw SdpParseException("could not parse: $value as ControlAttribute")
             }
-            return of(streamId)
+            return ControlAttribute(streamId)
         }
     }
 }

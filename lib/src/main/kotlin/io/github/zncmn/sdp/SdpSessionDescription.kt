@@ -7,17 +7,53 @@ data class SdpSessionDescription internal constructor(
     var origin: SdpOrigin,
     var sessionName: SdpSessionName,
     var information: SdpSessionInformation?,
-    val uris: MutableList<SdpUri>,
-    val emails: MutableList<SdpEmail>,
-    val phones: MutableList<SdpPhone>,
     var connection: SdpConnection?,
-    val bandwidths: MutableList<SdpBandwidth>,
-    val timings: MutableList<SdpTiming>,
     var timeZones: SdpTimeZones?,
     var key: EncryptionKey?,
-    val attributes: MutableList<SdpAttribute>,
-    val mediaDescriptions: MutableList<SdpMediaDescription>
+    private var _uris: MutableList<SdpUri>,
+    private var _emails: MutableList<SdpEmail>,
+    private var _phones: MutableList<SdpPhone>,
+    private var _bandwidths: MutableList<SdpBandwidth>,
+    private var _timings: MutableList<SdpTiming>,
+    private var _attributes: MutableList<SdpAttribute>,
+    private var _mediaDescriptions: MutableList<SdpMediaDescription>
 ) : SdpElement {
+    var urls: List<SdpUri>
+        get() = _uris
+        set(value) { _uris = ArrayList(value) }
+
+    var emails: List<SdpEmail>
+        get() = _emails
+        set(value) { _emails = ArrayList(value) }
+
+    var phones: List<SdpPhone>
+        get() = _phones
+        set(value) { _phones = ArrayList(value) }
+
+    var bandwidths: List<SdpBandwidth>
+        get() = _bandwidths
+        set(value) { _bandwidths = ArrayList(value) }
+
+    var timing: List<SdpTiming>
+        get() = _timings
+        set(value) { _timings = ArrayList(value) }
+
+    var attributes: List<SdpAttribute>
+        get() = _attributes
+        set(value) { _attributes = ArrayList(value) }
+
+    var mediaDescriptions: List<SdpMediaDescription>
+        get() = _mediaDescriptions
+        set(value) { _mediaDescriptions = ArrayList(value) }
+
+    fun getAttribute(name: String): SdpAttribute? {
+        return _attributes.find { name.equals(it.field, ignoreCase = true) }
+    }
+
+    fun <R : SdpAttribute> getAttributes(clazz: Class<R>): List<R> {
+        return _attributes.filterIsInstance(clazz)
+    }
+
     @JvmOverloads
     fun addAttribute(name: String, value: String? = null) {
         addAttribute(BaseSdpAttribute.of(name, value))
@@ -28,11 +64,11 @@ data class SdpSessionDescription internal constructor(
     }
 
     fun addAttribute(attribute: SdpAttribute) {
-        attributes.add(attribute)
+        _attributes.add(attribute)
     }
 
     fun hasAttribute(name: String): Boolean {
-        return attributes.find { name.equals(it.field, ignoreCase = true) } != null
+        return _attributes.find { name.equals(it.field, ignoreCase = true) } != null
     }
 
     @JvmOverloads
@@ -45,16 +81,16 @@ data class SdpSessionDescription internal constructor(
     }
 
     fun setAttribute(attribute: SdpAttribute) {
-        val index = attributes.indexOfFirst { attribute.field.equals(it.field, ignoreCase = true) }
+        val index = _attributes.indexOfFirst { attribute.field.equals(it.field, ignoreCase = true) }
         if (index < 0) {
             addAttribute(attribute)
         } else {
-            attributes[index] = attribute
+            _attributes[index] = attribute
         }
     }
 
     fun removeAttribute(name: String): Boolean {
-        return attributes.removeIf { name.equals(it.field, ignoreCase = true) }
+        return _attributes.removeIf { name.equals(it.field, ignoreCase = true) }
     }
 
     override fun toString(): String {
@@ -67,16 +103,16 @@ data class SdpSessionDescription internal constructor(
             origin.joinTo(this)
             sessionName.joinTo(this)
             information?.joinTo(this)
-            uris.forEach { it.joinTo(this) }
-            emails.forEach { it.joinTo(this) }
-            phones.forEach { it.joinTo(this) }
+            _uris.forEach { it.joinTo(this) }
+            _emails.forEach { it.joinTo(this) }
+            _phones.forEach { it.joinTo(this) }
             connection?.joinTo(this)
-            bandwidths.forEach { it.joinTo(this) }
-            timings.forEach { it.joinTo(this) }
+            _bandwidths.forEach { it.joinTo(this) }
+            _timings.forEach { it.joinTo(this) }
             timeZones?.joinTo(this)
             key?.joinTo(this)
-            attributes.forEach { it.joinTo(this) }
-            mediaDescriptions.forEach { it.joinTo(this) }
+            _attributes.forEach { it.joinTo(this) }
+            _mediaDescriptions.forEach { it.joinTo(this) }
         }
     }
 
@@ -98,10 +134,20 @@ data class SdpSessionDescription internal constructor(
                mediaDescriptions: List<SdpMediaDescription> = emptyList()
         ): SdpSessionDescription {
             return SdpSessionDescription(
-                version, origin, sessionName, information,
-                ArrayList(uris), ArrayList(emails), ArrayList(phones),
-                connection, ArrayList(bandwidths), ArrayList(timings),
-                timeZones, key, ArrayList(attributes), ArrayList(mediaDescriptions)
+                version = version,
+                origin = origin,
+                sessionName = sessionName,
+                information = information,
+                connection = connection,
+                timeZones = timeZones,
+                key = key,
+                _uris = ArrayList(uris),
+                _emails = ArrayList(emails),
+                _phones = ArrayList(phones),
+                _bandwidths = ArrayList(bandwidths),
+                _timings = ArrayList(timings),
+                _attributes = ArrayList(attributes),
+                _mediaDescriptions = ArrayList(mediaDescriptions)
             )
         }
 
@@ -145,13 +191,13 @@ data class SdpSessionDescription internal constructor(
                         "p=" -> phones.add(SdpPhone.parse(line))
                         "c=" -> {
                             SdpConnection.parse(line).also { v ->
-                                lastMediaDescription?.connections?.add(v) ?: run {
+                                lastMediaDescription?._connections?.add(v) ?: run {
                                     connection = v
                                 }
                             }
                         }
                         "b=" -> {
-                            val list = lastMediaDescription?.bandwidths ?: bandwidths
+                            val list = lastMediaDescription?._bandwidths ?: bandwidths
                             list.add(SdpBandwidth.parse(line))
                         }
                         "t=" -> {
@@ -170,7 +216,7 @@ data class SdpSessionDescription internal constructor(
                             }
                         }
                         "a=" -> {
-                            val list = lastMediaDescription?.attributes ?: attributes
+                            val list = lastMediaDescription?._attributes ?: attributes
                             list.add(BaseSdpAttribute.parse(line))
                         }
                         "m=" -> {
@@ -185,21 +231,21 @@ data class SdpSessionDescription internal constructor(
                     }
                 }
 
-            return of(
+            return SdpSessionDescription(
                 version = checkNotNull(version),
                 origin = checkNotNull(origin),
                 sessionName = checkNotNull(sessionName),
                 information = information,
-                uris = uris,
-                emails = emails,
-                phones = phones,
                 connection = connection,
-                bandwidths = bandwidths,
-                timings = timings,
                 timeZones = timeZones,
                 key = key,
-                attributes = attributes,
-                mediaDescriptions = mediaDescriptions
+                _uris = uris,
+                _emails = emails,
+                _phones = phones,
+                _bandwidths = bandwidths,
+                _timings = timings,
+                _attributes = attributes,
+                _mediaDescriptions = mediaDescriptions
             )
         }
     }

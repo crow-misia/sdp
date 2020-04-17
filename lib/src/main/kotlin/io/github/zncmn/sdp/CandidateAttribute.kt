@@ -10,13 +10,15 @@ data class CandidateAttribute internal constructor(
     var address: String,
     var port: Int,
     var type: String,
-    var relAddr: String?,
-    var relPort: String?,
-    val extensions: MutableList<Extension>
+    internal var _extensions: MutableList<Extension>
 ) : SdpAttribute {
-    override val field = "candidate"
+    override val field = FIELD_NAME
     override val value: String?
         get() = buildString { valueJoinTo(this) }
+
+    var extensions: List<Extension>
+        get() = _extensions
+        set(value) { _extensions = ArrayList(value) }
 
     fun addExtension(name: String, value: Int) {
         addExtension(Extension(name, value.toString()))
@@ -27,11 +29,11 @@ data class CandidateAttribute internal constructor(
     }
 
     fun addExtension(extension: Extension) {
-        extensions.add(extension)
+        _extensions.add(extension)
     }
 
     fun hasExtension(name: String): Boolean {
-        return extensions.find { name.equals(it.name, ignoreCase = true) } != null
+        return _extensions.find { name.equals(it.name, ignoreCase = true) } != null
     }
 
     fun setExtension(name: String, value: String) {
@@ -39,16 +41,16 @@ data class CandidateAttribute internal constructor(
     }
 
     fun setExtension(extension: Extension) {
-        val index =  extensions.indexOfFirst { extension.name.equals(it.name, ignoreCase = true) }
+        val index =  _extensions.indexOfFirst { extension.name.equals(it.name, ignoreCase = true) }
         if (index < 0) {
             addExtension(extension)
         } else {
-            extensions[index] = extension
+            _extensions[index] = extension
         }
     }
 
     fun removeExtension(name: String): Boolean {
-        return extensions.removeIf { name.equals(it.name, ignoreCase = true) }
+        return _extensions.removeIf { name.equals(it.name, ignoreCase = true) }
     }
 
     override fun toString(): String {
@@ -80,15 +82,7 @@ data class CandidateAttribute internal constructor(
             append(port)
             append(" typ ")
             append(type)
-            relAddr?.also {
-                append(" raddr ")
-                append(it)
-            }
-            relPort?.also {
-                append(" rport ")
-                append(it)
-            }
-            extensions.forEach {
+            _extensions.forEach {
                 append(' ')
                 append(it.name)
                 append(' ')
@@ -98,22 +92,21 @@ data class CandidateAttribute internal constructor(
     }
 
     companion object {
+        internal const val FIELD_NAME = "candidate"
+
         @JvmStatic @JvmOverloads
         fun of(foundation: String,
-               componentId: Int,
+               component: Int,
                transport: String,
                priority: Int,
-               address: String,
+               ip: String,
                port: Int,
                type: String,
-               relAddr: String? = null,
-               relPort: String? = null,
                extensions: List<Extension> = emptyList()
         ): CandidateAttribute {
             return CandidateAttribute(
-                foundation, componentId, transport, priority,
-                address, port, type, relAddr, relPort,
-                ArrayList(extensions))
+                foundation, component, transport, priority,
+                ip, port, type, ArrayList(extensions))
         }
 
         internal fun parse(value: String?): CandidateAttribute {
@@ -122,7 +115,7 @@ data class CandidateAttribute internal constructor(
             }
             val values = value.split(' ')
             val size = values.size
-            if (size < 8) {
+            if (size < 6) {
                 throw SdpParseException("could not parse: $value as CandidateAttribute")
             }
             val componentId = values[1].toIntOrNull()
@@ -133,26 +126,29 @@ data class CandidateAttribute internal constructor(
             }
 
             var type: String? = null
-            var relAddr: String? = null
-            var relPort: String? = null
             val extensions = arrayListOf<Extension>()
             (6 until size step 2).map { index ->
                 val n = values[index]
                 val v = values[index + 1]
                 when (n) {
                     "typ" -> type = v
-                    "raddr" -> relAddr = v
-                    "rport" -> relPort = v
                     else -> extensions.add(Extension(n, v))
                 }
             }
 
-            return of(values[0], componentId, values[2], priority, values[4], port,
+            return CandidateAttribute(values[0], componentId, values[2], priority, values[4], port,
                 type ?: run {
                     throw SdpParseException("could not parse: $value as CandidateAttribute")
-                }, relAddr, relPort, extensions)
+                }, extensions)
         }
     }
 
-    data class Extension(val name: String, val value: String)
+    data class Extension internal constructor(val name: String, val value: String) {
+        companion object {
+            @JvmStatic
+            fun of(name: String, value: String): Extension {
+                return Extension(name.toLowerCase(), value)
+            }
+        }
+    }
 }

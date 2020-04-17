@@ -22,8 +22,8 @@ data class SdpTiming internal constructor(
 
     companion object {
         @JvmStatic @JvmOverloads
-        fun of(startTime: Long,
-               stopTime: Long,
+        fun of(startTime: Long = 0,
+               stopTime: Long = 0,
                repeatTime: SdpRepeatTime? = null
         ): SdpTiming {
             return SdpTiming(startTime, stopTime, repeatTime)
@@ -39,7 +39,7 @@ data class SdpTiming internal constructor(
             if (startTime == null || stopTime == null) {
                 throw SdpParseException("could not parse: $line as Timing")
             }
-            return of(startTime, stopTime, null)
+            return SdpTiming(startTime, stopTime, null)
         }
     }
 }

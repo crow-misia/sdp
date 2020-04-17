@@ -23,12 +23,12 @@ data class BaseSdpAttribute internal constructor(
     companion object {
         @JvmStatic @JvmOverloads
         fun of(field: String, value: String? = null): BaseSdpAttribute {
-            return BaseSdpAttribute(field, value)
+            return BaseSdpAttribute(SdpAttribute.getFieldName(field), value)
         }
 
         @JvmStatic
         fun of(field: String, value: Int): BaseSdpAttribute {
-            return BaseSdpAttribute(field, value.toString())
+            return BaseSdpAttribute(SdpAttribute.getFieldName(field), value.toString())
         }
 
         @JvmStatic
@@ -40,15 +40,15 @@ data class BaseSdpAttribute internal constructor(
                 line.substring(2, colonIndex) to line.substring(colonIndex + 1)
             }
 
-            return when (field) {
-                "candidate" -> CandidateAttribute.parse(value)
-                "control" -> ControlAttribute.parse(value)
-                "cname" -> CNameAttribute.of(value)
-                "fmtp" -> FormatAttribute.parse(value)
-                "ice-lite" -> IceLiteAttribute.of()
-                "rtcp" -> RTCPAttribute.parse(value)
-                "rtpmap" -> RTPMapAttribute.parse(value)
-                else -> of(field, value)
+            return when (val lowerField = SdpAttribute.getFieldName(field)) {
+                CandidateAttribute.FIELD_NAME -> CandidateAttribute.parse(value)
+                ControlAttribute.FIELD_NAME -> ControlAttribute.parse(value)
+                CNameAttribute.FIELD_NAME -> CNameAttribute.of(value)
+                FormatAttribute.FIELD_NAME -> FormatAttribute.parse(value)
+                IceLiteAttribute.FIELD_NAME -> IceLiteAttribute.of()
+                RTCPAttribute.FIELD_NAME -> RTCPAttribute.parse(value)
+                RTPMapAttribute.FIELD_NAME -> RTPMapAttribute.parse(value)
+                else -> BaseSdpAttribute(lowerField, value)
             }
         }
     }

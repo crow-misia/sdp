@@ -22,7 +22,7 @@ data class SdpEmail internal constructor(
         }
 
         internal fun parse(line: String): SdpEmail {
-            return of(line.substring(2))
+            return SdpEmail(line.substring(2))
         }
     }
 }

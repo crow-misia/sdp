@@ -5,14 +5,18 @@ package io.github.zncmn.sdp
 data class SdpRepeatTime internal constructor(
     var repeatInterval: Int,
     var activeDuration: Int,
-    val offsets: MutableList<Int>
+    internal var _offsets: MutableList<Int>
 ) : SdpElement {
+    var offsets: List<Int>
+        get() = _offsets
+        set(value) { _offsets = ArrayList(value) }
+
     override fun toString(): String {
         return buildString { joinTo(this) }
     }
 
     override fun joinTo(buffer: StringBuilder) {
-        val offsets = offsets
+        val offsets = _offsets
 
         buffer.apply {
             append("r=")
@@ -48,7 +52,6 @@ data class SdpRepeatTime internal constructor(
                 throw SdpParseException("could not parse: $line as RepeatTime")
             }
             return of(values[0], values[1], values.subList(2, size))
-
         }
     }
 }
