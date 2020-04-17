@@ -22,15 +22,23 @@ internal object Utils {
         IceUfragAttribute.FIELD_NAME to { v -> IceUfragAttribute.parse(v) },
         IcePwdAttribute.FIELD_NAME to { v -> IcePwdAttribute.parse(v) },
         MaxPtimeAttribute.FIELD_NAME to { v -> MaxPtimeAttribute.parse(v) },
+        MediaclkAttribute.FIELD_NAME to { v -> MediaclkAttribute.parse(v) },
         MidAttribute.FIELD_NAME to { v -> MidAttribute.parse(v) },
         MsidAttribute.FIELD_NAME to { v -> MsidAttribute.parse(v) },
+        MsidSemanticAttribute.FIELD_NAME to { v -> MsidSemanticAttribute.parse(v) },
         PtimeAttribute.FIELD_NAME to { v -> PtimeAttribute.parse(v) },
+        RidAttribute.FIELD_NAME to { v -> RidAttribute.parse(v) },
         RTCPAttribute.FIELD_NAME to { v -> RTCPAttribute.parse(v) },
         RTCPFbAttribute.FIELD_NAME to { v -> RTCPFbAttribute.parse(v) },
         RTCPMuxAttribute.FIELD_NAME to { _ -> RTCPMuxAttribute },
         RTCPRsizeAttribute.FIELD_NAME to { _ -> RTCPRsizeAttribute },
         RTPMapAttribute.FIELD_NAME to { v -> RTPMapAttribute.parse(v) },
-        SetupAttribute.FIELD_NAME to { v -> SetupAttribute.parse(v) }
+        SctpMapAttribute.FIELD_NAME to { v -> SctpMapAttribute.parse(v) },
+        SetupAttribute.FIELD_NAME to { v -> SetupAttribute.parse(v) },
+        SsrcAttribute.FIELD_NAME to { v -> SsrcAttribute.parse(v) },
+        SsrcGroupAttribute.FIELD_NAME to { v -> SsrcGroupAttribute.parse(v) },
+        TsRefclkAttribute.FIELD_NAME to { v -> TsRefclkAttribute.parse(v) },
+        XgoogleFlagAttribute.FIELD_NAME to { v -> XgoogleFlagAttribute.parse(v) }
     )
 
     @JvmStatic

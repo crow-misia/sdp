@@ -7,5 +7,5 @@ object Versions {
     const val assertk = "0.22"
     const val junit5 = "5.6.2"
 
-    const val name = "0.1.3"
+    const val name = "0.1.4"
 }
