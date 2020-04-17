@@ -1,20 +1,14 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package io.github.zncmn.sdp
 
-import java.lang.StringBuilder
-
-class FormatAttribute @JvmOverloads constructor(
+data class FormatAttribute internal constructor(
     var format: Int,
-    parameters: String? = null
+    val parameters: MutableMap<String, String?>
 ) : SdpAttribute {
-    val parameters = mutableMapOf<String, String?>()
-
     override val field = "fmtp"
     override val value: String?
         get() = buildString { valueJoinTo(this) }
-
-    init {
-        setParameter(parameters)
-    }
 
     fun setParameter(parameters: String?) {
         if (parameters.isNullOrBlank()) {
@@ -36,6 +30,10 @@ class FormatAttribute @JvmOverloads constructor(
     fun addParameter(key: String, value: Int?) {
         parameters[key.trim()] = value.toString()
     }
+
+    fun removeParameter(key: String) {
+        parameters.remove(key.trim())
+   }
 
     override fun toString(): String {
         return buildString { joinTo(this) }
@@ -70,8 +68,14 @@ class FormatAttribute @JvmOverloads constructor(
     }
 
     companion object {
-        @JvmStatic
-        fun parse(value: String?): FormatAttribute {
+        @JvmStatic @JvmOverloads
+        fun of(format: Int, parameters: String? = null): FormatAttribute {
+            return FormatAttribute(format, linkedMapOf()).also {
+                it.setParameter(parameters)
+            }
+        }
+
+        internal fun parse(value: String?): FormatAttribute {
             value ?: run {
                 throw SdpParseException("could not parse: $value as FormatAttribute")
             }
@@ -83,8 +87,7 @@ class FormatAttribute @JvmOverloads constructor(
             val format = values[0].toIntOrNull() ?: run {
                 throw SdpParseException("could not parse: $value as FormatAttribute")
             }
-            return FormatAttribute(format, if (size > 1) values[1] else "")
-
+            return of(format, if (size > 1) values[1] else null)
         }
     }
 }

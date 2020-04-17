@@ -1,14 +1,12 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package io.github.zncmn.sdp
 
-import java.lang.StringBuilder
-
-class SdpRepeatTime(
+data class SdpRepeatTime internal constructor(
     var repeatInterval: Int,
     var activeDuration: Int,
-    offsets: List<Int>
+    val offsets: MutableList<Int>
 ) : SdpElement {
-    val offsets = offsets.toMutableList()
-
     override fun toString(): String {
         return buildString { joinTo(this) }
     }
@@ -31,7 +29,14 @@ class SdpRepeatTime(
 
     companion object {
         @JvmStatic
-        fun parse(line: String): SdpRepeatTime {
+        fun of(repeatInterval: Int,
+               activeDuration: Int,
+               offsets: List<Int>
+        ): SdpRepeatTime {
+            return SdpRepeatTime(repeatInterval, activeDuration, ArrayList(offsets))
+        }
+
+        internal fun parse(line: String): SdpRepeatTime {
             val values = line.substring(2).split(' ')
                 .map {
                     it.toIntOrNull() ?: run {
@@ -42,7 +47,7 @@ class SdpRepeatTime(
             if (size < 3) {
                 throw SdpParseException("could not parse: $line as RepeatTime")
             }
-            return SdpRepeatTime(values[0], values[1], values.subList(2, size))
+            return of(values[0], values[1], values.subList(2, size))
 
         }
     }

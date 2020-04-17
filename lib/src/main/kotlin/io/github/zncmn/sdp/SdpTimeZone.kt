@@ -1,8 +1,6 @@
 package io.github.zncmn.sdp
 
-import java.lang.StringBuilder
-
-class SdpTimeZone(
+data class SdpTimeZone internal constructor(
     var adjustmentTime: Long,
     var offset: Int
 ) {
@@ -12,4 +10,11 @@ class SdpTimeZone(
             append(' ')
             append(offset)
         }
+
+    companion object {
+        @JvmStatic
+        fun of(adjustmentTime: Long, offset: Int): SdpTimeZone {
+            return SdpTimeZone(adjustmentTime, offset)
+        }
+    }
 }

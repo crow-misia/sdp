@@ -1,30 +1,61 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package io.github.zncmn.sdp
 
-import java.lang.StringBuilder
-
-class SessionDescription @JvmOverloads constructor(
+data class SessionDescription internal constructor(
     var version: SdpVersion,
     var origin: SdpOrigin,
     var sessionName: SdpSessionName,
-    var information: SdpSessionInformation? = null,
-    uris: List<SdpUri> = emptyList(),
-    emails: List<SdpEmail> = emptyList(),
-    phones: List<SdpPhone> = emptyList(),
-    var connection: SdpConnection? = null,
-    bandwidths: List<SdpBandwidth> = emptyList(),
-    timings: List<SdpTiming> = emptyList(),
-    var timeZones: SdpTimeZones? = null,
-    var key: EncryptionKey? = null,
-    attributes: List<SdpAttribute> = emptyList(),
-    mediaDescriptions: List<MediaDescription> = emptyList()
+    var information: SdpSessionInformation?,
+    val uris: MutableList<SdpUri>,
+    val emails: MutableList<SdpEmail>,
+    val phones: MutableList<SdpPhone>,
+    var connection: SdpConnection?,
+    val bandwidths: MutableList<SdpBandwidth>,
+    val timings: MutableList<SdpTiming>,
+    var timeZones: SdpTimeZones?,
+    var key: EncryptionKey?,
+    val attributes: MutableList<SdpAttribute>,
+    val mediaDescriptions: MutableList<SdpMediaDescription>
 ) : SdpElement {
-    var uris = uris.toMutableList()
-    var emails = emails.toMutableList()
-    var phones = phones.toMutableList()
-    var bandwidths = bandwidths.toMutableList()
-    var timings = timings.toMutableList()
-    var attributes = attributes.toMutableList()
-    var mediaDescriptions = mediaDescriptions.toMutableList()
+    @JvmOverloads
+    fun addAttribute(name: String, value: String? = null) {
+        addAttribute(BaseSdpAttribute.of(name, value))
+    }
+
+    fun addAttribute(name: String, value: Int) {
+        addAttribute(BaseSdpAttribute.of(name, value))
+    }
+
+    fun addAttribute(attribute: SdpAttribute) {
+        attributes.add(attribute)
+    }
+
+    fun hasAttribute(name: String): Boolean {
+        return attributes.find { name.equals(it.field, ignoreCase = true) } != null
+    }
+
+    @JvmOverloads
+    fun setAttribute(name: String, value: String? = null) {
+        setAttribute(BaseSdpAttribute.of(name, value))
+    }
+
+    fun setAttribute(name: String, value: Int) {
+        setAttribute(BaseSdpAttribute.of(name, value))
+    }
+
+    fun setAttribute(attribute: SdpAttribute) {
+        val index = attributes.indexOfFirst { attribute.field.equals(it.field, ignoreCase = true) }
+        if (index < 0) {
+            addAttribute(attribute)
+        } else {
+            attributes[index] = attribute
+        }
+    }
+
+    fun removeAttribute(name: String): Boolean {
+        return attributes.removeIf { name.equals(it.field, ignoreCase = true) }
+    }
 
     override fun toString(): String {
         return buildString { joinTo(this) }
@@ -50,8 +81,31 @@ class SessionDescription @JvmOverloads constructor(
     }
 
     companion object {
-        @JvmStatic
-        fun parse(text: String): SessionDescription {
+        @JvmStatic @JvmOverloads
+        fun of(version: SdpVersion,
+               origin: SdpOrigin,
+               sessionName: SdpSessionName,
+               information: SdpSessionInformation? = null,
+               uris: List<SdpUri> = emptyList(),
+               emails: List<SdpEmail> = emptyList(),
+               phones: List<SdpPhone> = emptyList(),
+               connection: SdpConnection? = null,
+               bandwidths: List<SdpBandwidth> = emptyList(),
+               timings: List<SdpTiming> = emptyList(),
+               timeZones: SdpTimeZones? = null,
+               key: EncryptionKey? = null,
+               attributes: List<SdpAttribute> = emptyList(),
+               mediaDescriptions: List<SdpMediaDescription> = emptyList()
+        ): SessionDescription {
+            return SessionDescription(
+                version, origin, sessionName, information,
+                ArrayList(uris), ArrayList(emails), ArrayList(phones),
+                connection, ArrayList(bandwidths), ArrayList(timings),
+                timeZones, key, ArrayList(attributes), ArrayList(mediaDescriptions)
+            )
+        }
+
+        internal fun parse(text: String): SessionDescription {
             var version: SdpVersion? = null
             var origin: SdpOrigin? = null
             var sessionName: SdpSessionName? = null
@@ -65,9 +119,9 @@ class SessionDescription @JvmOverloads constructor(
             var timeZones: SdpTimeZones? = null
             var key: EncryptionKey? = null
             val attributes = arrayListOf<SdpAttribute>()
-            val mediaDescriptions = arrayListOf<MediaDescription>()
+            val mediaDescriptions = arrayListOf<SdpMediaDescription>()
             var lastTiming: SdpTiming? = null
-            var lastMediaDescription: MediaDescription? = null
+            var lastMediaDescription: SdpMediaDescription? = null
 
             text.splitToSequence('\n')
                 .map { it.trim() }
@@ -120,7 +174,7 @@ class SessionDescription @JvmOverloads constructor(
                             list.add(BaseSdpAttribute.parse(line))
                         }
                         "m=" -> {
-                            MediaDescription.parse(line).also {
+                            SdpMediaDescription.parse(line).also {
                                 lastMediaDescription = it
                                 mediaDescriptions.add(it)
                             }
@@ -131,7 +185,7 @@ class SessionDescription @JvmOverloads constructor(
                     }
                 }
 
-            return SessionDescription(
+            return of(
                 version = checkNotNull(version),
                 origin = checkNotNull(origin),
                 sessionName = checkNotNull(sessionName),

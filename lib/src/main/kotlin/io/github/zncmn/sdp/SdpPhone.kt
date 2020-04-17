@@ -1,8 +1,6 @@
 package io.github.zncmn.sdp
 
-import java.lang.StringBuilder
-
-class SdpPhone(
+data class SdpPhone internal constructor(
     var number: String
 ) : SdpElement {
     override fun toString(): String {
@@ -19,8 +17,12 @@ class SdpPhone(
 
     companion object {
         @JvmStatic
-        fun parse(line: String): SdpPhone {
-            return SdpPhone(line.substring(2))
+        fun of(number: String): SdpPhone {
+            return SdpPhone(number)
+        }
+
+        internal fun parse(line: String): SdpPhone {
+            return of(line.substring(2))
         }
     }
 }

@@ -1,8 +1,6 @@
 package io.github.zncmn.sdp
 
-import java.lang.StringBuilder
-
-class SdpEmail(
+data class SdpEmail internal constructor(
     var address: String
 ) : SdpElement {
     override fun toString(): String {
@@ -19,8 +17,12 @@ class SdpEmail(
 
     companion object {
         @JvmStatic
-        fun parse(line: String): SdpEmail {
-            return SdpEmail(line.substring(2))
+        fun of(address: String): SdpEmail {
+            return SdpEmail(address)
+        }
+
+        internal fun parse(line: String): SdpEmail {
+            return of(line.substring(2))
         }
     }
 }

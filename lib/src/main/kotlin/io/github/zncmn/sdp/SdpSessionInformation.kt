@@ -1,8 +1,6 @@
 package io.github.zncmn.sdp
 
-import java.lang.StringBuilder
-
-data class SdpSessionInformation(
+data class SdpSessionInformation internal constructor(
     var description: String
 ) : SdpElement {
     override fun toString(): String {
@@ -19,8 +17,12 @@ data class SdpSessionInformation(
 
     companion object {
         @JvmStatic
-        fun parse(line: String): SdpSessionInformation {
-            return SdpSessionInformation(line.substring(2))
+        fun of(description: String): SdpSessionInformation {
+            return SdpSessionInformation(description)
+        }
+
+        internal fun parse(line: String): SdpSessionInformation {
+            return of(line.substring(2))
         }
     }
 }

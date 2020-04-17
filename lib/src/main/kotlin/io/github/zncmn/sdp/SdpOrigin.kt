@@ -1,10 +1,8 @@
 package io.github.zncmn.sdp
 
-import java.lang.StringBuilder
-
-class SdpOrigin(
+data class SdpOrigin internal constructor(
     var username: String,
-    var sessId: String,
+    var sessId: Long,
     var sessVersion: Long,
     var nettype: String,
     var addrtype: String,
@@ -33,16 +31,30 @@ class SdpOrigin(
     }
 
     companion object {
-        fun parse(line: String): SdpOrigin {
+        @JvmStatic @JvmOverloads
+        fun of(username: String = "-",
+               sessId: Long,
+               sessVersion: Long,
+               nettype: String,
+               addrtype: String,
+               unicastAddress: String
+        ): SdpOrigin {
+            return SdpOrigin(username, sessId, sessVersion, nettype, addrtype, unicastAddress)
+        }
+
+        internal fun parse(line: String): SdpOrigin {
             val values = line.substring(2).split(' ')
             if (values.size != 6) {
+                throw SdpParseException("could not parse: $line as Origin")
+            }
+            val id = values[1].toLongOrNull() ?: run {
                 throw SdpParseException("could not parse: $line as Origin")
             }
             val version = values[2].toLongOrNull() ?: run {
                 throw SdpParseException("could not parse: $line as Origin")
             }
 
-            return SdpOrigin(values[0], values[1], version, values[3], values[4], values[5])
+            return of(values[0], id, version, values[3], values[4], values[5])
         }
     }
 }

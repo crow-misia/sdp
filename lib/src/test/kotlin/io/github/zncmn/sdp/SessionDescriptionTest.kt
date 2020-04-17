@@ -2,46 +2,44 @@ package io.github.zncmn.sdp
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import assertk.assertions.isNotNull
 import org.junit.jupiter.api.Test
-
 
 internal class SessionDescriptionTest {
 
     @Test
     fun parse() {
         val actual = SessionDescription.parse("""
-      v=0
-      o=jdoe 2890844526 2890842807 IN IP4 10.47.16.5
-      s=SDP Seminar
-      i=A Seminar on the session description protocol
-      u=http://www.example.com/seminars/sdp.pdf
-      e=j.doe@example.com (Jane Doe)
-      c=IN IP4 224.2.17.12/127
-      t=2873397496 2873404696
-      a=recvonly
-      m=audio 49170 RTP/AVP 0
-      m=video 51372 RTP/AVP 99
-      a=rtpmap:99 h263-1998/90000
+v=0
+o=jdoe 2890844526 2890842807 IN IP4 10.47.16.5
+s=SDP Seminar
+i=A Seminar on the session description protocol
+u=http://www.example.com/seminars/sdp.pdf
+e=j.doe@example.com (Jane Doe)
+c=IN IP4 224.2.17.12/127
+t=2873397496 2873404696
+a=recvonly
+m=audio 49170 RTP/AVP 0
+m=video 51372 RTP/AVP 99
+a=rtpmap:99 h263-1998/90000
         """.trimIndent())
-        assertThat(actual.toString()).isEqualTo(SessionDescription(
-            version = SdpVersion(),
-            origin = SdpOrigin("jdoe", "2890844526", 2890842807, "IN", "IP4", "10.47.16.5"),
-            sessionName = SdpSessionName("SDP Seminar"),
-            information = SdpSessionInformation("A Seminar on the session description protocol"),
-            uris = listOf(SdpUri("http://www.example.com/seminars/sdp.pdf")),
-            emails = listOf(SdpEmail("j.doe@example.com (Jane Doe)")),
-            connection = SdpConnection("IN", "IP4", "224.2.17.12/127"),
-            timings = listOf(SdpTiming(2873397496L, 2873404696L)),
-            attributes = listOf(BaseSdpAttribute("recvonly")),
+        assertThat(actual).isEqualTo(SessionDescription.of(
+            version = SdpVersion.of(),
+            origin = SdpOrigin.of("jdoe", 2890844526, 2890842807, "IN", "IP4", "10.47.16.5"),
+            sessionName = SdpSessionName.of("SDP Seminar"),
+            information = SdpSessionInformation.of("A Seminar on the session description protocol"),
+            uris = listOf(SdpUri.of("http://www.example.com/seminars/sdp.pdf")),
+            emails = listOf(SdpEmail.of("j.doe@example.com (Jane Doe)")),
+            connection = SdpConnection.of("IN", "IP4", "224.2.17.12/127"),
+            timings = listOf(SdpTiming.of(2873397496L, 2873404696L)),
+            attributes = listOf(BaseSdpAttribute.of("recvonly")),
             mediaDescriptions = listOf(
-                MediaDescription("audio", 49170, null, listOf("RTP", "AVP"), listOf("0")),
-                MediaDescription("video", 51372, null, listOf("RTP", "AVP"), listOf("99"),
+                SdpMediaDescription.of("audio", 49170, null, listOf("RTP", "AVP"), listOf("0")),
+                SdpMediaDescription.of("video", 51372, null, listOf("RTP", "AVP"), listOf("99"),
                     attributes = listOf(
-                        RTPMapAttribute(99, "h263-1998", 90000)
+                        RTPMapAttribute.of(99, "h263-1998", 90000)
                     ))
             )
-        ).toString())
+        ))
     }
 
 
@@ -54,6 +52,7 @@ s=webrtc (chrome 22.0.1189.0) - Doubango Telecom (sipML5 r000)
 t=0 0
 m=audio 62359 RTP/SAVPF 103 104 0 8 106 105 13 126
 c=IN IP4 80.39.43.34
+b=AS:1000
 a=rtpmap:105 CN/16000
 a=rtcp:62359 IN IP4 80.39.43.34
 a=candidate:4242042849 1 udp 2130714367 192.168.153.1 54521 typ host generation 0

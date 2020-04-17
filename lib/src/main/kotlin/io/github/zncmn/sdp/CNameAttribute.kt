@@ -1,9 +1,7 @@
 package io.github.zncmn.sdp
 
-import java.lang.StringBuilder
-
-class CNameAttribute @JvmOverloads constructor(
-    var cname: String? = null
+data class CNameAttribute internal constructor(
+    var cname: String?
 ) : SdpAttribute {
     override val field = "cname"
     override val value: String?
@@ -27,7 +25,7 @@ class CNameAttribute @JvmOverloads constructor(
 
     companion object {
         @JvmStatic
-        fun parse(value: String?): CNameAttribute {
+        fun of(value: String? = null): CNameAttribute {
             return CNameAttribute(value)
         }
     }

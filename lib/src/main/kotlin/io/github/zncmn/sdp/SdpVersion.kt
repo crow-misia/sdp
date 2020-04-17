@@ -1,8 +1,6 @@
 package io.github.zncmn.sdp
 
-import java.lang.StringBuilder
-
-class SdpVersion @JvmOverloads constructor(
+data class SdpVersion internal constructor(
     var version: Int = 0
 ) : SdpElement {
     override fun toString(): String {
@@ -18,9 +16,13 @@ class SdpVersion @JvmOverloads constructor(
     }
 
     companion object {
-        @JvmStatic
-        fun parse(line: String): SdpVersion {
-            return SdpVersion(line.substring(2).toIntOrNull() ?: run {
+        @JvmStatic @JvmOverloads
+        fun of(version: Int = 0): SdpVersion {
+            return SdpVersion(version)
+        }
+
+        internal fun parse(line: String): SdpVersion {
+            return of(line.substring(2).toIntOrNull() ?: run {
                 throw SdpParseException("could not parse: $line as Version")
             })
         }

@@ -1,9 +1,7 @@
 package io.github.zncmn.sdp
 
-import java.lang.StringBuilder
-
-class SdpSessionName @JvmOverloads constructor(
-    var name: String = " "
+data class SdpSessionName internal constructor(
+    var name: String
 ) : SdpElement {
     override fun toString(): String {
         return buildString { joinTo(this) }
@@ -18,9 +16,13 @@ class SdpSessionName @JvmOverloads constructor(
     }
 
     companion object {
-        @JvmStatic
-        fun parse(line: String): SdpSessionName {
-            return SdpSessionName(line.substring(2))
+        @JvmStatic @JvmOverloads
+        fun of(name: String? = null): SdpSessionName {
+            return SdpSessionName(name.orEmpty().ifEmpty { " " })
+        }
+
+        internal fun parse(line: String): SdpSessionName {
+            return of(line.substring(2))
         }
     }
 }

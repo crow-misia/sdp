@@ -1,12 +1,10 @@
 package io.github.zncmn.sdp
 
-import java.lang.StringBuilder
-
-class RTPMapAttribute @JvmOverloads constructor(
+data class RTPMapAttribute internal constructor(
     var payloadType: Int,
     var encodingName: String,
     var clockRate: Int,
-    var encodingParameters: String? = null
+    var encodingParameters: String?
 ) : SdpAttribute {
     override val field = "rtpmap"
     override val value: String
@@ -41,8 +39,16 @@ class RTPMapAttribute @JvmOverloads constructor(
     }
 
     companion object {
-        @JvmStatic
-        fun parse(value: String?): RTPMapAttribute {
+        @JvmStatic @JvmOverloads
+        fun of(payloadType: Int,
+               encodingName: String,
+               clockRate: Int,
+               encodingParameters: String? = null
+        ): RTPMapAttribute {
+            return RTPMapAttribute(payloadType, encodingName, clockRate, encodingParameters)
+        }
+
+        internal fun parse(value: String?): RTPMapAttribute {
             value ?: run {
                 throw SdpParseException("could not parse: $value as RTPMapAttribute")
             }
@@ -63,7 +69,7 @@ class RTPMapAttribute @JvmOverloads constructor(
             val clockRate = parameters[1].toIntOrNull() ?: run {
                 throw SdpParseException("could not parse: $value as RTPMapAttribute")
             }
-            return RTPMapAttribute(payloadType, parameters[0], clockRate, if (paramsSize > 2) parameters[2] else null)
+            return of(payloadType, parameters[0], clockRate, if (paramsSize > 2) parameters[2] else null)
         }
     }
 }

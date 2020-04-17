@@ -1,13 +1,9 @@
 package io.github.zncmn.sdp
 
-import java.lang.StringBuilder
-
-open class BaseSdpAttribute @JvmOverloads constructor(
+data class BaseSdpAttribute internal constructor(
     override var field: String,
-    override var value: String? = null
+    override var value: String?
 ) : SdpAttribute {
-    constructor(field: String, value: Int) : this(field, value.toString())
-
     override fun toString(): String {
         return buildString { joinTo(this) }
     }
@@ -25,6 +21,16 @@ open class BaseSdpAttribute @JvmOverloads constructor(
     }
 
     companion object {
+        @JvmStatic @JvmOverloads
+        fun of(field: String, value: String? = null): BaseSdpAttribute {
+            return BaseSdpAttribute(field, value)
+        }
+
+        @JvmStatic
+        fun of(field: String, value: Int): BaseSdpAttribute {
+            return BaseSdpAttribute(field, value.toString())
+        }
+
         @JvmStatic
         fun parse(line: String): SdpAttribute {
             val colonIndex = line.indexOf(':', 2)
@@ -36,10 +42,13 @@ open class BaseSdpAttribute @JvmOverloads constructor(
 
             return when (field) {
                 "candidate" -> CandidateAttribute.parse(value)
-                "cname" -> CNameAttribute.parse(value)
+                "control" -> ControlAttribute.parse(value)
+                "cname" -> CNameAttribute.of(value)
                 "fmtp" -> FormatAttribute.parse(value)
+                "ice-lite" -> IceLiteAttribute.of()
+                "rtcp" -> RTCPAttribute.parse(value)
                 "rtpmap" -> RTPMapAttribute.parse(value)
-                else -> BaseSdpAttribute(field, value)
+                else -> of(field, value)
             }
         }
     }

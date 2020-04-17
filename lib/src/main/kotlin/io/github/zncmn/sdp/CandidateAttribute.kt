@@ -1,31 +1,54 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package io.github.zncmn.sdp
 
-import java.lang.StringBuilder
-
-class CandidateAttribute @JvmOverloads constructor(
-    var fundatioon: String,
-    var componentId: Int,
+data class CandidateAttribute internal constructor(
+    var foundation: String,
+    var component: Int,
     var transport: String,
     var priority: Int,
     var address: String,
     var port: Int,
     var type: String,
-    var relAddr: String? = null,
-    var relPort: String? = null,
-    extensions: List<Extension> = emptyList()
+    var relAddr: String?,
+    var relPort: String?,
+    val extensions: MutableList<Extension>
 ) : SdpAttribute {
-    val extensions = extensions.toMutableList()
-
     override val field = "candidate"
     override val value: String?
         get() = buildString { valueJoinTo(this) }
 
-   fun addExtension(extension: Extension) {
-        extensions.add(extension)
+    fun addExtension(name: String, value: Int) {
+        addExtension(Extension(name, value.toString()))
     }
 
     fun addExtension(name: String, value: String) {
-        extensions.add(Extension(name, value))
+        addExtension(Extension(name, value))
+    }
+
+    fun addExtension(extension: Extension) {
+        extensions.add(extension)
+    }
+
+    fun hasExtension(name: String): Boolean {
+        return extensions.find { name.equals(it.name, ignoreCase = true) } != null
+    }
+
+    fun setExtension(name: String, value: String) {
+        setExtension(Extension(name, value))
+    }
+
+    fun setExtension(extension: Extension) {
+        val index =  extensions.indexOfFirst { extension.name.equals(it.name, ignoreCase = true) }
+        if (index < 0) {
+            addExtension(extension)
+        } else {
+            extensions[index] = extension
+        }
+    }
+
+    fun removeExtension(name: String): Boolean {
+        return extensions.removeIf { name.equals(it.name, ignoreCase = true) }
     }
 
     override fun toString(): String {
@@ -44,9 +67,9 @@ class CandidateAttribute @JvmOverloads constructor(
 
     private fun valueJoinTo(buffer: StringBuilder) {
         buffer.apply {
-            append(fundatioon)
+            append(foundation)
             append(' ')
-            append(componentId)
+            append(component)
             append(' ')
             append(transport)
             append(' ')
@@ -75,8 +98,25 @@ class CandidateAttribute @JvmOverloads constructor(
     }
 
     companion object {
-        @JvmStatic
-        fun parse(value: String?): CandidateAttribute {
+        @JvmStatic @JvmOverloads
+        fun of(foundation: String,
+               componentId: Int,
+               transport: String,
+               priority: Int,
+               address: String,
+               port: Int,
+               type: String,
+               relAddr: String? = null,
+               relPort: String? = null,
+               extensions: List<Extension> = emptyList()
+        ): CandidateAttribute {
+            return CandidateAttribute(
+                foundation, componentId, transport, priority,
+                address, port, type, relAddr, relPort,
+                ArrayList(extensions))
+        }
+
+        internal fun parse(value: String?): CandidateAttribute {
             value ?: run {
                 throw SdpParseException("could not parse: $value as CandidateAttribute")
             }
@@ -107,7 +147,7 @@ class CandidateAttribute @JvmOverloads constructor(
                 }
             }
 
-            return CandidateAttribute(values[0], componentId, values[2], priority, values[4], port,
+            return of(values[0], componentId, values[2], priority, values[4], port,
                 type ?: run {
                     throw SdpParseException("could not parse: $value as CandidateAttribute")
                 }, relAddr, relPort, extensions)

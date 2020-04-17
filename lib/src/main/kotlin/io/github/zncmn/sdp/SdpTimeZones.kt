@@ -1,12 +1,10 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package io.github.zncmn.sdp
 
-import java.lang.StringBuilder
-
-class SdpTimeZones(
-   timeZones: List<SdpTimeZone>
+data class SdpTimeZones internal constructor(
+    val timeZones: MutableList<SdpTimeZone>
 ) : SdpElement {
-    val timeZones = timeZones.toMutableList()
-
     override fun toString(): String {
         return buildString { joinTo(this) }
     }
@@ -21,7 +19,11 @@ class SdpTimeZones(
 
     companion object {
         @JvmStatic
-        fun parse(line: String): SdpTimeZones {
+        fun of(timeZones: List<SdpTimeZone>): SdpTimeZones {
+            return SdpTimeZones(ArrayList(timeZones))
+        }
+
+        internal fun parse(line: String): SdpTimeZones {
             val values = line.substring(2).split(' ')
             val size = values.size
             if (size % 2 != 0) {
@@ -33,9 +35,9 @@ class SdpTimeZones(
                 if (time == null || offset == null) {
                     throw SdpParseException("could not parse: $line as TimeZones")
                 }
-                SdpTimeZone(time, offset)
+                SdpTimeZone.of(time, offset)
             }
-            return SdpTimeZones(timeZones)
+            return of(timeZones)
         }
     }
 }

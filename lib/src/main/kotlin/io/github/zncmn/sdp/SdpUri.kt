@@ -1,8 +1,6 @@
 package io.github.zncmn.sdp
 
-import java.lang.StringBuilder
-
-class SdpUri(
+data class SdpUri internal constructor(
     var uri: String
 ) : SdpElement {
     override fun toString(): String {
@@ -19,8 +17,12 @@ class SdpUri(
 
     companion object {
         @JvmStatic
-        fun parse(line: String): SdpUri {
-            return SdpUri(line.substring(2))
+        fun of(uri: String): SdpUri {
+            return SdpUri(uri)
+        }
+
+        internal fun parse(line: String): SdpUri {
+            return of(line.substring(2))
         }
     }
 }

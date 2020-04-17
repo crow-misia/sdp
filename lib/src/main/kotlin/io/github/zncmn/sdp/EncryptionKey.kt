@@ -1,10 +1,8 @@
 package io.github.zncmn.sdp
 
-import java.lang.StringBuilder
-
-class EncryptionKey @JvmOverloads constructor(
+data class EncryptionKey internal constructor(
     var method: String,
-    var key: String? = null
+    var key: String?
 ) : SdpElement {
     override fun toString(): String {
         return buildString { joinTo(this) }
@@ -23,14 +21,18 @@ class EncryptionKey @JvmOverloads constructor(
     }
 
     companion object {
-        @JvmStatic
-        fun parse(line: String): EncryptionKey {
+        @JvmStatic @JvmOverloads
+        fun of(method: String, key: String? = null): EncryptionKey {
+            return EncryptionKey(method, key)
+        }
+
+        internal fun parse(line: String): EncryptionKey {
             val values = line.substring(2).split(':')
             val size = values.size
             if (size <= 0 || size > 2) {
                 throw SdpParseException("could not parse: $line as EncryptionKey")
             }
-            return EncryptionKey(values[0], if (size == 1) null else values[1])
+            return of(values[0], if (size == 1) null else values[1])
         }
     }
 }
