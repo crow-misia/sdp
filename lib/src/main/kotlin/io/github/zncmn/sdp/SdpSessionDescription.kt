@@ -2,7 +2,7 @@
 
 package io.github.zncmn.sdp
 
-data class SessionDescription internal constructor(
+data class SdpSessionDescription internal constructor(
     var version: SdpVersion,
     var origin: SdpOrigin,
     var sessionName: SdpSessionName,
@@ -96,8 +96,8 @@ data class SessionDescription internal constructor(
                key: EncryptionKey? = null,
                attributes: List<SdpAttribute> = emptyList(),
                mediaDescriptions: List<SdpMediaDescription> = emptyList()
-        ): SessionDescription {
-            return SessionDescription(
+        ): SdpSessionDescription {
+            return SdpSessionDescription(
                 version, origin, sessionName, information,
                 ArrayList(uris), ArrayList(emails), ArrayList(phones),
                 connection, ArrayList(bandwidths), ArrayList(timings),
@@ -105,7 +105,7 @@ data class SessionDescription internal constructor(
             )
         }
 
-        internal fun parse(text: String): SessionDescription {
+        fun parse(text: String): SdpSessionDescription {
             var version: SdpVersion? = null
             var origin: SdpOrigin? = null
             var sessionName: SdpSessionName? = null

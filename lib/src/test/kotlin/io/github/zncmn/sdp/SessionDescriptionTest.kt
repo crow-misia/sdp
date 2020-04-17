@@ -8,7 +8,7 @@ internal class SessionDescriptionTest {
 
     @Test
     fun parse() {
-        val actual = SessionDescription.parse("""
+        val actual = SdpSessionDescription.parse("""
 v=0
 o=jdoe 2890844526 2890842807 IN IP4 10.47.16.5
 s=SDP Seminar
@@ -22,7 +22,7 @@ m=audio 49170 RTP/AVP 0
 m=video 51372 RTP/AVP 99
 a=rtpmap:99 h263-1998/90000
         """.trimIndent())
-        assertThat(actual).isEqualTo(SessionDescription.of(
+        assertThat(actual).isEqualTo(SdpSessionDescription.of(
             version = SdpVersion.of(),
             origin = SdpOrigin.of("jdoe", 2890844526, 2890842807, "IN", "IP4", "10.47.16.5"),
             sessionName = SdpSessionName.of("SDP Seminar"),
@@ -117,7 +117,7 @@ a=ssrc:2432199953 label:HnAeVefwdG64baIr9EdbXNwEChe67aSRJFcW10
 
         """.trimIndent().lines().joinToString("\r\n")
 
-        val actual = SessionDescription.parse(expected)
+        val actual = SdpSessionDescription.parse(expected)
         println(actual)
         assertThat(actual.toString()).isEqualTo(expected)
     }
@@ -186,7 +186,7 @@ a=ssrc:2814730704 label:77150781-678e-4cd3-a56d-233c01cd4ffd
 
         """.trimIndent().lines().joinToString("\r\n")
 
-        val actual = SessionDescription.parse(expected)
+        val actual = SdpSessionDescription.parse(expected)
         println(actual)
         assertThat(actual.toString()).isEqualTo(expected)
     }
