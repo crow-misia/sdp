@@ -14,52 +14,25 @@ data class SdpSessionDescription internal constructor(
     var connection: SdpConnection?,
     var timeZones: SdpTimeZones?,
     var key: EncryptionKey?,
-    private var _uris: MutableList<SdpUri>,
-    private var _emails: MutableList<SdpEmail>,
-    private var _phones: MutableList<SdpPhone>,
-    private var _bandwidths: MutableList<SdpBandwidth>,
-    private var _timings: MutableList<SdpTiming>,
-    private var _attributes: MutableList<SdpAttribute>,
-    private var _mediaDescriptions: MutableList<SdpMediaDescription>
+    val uris: MutableList<SdpUri>,
+    val emails: MutableList<SdpEmail>,
+    val phones: MutableList<SdpPhone>,
+    val bandwidths: MutableList<SdpBandwidth>,
+    val timings: MutableList<SdpTiming>,
+    val attributes: MutableList<SdpAttribute>,
+    val mediaDescriptions: MutableList<SdpMediaDescription>
 ) : SdpElement {
-    var urls: List<SdpUri>
-        get() = _uris
-        set(value) { _uris = ArrayList(value) }
-
-    var emails: List<SdpEmail>
-        get() = _emails
-        set(value) { _emails = ArrayList(value) }
-
-    var phones: List<SdpPhone>
-        get() = _phones
-        set(value) { _phones = ArrayList(value) }
-
-    var bandwidths: List<SdpBandwidth>
-        get() = _bandwidths
-        set(value) { _bandwidths = ArrayList(value) }
-
-    var timing: List<SdpTiming>
-        get() = _timings
-        set(value) { _timings = ArrayList(value) }
-
-    var attributes: List<SdpAttribute>
-        get() = _attributes
-        set(value) { _attributes = ArrayList(value) }
-
-    var mediaDescriptions: List<SdpMediaDescription>
-        get() = _mediaDescriptions
-        set(value) { _mediaDescriptions = ArrayList(value) }
-
     fun getAttribute(name: String): SdpAttribute? {
-        return _attributes.find { name.equals(it.field, ignoreCase = true) }
+        val field = SdpAttribute.getFieldName(name)
+        return attributes.find { field == it.field }
     }
 
     fun <R : SdpAttribute> getAttributes(clazz: Class<R>): List<R> {
-        return _attributes.filterIsInstance(clazz)
+        return attributes.filterIsInstance(clazz)
     }
 
     fun <R : SdpAttribute> getAttributes(clazz: KClass<R>): List<R> {
-        return _attributes.filterIsInstance(clazz.java)
+        return attributes.filterIsInstance(clazz.java)
     }
 
     @JvmOverloads
@@ -72,11 +45,12 @@ data class SdpSessionDescription internal constructor(
     }
 
     fun addAttribute(attribute: SdpAttribute) {
-        _attributes.add(attribute)
+        attributes.add(attribute)
     }
 
     fun hasAttribute(name: String): Boolean {
-        return _attributes.find { name.equals(it.field, ignoreCase = true) } != null
+        val field = SdpAttribute.getFieldName(name)
+        return attributes.find { field == it.field } != null
     }
 
     @JvmOverloads
@@ -89,24 +63,33 @@ data class SdpSessionDescription internal constructor(
     }
 
     fun setAttribute(attribute: SdpAttribute) {
-        val index = _attributes.indexOfFirst { attribute.field.equals(it.field, ignoreCase = true) }
+        val index = attributes.indexOfFirst { attribute.field == it.field }
         if (index < 0) {
             addAttribute(attribute)
         } else {
-            _attributes[index] = attribute
+            attributes[index] = attribute
         }
     }
 
     fun removeAttribute(name: String): Boolean {
-        return _attributes.removeIf { name.equals(it.field, ignoreCase = true) }
+        val field = SdpAttribute.getFieldName(name)
+        return attributes.removeIf { field == it.field }
     }
 
     fun <R : SdpAttribute> removeAttribute(clazz: Class<R>): Boolean {
-        return _attributes.removeIf { clazz.isInstance(it) }
+        return attributes.removeIf { clazz.isInstance(it) }
     }
 
     fun <R : SdpAttribute> removeAttribute(clazz: KClass<R>): Boolean {
-        return _attributes.removeIf { clazz.isInstance(it) }
+        return attributes.removeIf { clazz.isInstance(it) }
+    }
+
+    fun addMediaScription(description: SdpMediaDescription) {
+        mediaDescriptions.add(description)
+    }
+
+    fun numOfmediaScription(): Int {
+        return mediaDescriptions.size
     }
 
     override fun toString(): String {
@@ -119,16 +102,16 @@ data class SdpSessionDescription internal constructor(
             origin.joinTo(this)
             sessionName.joinTo(this)
             information?.joinTo(this)
-            _uris.forEach { it.joinTo(this) }
-            _emails.forEach { it.joinTo(this) }
-            _phones.forEach { it.joinTo(this) }
+            uris.forEach { it.joinTo(this) }
+            emails.forEach { it.joinTo(this) }
+            phones.forEach { it.joinTo(this) }
             connection?.joinTo(this)
-            _bandwidths.forEach { it.joinTo(this) }
-            _timings.forEach { it.joinTo(this) }
+            bandwidths.forEach { it.joinTo(this) }
+            timings.forEach { it.joinTo(this) }
             timeZones?.joinTo(this)
             key?.joinTo(this)
-            _attributes.forEach { it.joinTo(this) }
-            _mediaDescriptions.forEach { it.joinTo(this) }
+            attributes.forEach { it.joinTo(this) }
+            mediaDescriptions.forEach { it.joinTo(this) }
         }
     }
 
@@ -157,13 +140,13 @@ data class SdpSessionDescription internal constructor(
                 connection = connection,
                 timeZones = timeZones,
                 key = key,
-                _uris = ArrayList(uris),
-                _emails = ArrayList(emails),
-                _phones = ArrayList(phones),
-                _bandwidths = ArrayList(bandwidths),
-                _timings = ArrayList(timings),
-                _attributes = ArrayList(attributes),
-                _mediaDescriptions = ArrayList(mediaDescriptions)
+                uris = ArrayList(uris),
+                emails = ArrayList(emails),
+                phones = ArrayList(phones),
+                bandwidths = ArrayList(bandwidths),
+                timings = ArrayList(timings),
+                attributes = ArrayList(attributes),
+                mediaDescriptions = ArrayList(mediaDescriptions)
             )
         }
 
@@ -207,13 +190,13 @@ data class SdpSessionDescription internal constructor(
                         "p=" -> phones.add(SdpPhone.parse(line))
                         "c=" -> {
                             SdpConnection.parse(line).also { v ->
-                                lastMediaDescription?._connections?.add(v) ?: run {
+                                lastMediaDescription?.connections?.add(v) ?: run {
                                     connection = v
                                 }
                             }
                         }
                         "b=" -> {
-                            val list = lastMediaDescription?._bandwidths ?: bandwidths
+                            val list = lastMediaDescription?.bandwidths ?: bandwidths
                             list.add(SdpBandwidth.parse(line))
                         }
                         "t=" -> {
@@ -232,7 +215,7 @@ data class SdpSessionDescription internal constructor(
                             }
                         }
                         "a=" -> {
-                            val list = lastMediaDescription?._attributes ?: attributes
+                            val list = lastMediaDescription?.attributes ?: attributes
                             list.add(Utils.parseAttribute(line))
                         }
                         "m=" -> {
@@ -247,7 +230,7 @@ data class SdpSessionDescription internal constructor(
                     }
                 }
 
-            return SdpSessionDescription(
+            return of(
                 version = checkNotNull(version),
                 origin = checkNotNull(origin),
                 sessionName = checkNotNull(sessionName),
@@ -255,13 +238,13 @@ data class SdpSessionDescription internal constructor(
                 connection = connection,
                 timeZones = timeZones,
                 key = key,
-                _uris = uris,
-                _emails = emails,
-                _phones = phones,
-                _bandwidths = bandwidths,
-                _timings = timings,
-                _attributes = attributes,
-                _mediaDescriptions = mediaDescriptions
+                uris = uris,
+                emails = emails,
+                phones = phones,
+                bandwidths = bandwidths,
+                timings = timings,
+                attributes = attributes,
+                mediaDescriptions = mediaDescriptions
             )
         }
     }

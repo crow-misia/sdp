@@ -3,7 +3,7 @@
 package io.github.zncmn.sdp
 
 import io.github.zncmn.sdp.attribute.BaseSdpAttribute
-import io.github.zncmn.sdp.attribute.RTPMapAttribute
+import io.github.zncmn.sdp.attribute.MidAttribute
 import io.github.zncmn.sdp.attribute.SdpAttribute
 import kotlin.reflect.KClass
 
@@ -13,59 +13,33 @@ data class SdpMediaDescription internal constructor(
     var numberOfPorts: Int?,
     var information: SdpSessionInformation?,
     var key: EncryptionKey?,
-    internal var _protos: MutableList<String>,
-    internal var _formats: MutableList<String>,
-    internal var _connections: MutableList<SdpConnection>,
-    internal var _bandwidths: MutableList<SdpBandwidth>,
-    internal var _attributes: MutableList<SdpAttribute>
+    private var _protos: MutableList<String>,
+    val formats: MutableList<String>,
+    val connections: MutableList<SdpConnection>,
+    val bandwidths: MutableList<SdpBandwidth>,
+    val attributes: MutableList<SdpAttribute>
 ) : SdpElement {
-    var protos: List<String>
+    val protos: List<String>
         get() = _protos
-        set(value) { _protos = ArrayList(value) }
 
-    var formats: List<String>
-        get() = _formats
-        set(value) { _formats = ArrayList(value) }
-
-    var connections: List<SdpConnection>
-        get() = _connections
-        set(value) { _connections = ArrayList(value) }
-
-    var bandwidths: List<SdpBandwidth>
-        get() = _bandwidths
-        set(value) { _bandwidths = ArrayList(value) }
-
-    var attributes: List<SdpAttribute>
-        get() = _attributes
-        set(value) { _attributes = ArrayList(value) }
+    val mid: String
+        get() = getAttribute(MidAttribute.FIELD_NAME)?.value.orEmpty()
 
     fun setProto(proto: String) {
-        _protos.addAll(proto.splitToSequence('/'))
-    }
-
-    fun addFormat(format: String) {
-        _formats.add(format)
-    }
-
-    fun addConnection(connection: SdpConnection) {
-        _connections.add(connection)
-    }
-
-    fun addBandwidth(bandwidth: SdpBandwidth) {
-        _bandwidths.add(bandwidth)
+        _protos = proto.splitToSequence('/').toMutableList()
     }
 
     fun getAttribute(name: String): SdpAttribute? {
-        val lowerName = name.toLowerCase()
-        return _attributes.find { lowerName == it.field }
+        val field = SdpAttribute.getFieldName(name)
+        return attributes.find { field == it.field }
     }
 
     fun <R : SdpAttribute> getAttributes(clazz: Class<R>): List<R> {
-        return _attributes.filterIsInstance(clazz)
+        return attributes.filterIsInstance(clazz)
     }
 
     fun <R : SdpAttribute> getAttributes(clazz: KClass<R>): List<R> {
-        return _attributes.filterIsInstance(clazz.java)
+        return attributes.filterIsInstance(clazz.java)
     }
 
     @JvmOverloads
@@ -78,7 +52,7 @@ data class SdpMediaDescription internal constructor(
     }
 
     fun addAttribute(attribute: SdpAttribute) {
-        _attributes.add(attribute)
+        attributes.add(attribute)
     }
 
     fun hasAttribute(name: String): Boolean {
@@ -95,26 +69,26 @@ data class SdpMediaDescription internal constructor(
     }
 
     fun setAttribute(attribute: SdpAttribute) {
-        val lowerName = attribute.field.toLowerCase()
-        val index = _attributes.indexOfFirst { lowerName == it.field }
+        val field = SdpAttribute.getFieldName(attribute.field)
+        val index = attributes.indexOfFirst { field == it.field }
         if (index < 0) {
             addAttribute(attribute)
         } else {
-            _attributes[index] = attribute
+            attributes[index] = attribute
         }
     }
 
     fun removeAttribute(name: String): Boolean {
-        val lowerName = name.toLowerCase()
-        return _attributes.removeIf { lowerName == it.field }
+        val field = SdpAttribute.getFieldName(name)
+        return attributes.removeIf { field == it.field }
     }
 
     fun <R : SdpAttribute> removeAttribute(clazz: Class<R>): Boolean {
-        return _attributes.removeIf { clazz.isInstance(it) }
+        return attributes.removeIf { clazz.isInstance(it) }
     }
 
     fun <R : SdpAttribute> removeAttribute(clazz: KClass<R>): Boolean {
-        return _attributes.removeIf { clazz.isInstance(it) }
+        return attributes.removeIf { clazz.isInstance(it) }
     }
 
     override fun toString(): String {
@@ -131,15 +105,15 @@ data class SdpMediaDescription internal constructor(
             append(' ')
             _protos.joinTo(this, "/")
             append(' ')
-            _formats.joinTo(this, " ")
+            formats.joinTo(this, " ")
             append("\r\n")
 
             // lines of media
             information?.also { it.joinTo(this) }
-            _connections.forEach { it.joinTo(this) }
-            _bandwidths.forEach { it.joinTo(this) }
+            connections.forEach { it.joinTo(this) }
+            bandwidths.forEach { it.joinTo(this) }
             key?.also { it.joinTo(this) }
-            _attributes.forEach { it.joinTo(this) }
+            attributes.forEach { it.joinTo(this) }
         }
     }
 
@@ -163,10 +137,10 @@ data class SdpMediaDescription internal constructor(
                 information = information,
                 key = key,
                 _protos = ArrayList(protos),
-                _formats = ArrayList(formats),
-                _connections = ArrayList(connections),
-                _bandwidths = ArrayList(bandwidths),
-                _attributes = ArrayList(attributes))
+                formats = ArrayList(formats),
+                connections = ArrayList(connections),
+                bandwidths = ArrayList(bandwidths),
+                attributes = ArrayList(attributes))
         }
 
         internal fun parse(line: String): SdpMediaDescription {
@@ -191,10 +165,10 @@ data class SdpMediaDescription internal constructor(
                 information = null,
                 key = null,
                 _protos = values[2].splitToSequence('/').toMutableList(),
-                _formats = values[3].splitToSequence(' ').toMutableList(),
-                _connections = arrayListOf(),
-                _bandwidths = arrayListOf(),
-                _attributes = arrayListOf())
+                formats = values[3].splitToSequence(' ').toMutableList(),
+                connections = arrayListOf(),
+                bandwidths = arrayListOf(),
+                attributes = arrayListOf())
         }
     }
 }
