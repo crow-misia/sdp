@@ -5,6 +5,7 @@ package io.github.zncmn.sdp
 import io.github.zncmn.sdp.attribute.BaseSdpAttribute
 import io.github.zncmn.sdp.attribute.RTPMapAttribute
 import io.github.zncmn.sdp.attribute.SdpAttribute
+import kotlin.reflect.KClass
 
 data class SdpMediaDescription internal constructor(
     var type: String,
@@ -68,6 +69,10 @@ data class SdpMediaDescription internal constructor(
         return _attributes.filterIsInstance(clazz)
     }
 
+    fun <R : SdpAttribute> getAttributes(clazz: KClass<R>): List<R> {
+        return _attributes.filterIsInstance(clazz.java)
+    }
+
     @JvmOverloads
     fun addAttribute(name: String, value: String = "") {
         addAttribute(BaseSdpAttribute.of(name, value))
@@ -107,6 +112,14 @@ data class SdpMediaDescription internal constructor(
     fun removeAttribute(name: String): Boolean {
         val lowerName = name.toLowerCase()
         return _attributes.removeIf { lowerName == it.field }
+    }
+
+    fun <R : SdpAttribute> removeAttribute(clazz: Class<R>): Boolean {
+        return _attributes.removeIf { clazz.isInstance(it) }
+    }
+
+    fun <R : SdpAttribute> removeAttribute(clazz: KClass<R>): Boolean {
+        return _attributes.removeIf { clazz.isInstance(it) }
     }
 
     override fun toString(): String {

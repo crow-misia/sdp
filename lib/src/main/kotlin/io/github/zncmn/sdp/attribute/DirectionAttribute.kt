@@ -21,6 +21,7 @@ sealed class DirectionAttribute(
         internal const val FIELD_NAME_SENDRECV = "sendrecv"
         internal const val FIELD_NAME_SENDONLY = "sendonly"
         internal const val FIELD_NAME_RECVONLY = "recvonly"
+        internal const val FIELD_NAME_INACTIVE = "inactive"
     }
 }
 
@@ -35,6 +36,11 @@ object SendOnlyAttribute : DirectionAttribute(FIELD_NAME_SENDONLY) {
 }
 
 object RecvOnlyAttribute : DirectionAttribute(FIELD_NAME_RECVONLY) {
+    @JvmStatic
+    fun of() = this
+}
+
+object InactiveAttribute : DirectionAttribute(FIELD_NAME_INACTIVE) {
     @JvmStatic
     fun of() = this
 }

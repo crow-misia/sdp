@@ -4,6 +4,7 @@ package io.github.zncmn.sdp
 
 import io.github.zncmn.sdp.attribute.BaseSdpAttribute
 import io.github.zncmn.sdp.attribute.SdpAttribute
+import kotlin.reflect.KClass
 
 data class SdpSessionDescription internal constructor(
     var version: SdpVersion,
@@ -57,6 +58,10 @@ data class SdpSessionDescription internal constructor(
         return _attributes.filterIsInstance(clazz)
     }
 
+    fun <R : SdpAttribute> getAttributes(clazz: KClass<R>): List<R> {
+        return _attributes.filterIsInstance(clazz.java)
+    }
+
     @JvmOverloads
     fun addAttribute(name: String, value: String = "") {
         addAttribute(BaseSdpAttribute.of(name, value))
@@ -94,6 +99,14 @@ data class SdpSessionDescription internal constructor(
 
     fun removeAttribute(name: String): Boolean {
         return _attributes.removeIf { name.equals(it.field, ignoreCase = true) }
+    }
+
+    fun <R : SdpAttribute> removeAttribute(clazz: Class<R>): Boolean {
+        return _attributes.removeIf { clazz.isInstance(it) }
+    }
+
+    fun <R : SdpAttribute> removeAttribute(clazz: KClass<R>): Boolean {
+        return _attributes.removeIf { clazz.isInstance(it) }
     }
 
     override fun toString(): String {

@@ -11,6 +11,7 @@ internal object Utils {
         DirectionAttribute.FIELD_NAME_SENDONLY to { _ -> SendOnlyAttribute },
         DirectionAttribute.FIELD_NAME_RECVONLY to { _ -> RecvOnlyAttribute },
         DirectionAttribute.FIELD_NAME_SENDRECV to { _ -> SendRecvAttribute },
+        DirectionAttribute.FIELD_NAME_INACTIVE to { _ -> InactiveAttribute },
         EndOfCandidatesAttribute.FIELD_NAME to { _ -> EndOfCandidatesAttribute },
         FingerprintAttribute.FIELD_NAME to { v -> FingerprintAttribute.parse(v) },
         FormatAttribute.FIELD_NAME to { v -> FormatAttribute.parse(v) },
