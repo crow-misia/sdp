@@ -2,6 +2,10 @@
 
 package io.github.zncmn.sdp
 
+import io.github.zncmn.sdp.attribute.BaseSdpAttribute
+import io.github.zncmn.sdp.attribute.RTPMapAttribute
+import io.github.zncmn.sdp.attribute.SdpAttribute
+
 data class SdpMediaDescription internal constructor(
     var type: String,
     var port: Int,
@@ -65,7 +69,7 @@ data class SdpMediaDescription internal constructor(
     }
 
     @JvmOverloads
-    fun addAttribute(name: String, value: String? = null) {
+    fun addAttribute(name: String, value: String = "") {
         addAttribute(BaseSdpAttribute.of(name, value))
     }
 
@@ -82,7 +86,7 @@ data class SdpMediaDescription internal constructor(
     }
 
     @JvmOverloads
-    fun setAttribute(name: String, value: String? = null) {
+    fun setAttribute(name: String, value: String = "") {
         setAttribute(BaseSdpAttribute.of(name, value))
     }
 

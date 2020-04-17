@@ -1,6 +1,8 @@
-package io.github.zncmn.sdp
+package io.github.zncmn.sdp.attribute
 
-class IceLiteAttribute private constructor(): SdpAttribute {
+object EndOfCandidatesAttribute : SdpAttribute {
+    internal const val FIELD_NAME = "end-of-candidates"
+
     override val field = FIELD_NAME
     override val value: String? = null
 
@@ -16,12 +18,6 @@ class IceLiteAttribute private constructor(): SdpAttribute {
         }
     }
 
-    companion object {
-        internal const val FIELD_NAME = "ice-lite"
-
-        private val INSTANCE = IceLiteAttribute()
-
-        @JvmStatic
-        fun of() = INSTANCE
-    }
+    @JvmStatic
+    fun of() = this
 }

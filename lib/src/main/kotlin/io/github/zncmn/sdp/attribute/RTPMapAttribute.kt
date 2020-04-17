@@ -1,4 +1,6 @@
-package io.github.zncmn.sdp
+package io.github.zncmn.sdp.attribute
+
+import io.github.zncmn.sdp.SdpParseException
 
 data class RTPMapAttribute internal constructor(
     var payloadType: Int,
@@ -47,13 +49,15 @@ data class RTPMapAttribute internal constructor(
                clockRate: Int,
                encodingParameters: String? = null
         ): RTPMapAttribute {
-            return RTPMapAttribute(payloadType, encodingName, clockRate, encodingParameters)
+            return RTPMapAttribute(
+                payloadType = payloadType,
+                encodingName = encodingName,
+                clockRate = clockRate,
+                encodingParameters = encodingParameters
+            )
         }
 
-        internal fun parse(value: String?): RTPMapAttribute {
-            value ?: run {
-                throw SdpParseException("could not parse: $value as RTPMapAttribute")
-            }
+        internal fun parse(value: String): RTPMapAttribute {
             val values = value.split(' ', limit = 2)
             val size = values.size
             if (size < 2) {
@@ -71,7 +75,12 @@ data class RTPMapAttribute internal constructor(
             val clockRate = parameters[1].toIntOrNull() ?: run {
                 throw SdpParseException("could not parse: $value as RTPMapAttribute")
             }
-            return RTPMapAttribute(payloadType, parameters[0], clockRate, if (paramsSize > 2) parameters[2] else null)
+            return RTPMapAttribute(
+                payloadType = payloadType,
+                encodingName = parameters[0],
+                clockRate = clockRate,
+                encodingParameters = if (paramsSize < 3) null else parameters[2]
+            )
         }
     }
 }

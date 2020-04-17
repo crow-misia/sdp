@@ -2,6 +2,9 @@
 
 package io.github.zncmn.sdp
 
+import io.github.zncmn.sdp.attribute.BaseSdpAttribute
+import io.github.zncmn.sdp.attribute.SdpAttribute
+
 data class SdpSessionDescription internal constructor(
     var version: SdpVersion,
     var origin: SdpOrigin,
@@ -55,7 +58,7 @@ data class SdpSessionDescription internal constructor(
     }
 
     @JvmOverloads
-    fun addAttribute(name: String, value: String? = null) {
+    fun addAttribute(name: String, value: String = "") {
         addAttribute(BaseSdpAttribute.of(name, value))
     }
 
@@ -72,7 +75,7 @@ data class SdpSessionDescription internal constructor(
     }
 
     @JvmOverloads
-    fun setAttribute(name: String, value: String? = null) {
+    fun setAttribute(name: String, value: String = "") {
         setAttribute(BaseSdpAttribute.of(name, value))
     }
 
@@ -217,7 +220,7 @@ data class SdpSessionDescription internal constructor(
                         }
                         "a=" -> {
                             val list = lastMediaDescription?._attributes ?: attributes
-                            list.add(BaseSdpAttribute.parse(line))
+                            list.add(Utils.parseAttribute(line))
                         }
                         "m=" -> {
                             SdpMediaDescription.parse(line).also {

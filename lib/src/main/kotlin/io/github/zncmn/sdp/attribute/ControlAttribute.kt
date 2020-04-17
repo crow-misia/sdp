@@ -1,10 +1,12 @@
-package io.github.zncmn.sdp
+package io.github.zncmn.sdp.attribute
+
+import io.github.zncmn.sdp.SdpParseException
 
 data class ControlAttribute internal constructor(
     var streamId: Int
 ) : SdpAttribute {
     override val field = FIELD_NAME
-    override val value: String?
+    override val value: String
         get() = buildString { valueJoinTo(this) }
 
     override fun toString(): String {
@@ -33,10 +35,7 @@ data class ControlAttribute internal constructor(
             return ControlAttribute(streamId)
         }
 
-        internal fun parse(value: String?): ControlAttribute {
-            value ?: run {
-                throw SdpParseException("could not parse: $value as ControlAttribute")
-            }
+        internal fun parse(value: String): ControlAttribute {
             val streamId = value.toIntOrNull() ?: run {
                 throw SdpParseException("could not parse: $value as ControlAttribute")
             }

@@ -1,13 +1,15 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-package io.github.zncmn.sdp
+package io.github.zncmn.sdp.attribute
+
+import io.github.zncmn.sdp.SdpParseException
 
 data class FormatAttribute internal constructor(
     var format: Int,
     internal var _parameters: MutableMap<String, String?>
 ) : SdpAttribute {
     override val field = FIELD_NAME
-    override val value: String?
+    override val value: String
         get() = buildString { valueJoinTo(this) }
 
     var parameters: Map<String, String?>
@@ -81,10 +83,7 @@ data class FormatAttribute internal constructor(
             }
         }
 
-        internal fun parse(value: String?): FormatAttribute {
-            value ?: run {
-                throw SdpParseException("could not parse: $value as FormatAttribute")
-            }
+        internal fun parse(value: String): FormatAttribute {
             val values = value.split(' ', limit = 2)
             val size = values.size
             if (size < 1) {
@@ -93,7 +92,10 @@ data class FormatAttribute internal constructor(
             val format = values[0].toIntOrNull() ?: run {
                 throw SdpParseException("could not parse: $value as FormatAttribute")
             }
-            return of(format, if (size > 1) values[1] else null)
+            return of(
+                format = format,
+                parameters = if (size > 1) values[1] else null
+            )
         }
     }
 }

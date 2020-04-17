@@ -2,6 +2,9 @@ package io.github.zncmn.sdp
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import io.github.zncmn.sdp.attribute.BaseSdpAttribute
+import io.github.zncmn.sdp.attribute.RTPMapAttribute
+import io.github.zncmn.sdp.attribute.RecvOnlyAttribute
 import org.junit.jupiter.api.Test
 
 internal class SessionDescriptionTest {
@@ -22,7 +25,7 @@ m=audio 49170 RTP/AVP 0
 m=video 51372 RTP/AVP 99
 a=rtpmap:99 h263-1998/90000
         """.trimIndent())
-        assertThat(actual).isEqualTo(SdpSessionDescription.of(
+        val expected = SdpSessionDescription.of(
             version = SdpVersion.of(),
             origin = SdpOrigin.of("jdoe", 2890844526, 2890842807, "IN", "IP4", "10.47.16.5"),
             sessionName = SdpSessionName.of("SDP Seminar"),
@@ -31,7 +34,7 @@ a=rtpmap:99 h263-1998/90000
             emails = listOf(SdpEmail.of("j.doe@example.com (Jane Doe)")),
             connection = SdpConnection.of("IN", "IP4", "224.2.17.12/127"),
             timings = listOf(SdpTiming.of(2873397496L, 2873404696L)),
-            attributes = listOf(BaseSdpAttribute.of("recvonly")),
+            attributes = listOf(RecvOnlyAttribute),
             mediaDescriptions = listOf(
                 SdpMediaDescription.of("audio", 49170, null, listOf("RTP", "AVP"), listOf("0")),
                 SdpMediaDescription.of("video", 51372, null, listOf("RTP", "AVP"), listOf("99"),
@@ -39,7 +42,8 @@ a=rtpmap:99 h263-1998/90000
                         RTPMapAttribute.of(99, "h263-1998", 90000)
                     ))
             )
-        ))
+        )
+        assertThat(actual).isEqualTo(expected)
     }
 
 

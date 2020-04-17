@@ -18,7 +18,7 @@ data class SdpSessionName internal constructor(
     companion object {
         @JvmStatic @JvmOverloads
         fun of(name: String? = null): SdpSessionName {
-            return SdpSessionName(name.orEmpty().ifEmpty { " " })
+            return SdpSessionName(name.orEmpty().ifEmpty { "-" })
         }
 
         internal fun parse(line: String): SdpSessionName {

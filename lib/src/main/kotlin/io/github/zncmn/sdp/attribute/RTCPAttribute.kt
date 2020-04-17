@@ -1,4 +1,6 @@
-package io.github.zncmn.sdp
+package io.github.zncmn.sdp.attribute
+
+import io.github.zncmn.sdp.SdpParseException
 
 data class RTCPAttribute internal constructor(
     var port: Int,
@@ -7,7 +9,7 @@ data class RTCPAttribute internal constructor(
     var address: String
 ) : SdpAttribute {
     override val field = FIELD_NAME
-    override val value: String?
+    override val value: String
         get() = buildString { valueJoinTo(this) }
 
     override fun toString(): String {
@@ -44,10 +46,7 @@ data class RTCPAttribute internal constructor(
             return RTCPAttribute(port, nettype, addrtype, address)
         }
 
-        internal fun parse(value: String?): RTCPAttribute {
-            value ?: run {
-                throw SdpParseException("could not parse: $value as RtcpAttribute")
-            }
+        internal fun parse(value: String): RTCPAttribute {
             val values = value.split(' ')
             val size = values.size
             if (size != 4) {
