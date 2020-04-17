@@ -92,14 +92,20 @@ data class CandidateAttribute internal constructor(
                component: Int,
                transport: String,
                priority: Int,
-               ip: String,
+               address: String,
                port: Int,
                type: String,
                extensions: Map<String, String> = emptyMap()
         ): CandidateAttribute {
             return CandidateAttribute(
-                foundation, component, transport, priority,
-                ip, port, type, LinkedHashMap(extensions)
+                foundation = foundation,
+                component = component,
+                transport = transport,
+                priority = priority,
+                address = address,
+                port = port,
+                type = type,
+                _extensions = LinkedHashMap(extensions)
             )
         }
 

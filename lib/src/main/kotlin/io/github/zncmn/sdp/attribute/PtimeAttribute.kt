@@ -2,8 +2,8 @@ package io.github.zncmn.sdp.attribute
 
 import io.github.zncmn.sdp.SdpParseException
 
-data class ControlAttribute internal constructor(
-    var streamId: Int
+data class PtimeAttribute internal constructor(
+    var time: Int
 ) : SdpAttribute {
     override val field = FIELD_NAME
     override val value: String
@@ -18,28 +18,28 @@ data class ControlAttribute internal constructor(
             append("a=")
             append(field)
             append(':')
-            valueJoinTo(this)
+            append(time)
             append("\r\n")
         }
     }
 
     private fun valueJoinTo(buffer: StringBuilder) {
-        buffer.append(streamId)
+        buffer.append(time)
     }
 
     companion object {
-        internal const val FIELD_NAME = "control"
+        internal const val FIELD_NAME = "ptime"
 
-        @JvmStatic @JvmOverloads
-        fun of(streamId: Int = 0): ControlAttribute {
-            return ControlAttribute(streamId)
+        @JvmStatic
+        fun of(streamId: Int): PtimeAttribute {
+            return PtimeAttribute(streamId)
         }
 
-        internal fun parse(value: String): ControlAttribute {
-            val streamId = value.toIntOrNull() ?: run {
-                throw SdpParseException("could not parse: $value as ControlAttribute")
+        internal fun parse(value: String): PtimeAttribute {
+            val time = value.toIntOrNull() ?: run {
+                throw SdpParseException("could not parse: $value as PtimeAttribute")
             }
-            return ControlAttribute(streamId)
+            return PtimeAttribute(time)
         }
     }
 }

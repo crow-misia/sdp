@@ -39,7 +39,7 @@ open class BaseSdpAttribute internal constructor(
 
         @JvmStatic
         fun of(field: String, value: Int): BaseSdpAttribute {
-            return BaseSdpAttribute(SdpAttribute.getFieldName(field), value.toString())
+            return of(field, value.toString())
         }
     }
 }

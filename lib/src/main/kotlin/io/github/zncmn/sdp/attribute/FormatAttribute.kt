@@ -11,6 +11,8 @@ data class FormatAttribute internal constructor(
     override val field = FIELD_NAME
     override val value: String
         get() = buildString { valueJoinTo(this) }
+    val isNotEmptyParameters: Boolean
+        get() = _parameters.isNotEmpty()
 
     var parameters: Map<String, String?>
         get() = _parameters
@@ -39,7 +41,7 @@ data class FormatAttribute internal constructor(
 
     fun removeParameter(key: String) {
         _parameters.remove(key.trim())
-   }
+    }
 
     override fun toString(): String {
         return buildString { joinTo(this) }

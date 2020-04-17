@@ -2,9 +2,7 @@ package io.github.zncmn.sdp
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import io.github.zncmn.sdp.attribute.BaseSdpAttribute
-import io.github.zncmn.sdp.attribute.RTPMapAttribute
-import io.github.zncmn.sdp.attribute.RecvOnlyAttribute
+import io.github.zncmn.sdp.attribute.*
 import org.junit.jupiter.api.Test
 
 internal class SessionDescriptionTest {
@@ -18,12 +16,17 @@ s=SDP Seminar
 i=A Seminar on the session description protocol
 u=http://www.example.com/seminars/sdp.pdf
 e=j.doe@example.com (Jane Doe)
+p=+81012345678
 c=IN IP4 224.2.17.12/127
 t=2873397496 2873404696
-a=recvonly
+b=AS:4000
+a=sendrecv
 m=audio 49170 RTP/AVP 0
+a=recvonly
 m=video 51372 RTP/AVP 99
+a=sendonly
 a=rtpmap:99 h263-1998/90000
+a=framerate:29.97
         """.trimIndent())
         val expected = SdpSessionDescription.of(
             version = SdpVersion.of(),
@@ -32,14 +35,21 @@ a=rtpmap:99 h263-1998/90000
             information = SdpSessionInformation.of("A Seminar on the session description protocol"),
             uris = listOf(SdpUri.of("http://www.example.com/seminars/sdp.pdf")),
             emails = listOf(SdpEmail.of("j.doe@example.com (Jane Doe)")),
+            phones = listOf(SdpPhone.of("+81012345678")),
             connection = SdpConnection.of("IN", "IP4", "224.2.17.12/127"),
+            bandwidths = listOf(SdpBandwidth("AS", 4000)),
             timings = listOf(SdpTiming.of(2873397496L, 2873404696L)),
-            attributes = listOf(RecvOnlyAttribute),
+            attributes = listOf(SendRecvAttribute),
             mediaDescriptions = listOf(
-                SdpMediaDescription.of("audio", 49170, null, listOf("RTP", "AVP"), listOf("0")),
+                SdpMediaDescription.of("audio", 49170, null, listOf("RTP", "AVP"), listOf("0"),
+                    attributes = listOf(
+                        RecvOnlyAttribute
+                    )),
                 SdpMediaDescription.of("video", 51372, null, listOf("RTP", "AVP"), listOf("99"),
                     attributes = listOf(
-                        RTPMapAttribute.of(99, "h263-1998", 90000)
+                        SendOnlyAttribute,
+                        RTPMapAttribute.of(99, "h263-1998", 90000),
+                        FramerateAttribute.of(29.97)
                     ))
             )
         )

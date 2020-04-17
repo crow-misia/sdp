@@ -55,11 +55,6 @@ data class SdpMediaDescription internal constructor(
         _bandwidths.add(bandwidth)
     }
 
-    @JvmOverloads
-    fun addRTPMapAttribute(payloadType: Int, encodingName: String, clockRate: Int, encodingParameters: String? = null) {
-        _attributes.add(RTPMapAttribute.of(payloadType, encodingName, clockRate, encodingParameters))
-    }
-
     fun getAttribute(name: String): SdpAttribute? {
         val lowerName = name.toLowerCase()
         return _attributes.find { lowerName == it.field }
