@@ -19,8 +19,9 @@ data class SdpMediaDescription internal constructor(
     val bandwidths: MutableList<SdpBandwidth>,
     val attributes: MutableList<SdpAttribute>
 ) : SdpElement {
-    val protos: List<String>
+    var protos: List<String>
         get() = _protos
+        set(value) { _protos = ArrayList(value) }
 
     val mid: String
         get() = getAttribute(MidAttribute.FIELD_NAME)?.value.orEmpty()

@@ -19,6 +19,7 @@ internal object Utils {
         FramerateAttribute.FIELD_NAME to { v -> FramerateAttribute.parse(v) },
         GroupAttribute.FIELD_NAME to { v -> GroupAttribute.parse(v) },
         IceLiteAttribute.FIELD_NAME to { _ -> IceLiteAttribute },
+        IceOptionsAttribute.FIELD_NAME to { v -> IceOptionsAttribute.parse(v) },
         IceUfragAttribute.FIELD_NAME to { v -> IceUfragAttribute.parse(v) },
         IcePwdAttribute.FIELD_NAME to { v -> IcePwdAttribute.parse(v) },
         MaxPtimeAttribute.FIELD_NAME to { v -> MaxPtimeAttribute.parse(v) },
