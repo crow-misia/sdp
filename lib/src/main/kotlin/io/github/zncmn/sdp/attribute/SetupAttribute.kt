@@ -10,7 +10,7 @@ data class SetupAttribute internal constructor(
 
         private val MAPPING by lazy {
             EnumMap<Type, SetupAttribute>(Type::class.java).also {
-                Type.values().forEach { v -> it[v] = of(v) }
+                Type.values().forEach { v -> it[v] = SetupAttribute(v.name.toLowerCase()) }
             }
         }
 
