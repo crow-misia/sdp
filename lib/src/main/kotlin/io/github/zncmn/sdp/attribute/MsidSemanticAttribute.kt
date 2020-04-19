@@ -33,7 +33,7 @@ data class MsidSemanticAttribute internal constructor(
     }
 
     companion object {
-        internal const val FIELD_NAME = "ssrc-group"
+        internal const val FIELD_NAME = "msid-semantic"
 
         @JvmStatic
         fun of(semantic: String, token: String): MsidSemanticAttribute {
