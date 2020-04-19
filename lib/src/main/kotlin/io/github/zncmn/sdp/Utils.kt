@@ -3,7 +3,7 @@ package io.github.zncmn.sdp
 import io.github.zncmn.sdp.attribute.*
 
 internal object Utils {
-    private val PARSERS: Map<String, (String) -> SdpAttribute> = mapOf(
+    private val PARSERS: Map<String, (String) -> SdpAttribute> = hashMapOf(
         CandidateAttribute.FIELD_NAME to { v -> CandidateAttribute.parse(v) },
         CNameAttribute.FIELD_NAME to { v -> CNameAttribute.parse(v) },
         ControlAttribute.FIELD_NAME to { v -> ControlAttribute.parse(v) },
@@ -41,6 +41,10 @@ internal object Utils {
         TsRefclkAttribute.FIELD_NAME to { v -> TsRefclkAttribute.parse(v) },
         XgoogleFlagAttribute.FIELD_NAME to { v -> XgoogleFlagAttribute.parse(v) }
     )
+
+    init {
+        assert(PARSERS.size == 36)
+    }
 
     @JvmStatic
     fun parseAttribute(line: String): SdpAttribute {
