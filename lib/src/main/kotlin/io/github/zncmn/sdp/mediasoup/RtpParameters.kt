@@ -9,9 +9,9 @@ import io.github.zncmn.sdp.webrtc.RTCPriorityType
  */
 @JsonClass(generateAdapter = true)
 data class RtpCapabilities @JvmOverloads constructor(
-    var codecs: List<RtpCodecCapability> = arrayListOf(),
-    var headerExtensions: List<RtpHeaderExtension> = arrayListOf(),
-    var fecMechanisms: List<String> = arrayListOf()
+    var codecs: List<RtpCodecCapability> = emptyList(),
+    var headerExtensions: List<RtpHeaderExtension> = emptyList(),
+    var fecMechanisms: List<String> = emptyList()
 )
 
 /**
@@ -54,12 +54,12 @@ data class RtpCodecCapability @JvmOverloads constructor(
      * and 'profile-level-id' in H264 or 'profile-id' in VP9) are critical for
      * codec matching.
      */
-    var parameters: Any? = null,
+    var parameters: Map<String, Any>? = null,
 
     /**
      * Transport layer and codec-specific feedback messages for this codec.
      */
-    var rtcpFeedback: List<RtcpFeedback> = arrayListOf()
+    var rtcpFeedback: List<RtcpFeedback> = emptyList()
 )
 
 enum class RtpHeaderExtensionDirection {
@@ -111,17 +111,17 @@ data class RtpParameters(
     /**
      * Media and RTX codecs in use.
      */
-    var codecs: List<RtpCodecParameters> = arrayListOf(),
+    var codecs: List<RtpCodecParameters> = emptyList(),
 
     /**
      * RTP header extensions in use.
      */
-    var headerExtensions: List<RtpHeaderExtensionParameters> = arrayListOf(),
+    var headerExtensions: List<RtpHeaderExtensionParameters> = emptyList(),
 
     /**
      * Transmitted RTP streams and their settings.
      */
-    var encodings: List<RtpEncodingParameters> = arrayListOf(),
+    var encodings: List<RtpEncodingParameters> = emptyList(),
 
     /**
      * Parameters used for RTCP.
@@ -157,12 +157,12 @@ data class RtpCodecParameters(
      * as 'packetization-mode' and 'profile-level-id' in H264 or 'profile-id' in
      * VP9) are critical for codec matching.
      */
-    var parameters: Any? = null,
+    var parameters: Map<String, Any>? = null,
 
     /**
      * Transport layer and codec-specific feedback messages for this codec.
      */
-    var rtcpFeedback: List<RtcpFeedback> = arrayListOf()
+    var rtcpFeedback: List<RtcpFeedback> = emptyList()
 )
 
 @JsonClass(generateAdapter = true)
@@ -200,7 +200,7 @@ data class RtpEncodingParameters(
      * RTX stream information. It must contain a numeric ssrc field indicating
      * the RTX SSRC.
      */
-    var rtx: RtxParameter? = null,
+    var rtx: List<RtxParameter>? = null,
 
     /**
      * It indicates whether discontinuous RTP transmission will be used. Useful
@@ -250,7 +250,7 @@ data class RtpHeaderExtensionParameters(
     /**
      * Configuration parameters for the header extension.
      */
-    var parameters: Any? = null
+    var parameters: Map<String, Any>? = null
 )
 
 @JsonClass(generateAdapter = true)

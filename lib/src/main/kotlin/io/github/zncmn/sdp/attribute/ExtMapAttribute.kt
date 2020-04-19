@@ -3,7 +3,7 @@ package io.github.zncmn.sdp.attribute
 import io.github.zncmn.sdp.SdpParseException
 
 data class ExtMapAttribute internal constructor(
-    var id: Int,
+    var id: Long,
     var direction: Direction?,
     var uri: String?,
     var encryptUri: String?,
@@ -51,7 +51,7 @@ data class ExtMapAttribute internal constructor(
         internal const val FIELD_NAME = "extmap"
 
         @JvmStatic @JvmOverloads
-        fun of(value: Int, direction: Direction? = null, uri: String, encryptUri: String? = null, config: String? = null): ExtMapAttribute {
+        fun of(value: Long, direction: Direction? = null, uri: String, encryptUri: String? = null, config: String? = null): ExtMapAttribute {
             return ExtMapAttribute(value, direction, uri, encryptUri, config)
         }
 
@@ -62,7 +62,7 @@ data class ExtMapAttribute internal constructor(
                 throw SdpParseException("could not parse: $value as ExtMapAttribute")
             }
             val tmp = values[0].split('/', limit = 2)
-            val id = tmp[0].toIntOrNull() ?: run {
+            val id = tmp[0].toLongOrNull() ?: run {
                 throw SdpParseException("could not parse: $value as ExtMapAttribute")
             }
             val direction = if (tmp.size > 1) {

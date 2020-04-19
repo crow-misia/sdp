@@ -41,7 +41,7 @@ data class RTCPFbAttribute internal constructor(
         internal const val FIELD_NAME = "rtcp-fb"
 
         @JvmStatic
-        fun of(payloadType: String, type: String, subtype: String): RTCPFbAttribute {
+        fun of(payloadType: String, type: String, subtype: String?): RTCPFbAttribute {
             return RTCPFbAttribute(payloadType, type, subtype)
         }
 

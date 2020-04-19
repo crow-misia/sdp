@@ -70,7 +70,7 @@ data class DtlsParameters(
     /**
      * DTLS fingerprints.
      */
-    var fingerprints: List<DtlsFingerprint> = arrayListOf()
+    var fingerprints: List<DtlsFingerprint> = emptyList()
 )
 
 @JsonClass(generateAdapter = true)
