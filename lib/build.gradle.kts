@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm")
+    kotlin("kapt")
     `maven-publish`
     id("org.jetbrains.dokka") version Versions.dokkaPlugin
     id("com.jfrog.bintray") version Versions.bintrayPlugin
@@ -15,9 +16,16 @@ version = Versions.name
 dependencies {
     api(kotlin("stdlib"))
 
+    implementation(Deps.moshi)
+    kapt(Deps.moshiCodegen)
+
     testImplementation(Deps.mockk)
     testImplementation(Deps.assertk)
     testImplementation(Deps.junit5)
+}
+
+kapt {
+    correctErrorTypes = true
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
