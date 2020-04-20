@@ -47,7 +47,7 @@ data class RtpCodecCapability @JvmOverloads constructor(
     /**
      * The number of channels supported (e.g. two for stereo). Just for audio Default 1.
      */
-    var channels: Int = 1,
+    var channels: Int? = null,
 
     /**
      * Codec specific parameters. Some parameters (such as 'packetization-mode'
@@ -55,6 +55,70 @@ data class RtpCodecCapability @JvmOverloads constructor(
      * codec matching.
      */
     var parameters: Map<String, Any>? = null,
+
+    /**
+     * Transport layer and codec-specific feedback messages for this codec.
+     */
+    var rtcpFeedback: List<RtcpFeedback> = emptyList()
+)
+
+@JsonClass(generateAdapter = true)
+data class ExtendedRtpCapabilities @JvmOverloads constructor(
+    var codecs: List<ExtendedRtpCodecCapability> = emptyList(),
+    var headerExtensions: List<ExtendedRtpHeaderExtension> = emptyList()
+)
+
+@JsonClass(generateAdapter = true)
+data class ExtendedRtpCodecCapability @JvmOverloads constructor(
+    /**
+     * Media kind.
+     */
+    var kind: MediaKind,
+
+    /**
+     * The codec MIME media type/subtype (e.g. 'audio/opus', 'video/VP8').
+     */
+    var mimeType: String,
+
+    /**
+     * Local RTP payload type.
+     */
+    var localPayloadType: Int? = null,
+
+    /**
+     * Local RTX RTP payload type.
+     */
+    var localRtxPayloadType: Int? = null,
+
+    /**
+     * Remote RTP payload type.
+     */
+    var remotePayloadType: Int? = null,
+
+    /**
+     * Remote RTX RTP payload type.
+     */
+    var remoteRtxPayloadType: Int? = null,
+
+    /**
+     * Codec clock rate expressed in Hertz.
+     */
+    var clockRate: Int,
+
+    /**
+     * The number of channels supported (e.g. two for stereo).
+     */
+    var channels: Int? = null,
+
+    /**
+     * Local Codec specific parameters.
+     */
+    var localParameters: Map<String, Any>? = null,
+
+    /**
+     * Remote Codec specific parameters.
+     */
+    var remoteParameters: Map<String, Any>? = null,
 
     /**
      * Transport layer and codec-specific feedback messages for this codec.
@@ -98,6 +162,16 @@ data class RtpHeaderExtension(
      * 'sendonly' means that mediasoup can send (but not receive) it. 'recvonly'
      * means that mediasoup can receive (but not send) it.
      */
+    var direction: RtpHeaderExtensionDirection? = null
+)
+
+@JsonClass(generateAdapter = true)
+data class ExtendedRtpHeaderExtension(
+    var kind: MediaKind? = null,
+    var uri: String,
+    var sendId: Long,
+    var recvId: Long,
+    var encrypt: Boolean = false,
     var direction: RtpHeaderExtensionDirection? = null
 )
 
@@ -150,7 +224,7 @@ data class RtpCodecParameters(
      * The number of channels supported (e.g. two for stereo). Just for audio.
      * Default 1.
      */
-    var channels: Int = 1,
+    var channels: Int? = null,
 
     /**
      * Codec-specific parameters available for signaling. Some parameters (such

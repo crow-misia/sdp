@@ -5,6 +5,11 @@ import com.squareup.moshi.JsonClass
 import io.github.zncmn.sdp.webrtc.RTCPriorityType
 
 @JsonClass(generateAdapter = true)
+data class SctpCapabilities @JvmOverloads constructor(
+    var numStreams: List<NumSctpStreams> = emptyList()
+)
+
+@JsonClass(generateAdapter = true)
 data class NumSctpStreams(
     /**
      * Initially requested number of outgoing SCTP streams.
@@ -45,7 +50,7 @@ data class SctpStreamParameters @JvmOverloads constructor(
     /**
      * SCTP stream id.
      */
-    var streamId: Int? = null,
+    var streamId: Int,
 
     /**
      * Whether data messages must be received in order. if true the messages will
@@ -57,13 +62,13 @@ data class SctpStreamParameters @JvmOverloads constructor(
      * When ordered is false indicates the time (in milliseconds) after which a
      * SCTP packet will stop being retransmitted.
      */
-    var maxPacketLifeTime: Int? = null,
+    var maxPacketLifeTime: Int = 0,
 
     /**
      * When ordered is false indicates the maximum number of times a packet will
      * be retransmitted.
      */
-    var maxRetransmits: Int? = null,
+    var maxRetransmits: Int = 0,
 
     /**
      * DataChannel priority.
@@ -73,10 +78,10 @@ data class SctpStreamParameters @JvmOverloads constructor(
     /**
      * A label which can be used to distinguish this DataChannel from others.
      */
-    var label: String? = null,
+    var label: String = "",
 
     /**
      * Name of the sub-protocol used by this DataChannel.
      */
-    var protocol: String? = null
+    var protocol: String = ""
 )

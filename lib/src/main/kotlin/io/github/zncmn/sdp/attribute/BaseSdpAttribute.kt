@@ -41,5 +41,10 @@ open class BaseSdpAttribute internal constructor(
         fun of(field: String, value: Int): BaseSdpAttribute {
             return of(field, value.toString())
         }
+
+        @JvmStatic
+        fun of(field: String, value: Long): BaseSdpAttribute {
+            return of(field, value.toString())
+        }
     }
 }

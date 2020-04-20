@@ -6,9 +6,9 @@ import io.github.zncmn.sdp.SdpParseException
 
 data class CandidateAttribute internal constructor(
     var foundation: String,
-    var component: Int,
+    var component: Long,
     var transport: String,
-    var priority: Int,
+    var priority: Long,
     var address: String,
     var port: Int,
     var type: String,
@@ -26,6 +26,10 @@ data class CandidateAttribute internal constructor(
         addExtension(name, value.toString())
     }
 
+    fun addExtension(name: String, value: Long) {
+        addExtension(name, value.toString())
+    }
+
     fun addExtension(name: String, value: String) {
         _extensions[name.toLowerCase()] = value
    }
@@ -35,6 +39,10 @@ data class CandidateAttribute internal constructor(
     }
 
     fun setExtension(name: String, value: Int) {
+        setExtension(name, value.toString())
+    }
+
+    fun setExtension(name: String, value: Long) {
         setExtension(name, value.toString())
     }
 
@@ -89,9 +97,9 @@ data class CandidateAttribute internal constructor(
 
         @JvmStatic @JvmOverloads
         fun of(foundation: String,
-               component: Int,
+               component: Long,
                transport: String,
-               priority: Int,
+               priority: Long,
                address: String,
                port: Int,
                type: String,
@@ -115,8 +123,8 @@ data class CandidateAttribute internal constructor(
             if (size < 6) {
                 throw SdpParseException("could not parse: $value as CandidateAttribute")
             }
-            val component = values[1].toIntOrNull()
-            val priority = values[3].toIntOrNull()
+            val component = values[1].toLongOrNull()
+            val priority = values[3].toLongOrNull()
             val port = values[5].toIntOrNull()
             if (component == null || priority == null || port == null) {
                 throw SdpParseException("could not parse: $value as CandidateAttribute")

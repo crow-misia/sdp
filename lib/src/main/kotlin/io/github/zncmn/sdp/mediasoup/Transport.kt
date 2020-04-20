@@ -18,7 +18,7 @@ data class IceParameters(
     /**
      * ICE Lite.
      */
-    var iceLite: Boolean = true
+    var iceLite: Boolean = false
 )
 
 @JsonClass(generateAdapter = true)
@@ -32,7 +32,7 @@ data class IceCandidate(
     /**
      * The assigned priority of the candidate.
      */
-    var priority: Int,
+    var priority: Long,
 
     /**
      * The IP address of the candidate.

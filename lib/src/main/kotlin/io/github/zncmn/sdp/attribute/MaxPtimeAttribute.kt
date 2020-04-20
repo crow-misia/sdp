@@ -3,7 +3,7 @@ package io.github.zncmn.sdp.attribute
 import io.github.zncmn.sdp.SdpParseException
 
 data class MaxPtimeAttribute internal constructor(
-    var time: Int
+    var time: Long
 ) : SdpAttribute {
     override val field = FIELD_NAME
     override val value: String
@@ -31,12 +31,12 @@ data class MaxPtimeAttribute internal constructor(
         internal const val FIELD_NAME = "maxptime"
 
         @JvmStatic
-        fun of(streamId: Int): MaxPtimeAttribute {
+        fun of(streamId: Long): MaxPtimeAttribute {
             return MaxPtimeAttribute(streamId)
         }
 
         internal fun parse(value: String): MaxPtimeAttribute {
-            val time = value.toIntOrNull() ?: run {
+            val time = value.toLongOrNull() ?: run {
                 throw SdpParseException("could not parse: $value as MaxPtimeAttribute")
             }
             return MaxPtimeAttribute(time)

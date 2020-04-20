@@ -3,7 +3,7 @@ package io.github.zncmn.sdp.attribute
 import io.github.zncmn.sdp.SdpParseException
 
 data class CryptoAttribute internal constructor(
-    var id: Int,
+    var id: Long,
     var suite: String,
     var config: String,
     var sessionConfig: String?
@@ -44,7 +44,7 @@ data class CryptoAttribute internal constructor(
         internal const val FIELD_NAME = "crypto"
 
         @JvmStatic @JvmOverloads
-        fun of(id: Int, suite: String, config: String, sessionConfig: String? = null): CryptoAttribute {
+        fun of(id: Long, suite: String, config: String, sessionConfig: String? = null): CryptoAttribute {
             return CryptoAttribute(id, suite, config, sessionConfig)
         }
 
@@ -54,7 +54,7 @@ data class CryptoAttribute internal constructor(
             if (size < 3) {
                 throw SdpParseException("could not parse: $value as CryptoAttribute")
             }
-            val id = values[0].toIntOrNull() ?: run {
+            val id = values[0].toLongOrNull() ?: run {
                 throw SdpParseException("could not parse: $value as CryptoAttribute")
             }
             return CryptoAttribute(

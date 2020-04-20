@@ -44,6 +44,10 @@ data class SdpSessionDescription internal constructor(
         addAttribute(BaseSdpAttribute.of(name, value))
     }
 
+    fun addAttribute(name: String, value: Long) {
+        addAttribute(BaseSdpAttribute.of(name, value))
+    }
+
     fun addAttribute(attribute: SdpAttribute) {
         attributes.add(attribute)
     }
@@ -59,6 +63,10 @@ data class SdpSessionDescription internal constructor(
     }
 
     fun setAttribute(name: String, value: Int) {
+        setAttribute(BaseSdpAttribute.of(name, value))
+    }
+
+    fun setAttribute(name: String, value: Long) {
         setAttribute(BaseSdpAttribute.of(name, value))
     }
 
