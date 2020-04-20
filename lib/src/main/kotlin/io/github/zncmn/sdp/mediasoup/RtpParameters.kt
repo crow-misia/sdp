@@ -200,7 +200,7 @@ data class RtpEncodingParameters(
      * RTX stream information. It must contain a numeric ssrc field indicating
      * the RTX SSRC.
      */
-    var rtx: List<RtxParameter>? = null,
+    var rtx: RtxParameter? = null,
 
     /**
      * It indicates whether discontinuous RTP transmission will be used. Useful
