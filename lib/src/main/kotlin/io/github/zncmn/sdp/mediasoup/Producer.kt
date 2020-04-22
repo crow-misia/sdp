@@ -2,7 +2,6 @@ package io.github.zncmn.sdp.mediasoup
 
 import com.squareup.moshi.JsonClass
 
-
 @JsonClass(generateAdapter = true)
 data class ProducerCodecOptions(
     var opusStereo: Boolean,
@@ -10,7 +9,7 @@ data class ProducerCodecOptions(
     var opusDtx: Boolean,
     var opusMaxPlaybackRate: Int,
     var opusPtime: Long,
-    var videoGoogleStartBitrate: Long,
-    var videoGoogleMaxBitrate: Long,
-    var videoGoogleMinBitrate: Long
+    var videoGoogleStartBitrate: Int,
+    var videoGoogleMaxBitrate: Int,
+    var videoGoogleMinBitrate: Int
 )

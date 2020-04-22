@@ -1,5 +1,7 @@
 package io.github.zncmn.sdp.attribute
 
+import java.util.*
+
 enum class Direction {
     SENDONLY,
     RECVONLY,
@@ -14,5 +16,8 @@ enum class Direction {
         fun of(str: String): Direction? {
             return MAPPING[str.toLowerCase()]
         }
+
+        @Suppress("NOTHING_TO_INLINE")
+        private inline fun getKey(name: String) = name.toLowerCase(Locale.ENGLISH)
     }
 }

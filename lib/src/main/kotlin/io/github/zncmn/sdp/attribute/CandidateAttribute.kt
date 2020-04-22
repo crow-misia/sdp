@@ -3,6 +3,8 @@
 package io.github.zncmn.sdp.attribute
 
 import io.github.zncmn.sdp.SdpParseException
+import java.util.*
+import kotlin.collections.LinkedHashMap
 
 data class CandidateAttribute internal constructor(
     var foundation: String,
@@ -31,11 +33,11 @@ data class CandidateAttribute internal constructor(
     }
 
     fun addExtension(name: String, value: String) {
-        _extensions[name.toLowerCase()] = value
+        _extensions[getKey(name)] = value
    }
 
     fun hasExtension(name: String): Boolean {
-        return _extensions.containsKey(name.toLowerCase())
+        return _extensions.containsKey(getKey(name))
     }
 
     fun setExtension(name: String, value: Int) {
@@ -47,11 +49,11 @@ data class CandidateAttribute internal constructor(
     }
 
     fun setExtension(name: String, value: String) {
-        _extensions.put(name.toLowerCase(), value)
+        _extensions[getKey(name)] = value
     }
 
     fun removeExtension(name: String): Boolean {
-        return _extensions.remove(name.toLowerCase()) != null
+        return _extensions.remove(getKey(name)) != null
     }
 
     override fun toString(): String {
@@ -95,6 +97,9 @@ data class CandidateAttribute internal constructor(
     companion object {
         internal const val FIELD_NAME = "candidate"
 
+        @Suppress("NOTHING_TO_INLINE")
+        private inline fun getKey(name: String): String = name.toLowerCase(Locale.ENGLISH)
+
         @JvmStatic @JvmOverloads
         fun of(foundation: String,
                component: Long,
@@ -137,7 +142,7 @@ data class CandidateAttribute internal constructor(
                 val v = values[index + 1]
                 when (n) {
                     "typ" -> type = v
-                    else -> extensions[n.toLowerCase()] = v
+                    else -> extensions[getKey(n)] = v
                 }
             }
 

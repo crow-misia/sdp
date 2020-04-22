@@ -17,10 +17,7 @@ data class RtpCapabilities @JvmOverloads constructor(
 /**
  * Media kind ('audio' or 'video').
  */
-enum class MediaKind {
-    @Json(name = "audio") AUDIO,
-    @Json(name = "video") VIDEO
-}
+typealias MediaKind = String
 
 @JsonClass(generateAdapter = true)
 data class RtpCodecCapability @JvmOverloads constructor(
@@ -37,7 +34,7 @@ data class RtpCodecCapability @JvmOverloads constructor(
     /**
      * The preferred RTP payload type.
      */
-    var preferredPayloadType: Int? = null,
+    var preferredPayloadType: Int,
 
     /**
      * Codec clock rate expressed in Hertz.
@@ -83,7 +80,7 @@ data class ExtendedRtpCodecCapability @JvmOverloads constructor(
     /**
      * Local RTP payload type.
      */
-    var localPayloadType: Int? = null,
+    var localPayloadType: Int,
 
     /**
      * Local RTX RTP payload type.
@@ -93,7 +90,7 @@ data class ExtendedRtpCodecCapability @JvmOverloads constructor(
     /**
      * Remote RTP payload type.
      */
-    var remotePayloadType: Int? = null,
+    var remotePayloadType: Int,
 
     /**
      * Remote RTX RTP payload type.
@@ -134,7 +131,7 @@ enum class RtpHeaderExtensionDirection {
 }
 
 @JsonClass(generateAdapter = true)
-data class RtpHeaderExtension(
+data class RtpHeaderExtension @JvmOverloads constructor(
     /**
      * Media kind. If empty string, it's valid for all kinds.
      * Default any media kind.
@@ -166,7 +163,7 @@ data class RtpHeaderExtension(
 )
 
 @JsonClass(generateAdapter = true)
-data class ExtendedRtpHeaderExtension(
+data class ExtendedRtpHeaderExtension @JvmOverloads constructor(
     var kind: MediaKind? = null,
     var uri: String,
     var sendId: Long,
@@ -176,7 +173,7 @@ data class ExtendedRtpHeaderExtension(
 )
 
 @JsonClass(generateAdapter = true)
-data class RtpParameters(
+data class RtpParameters @JvmOverloads constructor(
     /**
      * The MID RTP extension value as defined in the BUNDLE specification.
      */
@@ -204,7 +201,7 @@ data class RtpParameters(
 )
 
 @JsonClass(generateAdapter = true)
-data class RtpCodecParameters(
+data class RtpCodecParameters @JvmOverloads constructor(
     /**
      * The codec MIME media type/subtype (e.g. 'audio/opus', 'video/VP8').
      */
@@ -240,7 +237,7 @@ data class RtpCodecParameters(
 )
 
 @JsonClass(generateAdapter = true)
-data class RtcpFeedback(
+data class RtcpFeedback @JvmOverloads constructor(
     /**
      * RTCP feedback type.
      */
@@ -253,11 +250,11 @@ data class RtcpFeedback(
 )
 
 @JsonClass(generateAdapter = true)
-data class RtpEncodingParameters(
+data class RtpEncodingParameters @JvmOverloads constructor(
     /**
      * The media SSRC.
      */
-    var ssrc: Long? = null,
+    var ssrc: Long,
 
     /**
      * The RID RTP extension value. Must be unique.
@@ -293,19 +290,24 @@ data class RtpEncodingParameters(
     /**
      * Others.
      */
+    var active: Boolean = true,
+    var scaleFramerateDownBy: Double? = null,
     var scaleResolutionDownBy: Double? = null,
-    var maxBitrate: Long? = null,
+    var minBitrate: Int? = null,
+    var maxBitrate: Int? = null,
+    var maxFramerate: Int? = null,
+    var numTemporalLayers: Int? = null,
     var priority: RTCPriorityType = RTCPriorityType.LOW,
     var networkPriority: RTCPriorityType = RTCPriorityType.LOW
 )
 
 @JsonClass(generateAdapter = true)
-data class RtxParameter(
+data class RtxParameter @JvmOverloads constructor(
     var ssrc: Long? = null
 )
 
 @JsonClass(generateAdapter = true)
-data class RtpHeaderExtensionParameters(
+data class RtpHeaderExtensionParameters @JvmOverloads constructor(
     /**
      * The URI of the RTP header extension, as defined in RFC 5285.
      */
@@ -328,7 +330,7 @@ data class RtpHeaderExtensionParameters(
 )
 
 @JsonClass(generateAdapter = true)
-data class RtcpParameters(
+data class RtcpParameters @JvmOverloads constructor(
     /**
      * The Canonical Name (CNAME) used by RTCP (e.g. in SDES messages).
      */
