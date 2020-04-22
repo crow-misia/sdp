@@ -51,7 +51,7 @@ data class RtpCodecCapability @JvmOverloads constructor(
      * and 'profile-level-id' in H264 or 'profile-id' in VP9) are critical for
      * codec matching.
      */
-    var parameters: Map<String, Any>? = null,
+    var parameters: Map<String, Any?> = emptyMap(),
 
     /**
      * Transport layer and codec-specific feedback messages for this codec.
@@ -110,12 +110,12 @@ data class ExtendedRtpCodecCapability @JvmOverloads constructor(
     /**
      * Local Codec specific parameters.
      */
-    var localParameters: Map<String, Any>? = null,
+    var localParameters: Map<String, Any?> = emptyMap(),
 
     /**
      * Remote Codec specific parameters.
      */
-    var remoteParameters: Map<String, Any>? = null,
+    var remoteParameters: Map<String, Any?> = emptyMap(),
 
     /**
      * Transport layer and codec-specific feedback messages for this codec.
@@ -228,7 +228,7 @@ data class RtpCodecParameters @JvmOverloads constructor(
      * as 'packetization-mode' and 'profile-level-id' in H264 or 'profile-id' in
      * VP9) are critical for codec matching.
      */
-    var parameters: Map<String, Any>? = null,
+    var parameters: Map<String, Any?> = emptyMap(),
 
     /**
      * Transport layer and codec-specific feedback messages for this codec.
@@ -326,7 +326,7 @@ data class RtpHeaderExtensionParameters @JvmOverloads constructor(
     /**
      * Configuration parameters for the header extension.
      */
-    var parameters: Map<String, Any>? = null
+    var parameters: Map<String, Any?> = emptyMap()
 )
 
 @JsonClass(generateAdapter = true)

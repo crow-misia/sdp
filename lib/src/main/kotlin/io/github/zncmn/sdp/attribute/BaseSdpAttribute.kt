@@ -33,8 +33,8 @@ open class BaseSdpAttribute internal constructor(
 
     companion object {
         @JvmStatic @JvmOverloads
-        fun of(field: String, value: String = ""): BaseSdpAttribute {
-            return BaseSdpAttribute(SdpAttribute.getFieldName(field), if (value.isEmpty()) null else value)
+        fun of(field: String, value: String? = null): BaseSdpAttribute {
+            return BaseSdpAttribute(SdpAttribute.getFieldName(field), if (value.isNullOrEmpty()) null else value)
         }
 
         @JvmStatic

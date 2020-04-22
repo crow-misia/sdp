@@ -22,21 +22,29 @@ data class SdpSessionDescription internal constructor(
     val attributes: MutableList<SdpAttribute>,
     val mediaDescriptions: MutableList<SdpMediaDescription>
 ) : SdpElement {
-    fun getAttribute(name: String): SdpAttribute? {
+    fun <R : SdpAttribute> getAttribute(clazz: Class<R>): R? {
+        return attributes.asSequence().filterIsInstance(clazz).firstOrNull()
+    }
+
+    fun <R : SdpAttribute> getAttribute(clazz: KClass<R>): R? {
+        return getAttribute(clazz.java)
+    }
+
+    fun getAttributes(name: String): Sequence<SdpAttribute> {
         val field = SdpAttribute.getFieldName(name)
-        return attributes.find { field == it.field }
+        return attributes.asSequence().filter { field == it.field }
     }
 
-    fun <R : SdpAttribute> getAttributes(clazz: Class<R>): List<R> {
-        return attributes.filterIsInstance(clazz)
+    fun <R : SdpAttribute> getAttributes(clazz: Class<R>): Sequence<R> {
+        return attributes.asSequence().filterIsInstance(clazz)
     }
 
-    fun <R : SdpAttribute> getAttributes(clazz: KClass<R>): List<R> {
-        return attributes.filterIsInstance(clazz.java)
+    fun <R : SdpAttribute> getAttributes(clazz: KClass<R>): Sequence<R> {
+        return getAttributes(clazz.java)
     }
 
     @JvmOverloads
-    fun addAttribute(name: String, value: String = "") {
+    fun addAttribute(name: String, value: String? = null) {
         addAttribute(BaseSdpAttribute.of(name, value))
     }
 
@@ -53,12 +61,19 @@ data class SdpSessionDescription internal constructor(
     }
 
     fun hasAttribute(name: String): Boolean {
-        val field = SdpAttribute.getFieldName(name)
-        return attributes.find { field == it.field } != null
+        return getAttributes(name).any()
+    }
+
+    fun <R : SdpAttribute> hasAttribute(clazz: Class<R>): Boolean {
+        return getAttributes(clazz).any()
+    }
+
+    fun <R : SdpAttribute> hasAttribute(clazz: KClass<R>): Boolean {
+        return hasAttribute(clazz.java)
     }
 
     @JvmOverloads
-    fun setAttribute(name: String, value: String = "") {
+    fun setAttribute(name: String, value: String? = null) {
         setAttribute(BaseSdpAttribute.of(name, value))
     }
 
@@ -71,7 +86,7 @@ data class SdpSessionDescription internal constructor(
     }
 
     fun setAttribute(attribute: SdpAttribute) {
-        val index = attributes.indexOfFirst { attribute.field == it.field }
+        val index = attributes.asSequence().indexOfFirst { attribute.field == it.field }
         if (index < 0) {
             addAttribute(attribute)
         } else {
@@ -89,7 +104,7 @@ data class SdpSessionDescription internal constructor(
     }
 
     fun <R : SdpAttribute> removeAttribute(clazz: KClass<R>): Boolean {
-        return attributes.removeIf { clazz.isInstance(it) }
+        return removeAttribute(clazz.java)
     }
 
     fun addMediaScription(description: SdpMediaDescription) {

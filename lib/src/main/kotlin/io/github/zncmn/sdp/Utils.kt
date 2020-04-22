@@ -14,6 +14,7 @@ internal object Utils {
         InactiveAttribute.field to { _ -> InactiveAttribute },
         EndOfCandidatesAttribute.FIELD_NAME to { _ -> EndOfCandidatesAttribute },
         ExtMapAttribute.FIELD_NAME to { v -> ExtMapAttribute.parse(v) },
+        ExtmapAllowMixedAttribute.FIELD_NAME to { v -> ExtmapAllowMixedAttribute.parse(v) },
         FingerprintAttribute.FIELD_NAME to { v -> FingerprintAttribute.parse(v) },
         FormatAttribute.FIELD_NAME to { v -> FormatAttribute.parse(v) },
         FramerateAttribute.FIELD_NAME to { v -> FramerateAttribute.parse(v) },
@@ -35,6 +36,7 @@ internal object Utils {
         RTCPRsizeAttribute.FIELD_NAME to { _ -> RTCPRsizeAttribute },
         RTPMapAttribute.FIELD_NAME to { v -> RTPMapAttribute.parse(v) },
         SctpMapAttribute.FIELD_NAME to { v -> SctpMapAttribute.parse(v) },
+        SimulcastAttribute.FIELD_NAME to { v -> SimulcastAttribute.parse(v) },
         SetupAttribute.FIELD_NAME to { v -> SetupAttribute.parse(v) },
         SsrcAttribute.FIELD_NAME to { v -> SsrcAttribute.parse(v) },
         SsrcGroupAttribute.FIELD_NAME to { v -> SsrcGroupAttribute.parse(v) },
@@ -43,7 +45,7 @@ internal object Utils {
     )
 
     init {
-        assert(PARSERS.size == 36)
+        assert(PARSERS.size == 38)
     }
 
     @JvmStatic

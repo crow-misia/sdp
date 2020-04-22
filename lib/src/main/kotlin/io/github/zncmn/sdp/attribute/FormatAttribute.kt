@@ -36,7 +36,7 @@ data class FormatAttribute internal constructor(
     }
 
     fun addParameter(key: String, value: Int?) {
-        _parameters[key.trim()] = value.toString()
+        _parameters[key.trim()] = value?.toString()
     }
 
     fun removeParameter(key: String) {

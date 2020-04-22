@@ -4,12 +4,12 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class ProducerCodecOptions(
-    var opusStereo: Boolean,
-    var opusFec: Boolean,
-    var opusDtx: Boolean,
-    var opusMaxPlaybackRate: Int,
-    var opusPtime: Long,
-    var videoGoogleStartBitrate: Int,
-    var videoGoogleMaxBitrate: Int,
-    var videoGoogleMinBitrate: Int
+    var opusStereo: Boolean? = null,
+    var opusFec: Boolean? = null,
+    var opusDtx: Boolean? = null,
+    var opusMaxPlaybackRate: Int? = null,
+    var opusPtime: Long? = null,
+    var videoGoogleStartBitrate: Int? = null,
+    var videoGoogleMaxBitrate: Int? = null,
+    var videoGoogleMinBitrate: Int? = null
 )
