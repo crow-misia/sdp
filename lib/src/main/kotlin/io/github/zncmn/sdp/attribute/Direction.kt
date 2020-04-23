@@ -9,15 +9,17 @@ enum class Direction {
     INACTIVE
     ;
 
+    val value = getKey(name)
+
     companion object {
-        private val MAPPING = values().associateBy { it.name.toLowerCase() }
+        private val MAPPING = values().associateBy { it.value }
 
         @JvmStatic
         fun of(str: String): Direction? {
-            return MAPPING[str.toLowerCase()]
+            return MAPPING[getKey(str)]
         }
-
-        @Suppress("NOTHING_TO_INLINE")
-        private inline fun getKey(name: String) = name.toLowerCase(Locale.ENGLISH)
     }
 }
+
+@Suppress("NOTHING_TO_INLINE")
+private inline fun getKey(name: String) = name.toLowerCase(Locale.ENGLISH)

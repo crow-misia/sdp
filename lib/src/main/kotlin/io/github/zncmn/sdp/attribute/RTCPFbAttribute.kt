@@ -8,8 +8,6 @@ data class RTCPFbAttribute internal constructor(
     var subtype: String?
 ) : SdpAttribute {
     override val field = FIELD_NAME
-    override val value: String
-        get() = buildString { valueJoinTo(this) }
 
     override fun toString(): String {
         return buildString { joinTo(this) }
@@ -45,7 +43,7 @@ data class RTCPFbAttribute internal constructor(
             return RTCPFbAttribute(payloadType, type, subtype)
         }
 
-        internal fun parse(value: String): RTCPFbAttribute {
+        internal fun parse(value: String): SdpAttribute {
             val values = value.split(' ', limit = 3)
             val size = values.size
             if (size < 2) {

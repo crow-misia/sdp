@@ -17,8 +17,6 @@ data class CandidateAttribute internal constructor(
     internal var _extensions: MutableMap<String, String>
 ) : SdpAttribute {
     override val field = FIELD_NAME
-    override val value: String
-        get() = buildString { valueJoinTo(this) }
 
     var extensions: Map<String, String>
         get() = _extensions
@@ -122,7 +120,7 @@ data class CandidateAttribute internal constructor(
             )
         }
 
-        internal fun parse(value: String): CandidateAttribute {
+        internal fun parse(value: String): SdpAttribute {
             val values = value.split(' ')
             val size = values.size
             if (size < 6) {

@@ -17,8 +17,8 @@ data class SdpMediaDescription internal constructor(
     val formats: MutableList<String>,
     val connections: MutableList<SdpConnection>,
     val bandwidths: MutableList<SdpBandwidth>,
-    val attributes: MutableList<SdpAttribute>
-) : SdpElement {
+    override val attributes: MutableList<SdpAttribute>
+) : WithAttributeSdpElement, SdpElement {
     private var cachedMid: String? = null
 
     var protos: List<String>
@@ -28,7 +28,7 @@ data class SdpMediaDescription internal constructor(
     var mid: String
         get() {
             return cachedMid ?: run {
-                val mid = getAttributes(MidAttribute.FIELD_NAME).firstOrNull()?.value.orEmpty()
+                val mid = getAttributes(MidAttribute::class).firstOrNull()?.value.orEmpty()
                 cachedMid = mid
                 mid
             }
@@ -42,83 +42,6 @@ data class SdpMediaDescription internal constructor(
 
     fun setProto(proto: String) {
         _protos = proto.splitToSequence('/').toMutableList()
-    }
-
-    fun <R : SdpAttribute> getAttribute(clazz: Class<R>): R? {
-        return attributes.asSequence().filterIsInstance(clazz).firstOrNull()
-    }
-
-    fun <R : SdpAttribute> getAttribute(clazz: KClass<R>): R? {
-        return getAttribute(clazz.java)
-    }
-
-    fun getAttributes(name: String): Sequence<SdpAttribute> {
-        val field = SdpAttribute.getFieldName(name)
-        return attributes.asSequence().filter { field == it.field }
-    }
-
-    fun <R : SdpAttribute> getAttributes(clazz: Class<R>): Sequence<R> {
-        return attributes.asSequence().filterIsInstance(clazz)
-    }
-
-    fun <R : SdpAttribute> getAttributes(clazz: KClass<R>): Sequence<R> {
-        return getAttributes(clazz.java)
-    }
-
-    @JvmOverloads
-    fun addAttribute(name: String, value: String? = null) {
-        addAttribute(BaseSdpAttribute.of(name, value))
-    }
-
-    fun addAttribute(name: String, value: Int) {
-        addAttribute(BaseSdpAttribute.of(name, value))
-    }
-
-    fun addAttribute(attribute: SdpAttribute) {
-        attributes.add(attribute)
-    }
-
-    fun hasAttribute(name: String): Boolean {
-        return getAttributes(name).any()
-    }
-
-    fun <R : SdpAttribute> hasAttribute(clazz: Class<R>): Boolean {
-        return getAttributes(clazz).any()
-    }
-
-    fun <R : SdpAttribute> hasAttribute(clazz: KClass<R>): Boolean {
-        return hasAttribute(clazz.java)
-    }
-
-    @JvmOverloads
-    fun setAttribute(name: String, value: String? = null) {
-        setAttribute(BaseSdpAttribute.of(name, value))
-    }
-
-    fun setAttribute(name: String, value: Int) {
-        setAttribute(BaseSdpAttribute.of(name, value))
-    }
-
-    fun setAttribute(attribute: SdpAttribute) {
-        val index = attributes.asSequence().indexOfFirst { attribute.field == it.field }
-        if (index < 0) {
-            addAttribute(attribute)
-        } else {
-            attributes[index] = attribute
-        }
-    }
-
-    fun removeAttribute(name: String): Boolean {
-        val field = SdpAttribute.getFieldName(name)
-        return attributes.removeIf { field == it.field }
-    }
-
-    fun <R : SdpAttribute> removeAttribute(clazz: Class<R>): Boolean {
-        return attributes.removeIf { clazz.isInstance(it) }
-    }
-
-    fun <R : SdpAttribute> removeAttribute(clazz: KClass<R>): Boolean {
-        return removeAttribute(clazz.java)
     }
 
     override fun toString(): String {

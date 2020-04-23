@@ -1,7 +1,7 @@
 package io.github.zncmn.sdp.attribute
 
 data class IceOptionsAttribute internal constructor(
-    override var value: String?
+    override var value: String
 ) : BaseSdpAttribute(FIELD_NAME, value) {
     companion object {
         internal const val FIELD_NAME = "ice-options"
@@ -11,7 +11,7 @@ data class IceOptionsAttribute internal constructor(
             return IceOptionsAttribute(value)
         }
 
-        internal fun parse(value: String): IceOptionsAttribute {
+        internal fun parse(value: String): SdpAttribute {
             return IceOptionsAttribute(value)
         }
     }

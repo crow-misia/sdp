@@ -9,8 +9,6 @@ data class RTCPAttribute internal constructor(
     var address: String
 ) : SdpAttribute {
     override val field = FIELD_NAME
-    override val value: String
-        get() = buildString { valueJoinTo(this) }
 
     override fun toString(): String {
         return buildString { joinTo(this) }
@@ -29,12 +27,14 @@ data class RTCPAttribute internal constructor(
    private fun valueJoinTo(buffer: StringBuilder) {
         buffer.apply {
             append(port)
-            append(' ')
-            append(nettype)
-            append(' ')
-            append(addrtype)
-            append(' ')
-            append(address)
+            if (address.isNotEmpty()) {
+                append(' ')
+                append(nettype)
+                append(' ')
+                append(addrtype)
+                append(' ')
+                append(address)
+            }
         }
     }
 
@@ -42,20 +42,25 @@ data class RTCPAttribute internal constructor(
         internal const val FIELD_NAME = "rtcp"
 
         @JvmStatic
+        fun of(port: Int): RTCPAttribute {
+            return RTCPAttribute(port, "", "", "")
+        }
+
+        @JvmStatic
         fun of(port: Int, nettype: String, addrtype: String, address: String): RTCPAttribute {
             return RTCPAttribute(port, nettype, addrtype, address)
         }
 
-        internal fun parse(value: String): RTCPAttribute {
-            val values = value.split(' ')
-            val size = values.size
-            if (size != 4) {
-                throw SdpParseException("could not parse: $value as RtcpAttribute")
-            }
+        internal fun parse(value: String): SdpAttribute {
+            val values = value.split(' ', limit = 4)
             val port = values[0].toIntOrNull() ?: run {
                 throw SdpParseException("could not parse: $value as RtcpAttribute")
             }
-            return RTCPAttribute(port, values[1], values[2], values[3])
+            return if (values.size == 4) {
+                RTCPAttribute(port, values[1], values[2], values[3])
+            } else {
+                RTCPAttribute(port, "", "", "")
+            }
         }
     }
 }

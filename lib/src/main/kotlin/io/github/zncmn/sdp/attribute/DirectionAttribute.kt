@@ -3,8 +3,7 @@ package io.github.zncmn.sdp.attribute
 sealed class DirectionAttribute(
     type: Direction
 ) : SdpAttribute {
-    override val field: String = type.name.toLowerCase(java.util.Locale.ENGLISH)
-    override val value: String? = null
+    override val field: String = type.value
 
     override fun toString(): String {
         return buildString { joinTo(this) }

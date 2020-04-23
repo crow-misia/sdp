@@ -1,9 +1,12 @@
 package io.github.zncmn.sdp.attribute
 
+import io.github.zncmn.sdp.Utils
+
 open class BaseSdpAttribute internal constructor(
     override var field: String,
-    override var value: String?
+    open var value: String
 ) : SdpAttribute {
+
     override fun equals(other: Any?): Boolean {
         if (other !is BaseSdpAttribute) {
             return false
@@ -23,9 +26,9 @@ open class BaseSdpAttribute internal constructor(
         buffer.apply {
             append("a=")
             append(field)
-            value?.also {
+            if (value.isNotEmpty()) {
                 append(':')
-                append(it)
+                append(value)
             }
             append("\r\n")
         }
@@ -34,7 +37,7 @@ open class BaseSdpAttribute internal constructor(
     companion object {
         @JvmStatic @JvmOverloads
         fun of(field: String, value: String? = null): BaseSdpAttribute {
-            return BaseSdpAttribute(SdpAttribute.getFieldName(field), if (value.isNullOrEmpty()) null else value)
+            return BaseSdpAttribute(Utils.getFieldName(field), value.orEmpty())
         }
 
         @JvmStatic

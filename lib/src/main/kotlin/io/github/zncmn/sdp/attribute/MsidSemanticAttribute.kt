@@ -7,8 +7,6 @@ data class MsidSemanticAttribute internal constructor(
     var token: String
 ) : SdpAttribute {
     override val field = FIELD_NAME
-    override val value: String
-        get() = buildString { valueJoinTo(this) }
 
     override fun toString(): String {
         return buildString { joinTo(this) }
@@ -26,6 +24,7 @@ data class MsidSemanticAttribute internal constructor(
 
     private fun valueJoinTo(buffer: StringBuilder) {
         buffer.apply {
+            append(' ')
             append(semantic)
             append(' ')
             append(token)
@@ -40,8 +39,8 @@ data class MsidSemanticAttribute internal constructor(
             return MsidSemanticAttribute(semantic, token)
         }
 
-        internal fun parse(value: String): MsidSemanticAttribute {
-            val values = value.split(' ', limit = 2)
+        internal fun parse(value: String): SdpAttribute {
+            val values = value.trimStart().split(' ', limit = 2)
             val size = values.size
             if (size < 2) {
                 throw SdpParseException("could not parse: $value as MsidSemanticAttribute")

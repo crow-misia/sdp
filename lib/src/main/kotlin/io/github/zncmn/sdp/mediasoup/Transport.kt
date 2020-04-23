@@ -85,7 +85,6 @@ enum class DtlsRole {
     @Json(name = "server") SERVER
 }
 
-
 enum class ConnectionState {
     @Json(name = "new") NEW,
     @Json(name = "connecting") CONNECTING,

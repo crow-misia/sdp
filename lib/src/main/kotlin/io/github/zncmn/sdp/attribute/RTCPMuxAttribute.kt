@@ -4,7 +4,6 @@ object RTCPMuxAttribute : SdpAttribute {
     internal const val FIELD_NAME = "rtcp-mux"
 
     override val field = FIELD_NAME
-    override val value: String? = null
 
     override fun toString(): String {
         return buildString { joinTo(this) }

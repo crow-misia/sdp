@@ -7,8 +7,6 @@ data class FingerprintAttribute internal constructor(
     var hash: String
 ) : SdpAttribute {
     override val field = FIELD_NAME
-    override val value: String
-        get() = buildString { valueJoinTo(this) }
 
     override fun toString(): String {
         return buildString { joinTo(this) }
@@ -37,16 +35,16 @@ data class FingerprintAttribute internal constructor(
 
         @JvmStatic
         fun of(type: String, hash: String): FingerprintAttribute {
-            return FingerprintAttribute(type, hash)
+            return FingerprintAttribute(type.trim(), hash.trim())
         }
 
-        internal fun parse(value: String): FingerprintAttribute {
+        internal fun parse(value: String): SdpAttribute {
             val values = value.split(' ', limit = 2)
             val size = values.size
             if (size != 2) {
                 throw SdpParseException("could not parse: $value as FingerprintAttribute")
             }
-            return FingerprintAttribute(values[0], values[1])
+            return of(values[0], values[1])
         }
     }
 }

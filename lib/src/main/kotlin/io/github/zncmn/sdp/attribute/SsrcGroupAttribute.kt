@@ -4,17 +4,18 @@ import io.github.zncmn.sdp.SdpParseException
 
 data class SsrcGroupAttribute internal constructor(
     var semantics: String,
-    var ssrcs: String
+    val ssrcs: MutableSet<Long>
 ) : SdpAttribute {
     override val field = FIELD_NAME
-    override val value: String
-        get() = buildString { valueJoinTo(this) }
 
     override fun toString(): String {
         return buildString { joinTo(this) }
     }
 
     override fun joinTo(buffer: StringBuilder) {
+        if (ssrcs.isEmpty()) {
+            return
+        }
         buffer.apply {
             append("a=")
             append(field)
@@ -27,8 +28,10 @@ data class SsrcGroupAttribute internal constructor(
     private fun valueJoinTo(buffer: StringBuilder) {
         buffer.apply {
             append(semantics)
-            append(' ')
-            append(ssrcs)
+            ssrcs.forEach {
+                append(' ')
+                append(it)
+            }
         }
     }
 
@@ -36,17 +39,17 @@ data class SsrcGroupAttribute internal constructor(
         internal const val FIELD_NAME = "ssrc-group"
 
         @JvmStatic
-        fun of(semantics: String, ssrcs: String): SsrcGroupAttribute {
-            return SsrcGroupAttribute(semantics, ssrcs)
+        fun of(semantics: String, vararg ssrcs: Long): SsrcGroupAttribute {
+            return SsrcGroupAttribute(semantics, ssrcs.toMutableSet())
         }
 
-        internal fun parse(value: String): SsrcGroupAttribute {
+        internal fun parse(value: String): SdpAttribute {
             val values = value.split(' ', limit = 2)
             val size = values.size
             if (size < 2) {
                 throw SdpParseException("could not parse: $value as SsrcGroupAttribute")
             }
-            return SsrcGroupAttribute(values[0], values[1])
+            return SsrcGroupAttribute(values[0], values[1].splitToSequence(' ').map { it.toLong() }.toMutableSet())
         }
     }
 }

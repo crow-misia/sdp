@@ -1,22 +1,22 @@
 package io.github.zncmn.sdp.attribute
 
-data class ExtmapAllowMixedAttribute internal constructor(
-    override var value: String?
-) : BaseSdpAttribute(FIELD_NAME, value) {
+object ExtmapAllowMixedAttribute : SdpAttribute {
+    internal const val FIELD_NAME = "extmap-allow-mixed"
 
-    companion object {
-        internal const val FIELD_NAME = "extmap-allow-mixed"
+    override val field = FIELD_NAME
 
-        @JvmStatic
-        fun of(value: String? = null): ExtmapAllowMixedAttribute {
-            return ExtmapAllowMixedAttribute(value)
-        }
+    override fun toString(): String {
+        return buildString { joinTo(this) }
+    }
 
-        internal fun parse(value: String): ExtmapAllowMixedAttribute {
-            return if (value.isEmpty())
-                ExtmapAllowMixedAttribute(null)
-            else
-                ExtmapAllowMixedAttribute(value)
+    override fun joinTo(buffer: StringBuilder) {
+        buffer.apply {
+            append("a=")
+            append(field)
+            append("\r\n")
         }
     }
+
+    @JvmStatic
+    fun of() = this
 }

@@ -9,8 +9,6 @@ data class CryptoAttribute internal constructor(
     var sessionConfig: String?
 ) : SdpAttribute {
     override val field = FIELD_NAME
-    override val value: String
-        get() = buildString { valueJoinTo(this) }
 
     override fun toString(): String {
         return buildString { joinTo(this) }
@@ -48,7 +46,7 @@ data class CryptoAttribute internal constructor(
             return CryptoAttribute(id, suite, config, sessionConfig)
         }
 
-        internal fun parse(value: String): CryptoAttribute {
+        internal fun parse(value: String): SdpAttribute {
             val values = value.split(' ', limit = 4)
             val size = values.size
             if (size < 3) {

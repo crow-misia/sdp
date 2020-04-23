@@ -1,6 +1,8 @@
 package io.github.zncmn.sdp.attribute
 
 import io.github.zncmn.sdp.SdpParseException
+import java.util.*
+import kotlin.collections.LinkedHashSet
 
 data class GroupAttribute internal constructor(
     var type: String,
@@ -9,23 +11,21 @@ data class GroupAttribute internal constructor(
     var mids: Set<String>
         get() = _mids
         set(value) {
-            _mids = LinkedHashSet(value.map { it.toLowerCase() })
+            _mids = LinkedHashSet(value.map { getKey(it) })
         }
 
     override val field = FIELD_NAME
-    override val value: String
-        get() = buildString { valueJoinTo(this) }
 
     fun addMid(mid: String) {
-        _mids.add(mid.toLowerCase())
+        _mids.add(getKey(mid))
     }
 
     fun hasMid(mid: String): Boolean {
-        return _mids.contains(mid.toLowerCase())
+        return _mids.contains(getKey(mid))
     }
 
     fun removeMid(mid: String): Boolean {
-        return _mids.remove(mid.toLowerCase())
+        return _mids.remove(getKey(mid))
     }
 
     override fun toString(): String {
@@ -57,10 +57,10 @@ data class GroupAttribute internal constructor(
 
         @JvmStatic
         fun of(type: String, vararg mids: String): GroupAttribute {
-            return GroupAttribute(type, LinkedHashSet(mids.map { it.toLowerCase() }))
+            return GroupAttribute(type, LinkedHashSet(mids.map { getKey(it) }))
         }
 
-        internal fun parse(value: String): GroupAttribute {
+        internal fun parse(value: String): SdpAttribute {
             val values = value.split(' ', limit = 2)
             val size = values.size
             if (size < 2) {
@@ -71,5 +71,8 @@ data class GroupAttribute internal constructor(
                 mids = *values[1].split(' ').toTypedArray()
             )
         }
+
+        @Suppress("NOTHING_TO_INLINE")
+        private inline fun getKey(name: String) = name.toLowerCase(Locale.ENGLISH)
     }
 }

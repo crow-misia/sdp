@@ -1,22 +1,45 @@
 package io.github.zncmn.sdp.attribute
 
+import io.github.zncmn.sdp.SdpParseException
+
 data class FramerateAttribute internal constructor(
-    override var value: String?
-) : BaseSdpAttribute(FIELD_NAME, value) {
+    var value: Double
+) : SdpAttribute {
+    override val field = FIELD_NAME
+
+    override fun toString(): String {
+        return buildString { joinTo(this) }
+    }
+
+    override fun joinTo(buffer: StringBuilder) {
+        buffer.apply {
+            append("a=")
+            append(field)
+            append(':')
+            append(value)
+            append("\r\n")
+        }
+    }
 
     companion object {
         internal const val FIELD_NAME = "framerate"
 
         @JvmStatic
-        fun of(value: Double): FramerateAttribute {
-            return FramerateAttribute(value.toString())
+        fun of(value: Int): FramerateAttribute {
+            return FramerateAttribute(value.toDouble())
         }
 
-        internal fun parse(value: String): FramerateAttribute {
-            return if (value.isEmpty())
-                FramerateAttribute(null)
-            else
-                FramerateAttribute(value)
+        @JvmStatic
+        fun of(value: Double): FramerateAttribute {
+            return FramerateAttribute(value)
+        }
+
+        internal fun parse(value: String): SdpAttribute {
+            val rate = value.toDoubleOrNull() ?: run {
+                throw SdpParseException("could not parse: $value as FramerateAttribute")
+            }
+
+            return FramerateAttribute(rate)
         }
     }
 }

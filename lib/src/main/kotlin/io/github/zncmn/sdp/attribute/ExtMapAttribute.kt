@@ -10,8 +10,6 @@ data class ExtMapAttribute internal constructor(
     var config: String?
 ) : SdpAttribute {
     override val field = FIELD_NAME
-    override val value: String
-        get() = buildString { valueJoinTo(this) }
 
     override fun toString(): String {
         return buildString { joinTo(this) }
@@ -32,7 +30,7 @@ data class ExtMapAttribute internal constructor(
             append(id)
             direction?.also {
                 append('/')
-                append(it)
+                append(it.value)
             }
             append(' ')
             append(uri)
@@ -55,7 +53,7 @@ data class ExtMapAttribute internal constructor(
             return ExtMapAttribute(value, direction, uri, encryptUri, config)
         }
 
-        internal fun parse(value: String): ExtMapAttribute {
+        internal fun parse(value: String): SdpAttribute {
             val values = value.split(' ', limit = 4)
             val size = values.size
             if (size < 2) {

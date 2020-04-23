@@ -5,12 +5,10 @@ import io.github.zncmn.sdp.SdpParseException
 data class RTPMapAttribute internal constructor(
     var payloadType: Int,
     var encodingName: String,
-    var clockRate: Int,
+    var clockRate: Int?,
     var encodingParameters: String?
 ) : SdpAttribute {
     override val field = FIELD_NAME
-    override val value: String
-        get() = buildString { valueJoinTo(this) }
 
     override fun toString(): String {
         return buildString { joinTo(this) }
@@ -31,9 +29,12 @@ data class RTPMapAttribute internal constructor(
             append(payloadType)
             append(' ')
             append(encodingName)
-            append('/')
-            append(clockRate)
             encodingParameters?.also {
+                append('/')
+                append(clockRate ?: 0)
+                append('/')
+                append(it)
+            } ?: clockRate?.also {
                 append('/')
                 append(it)
             }
@@ -46,7 +47,7 @@ data class RTPMapAttribute internal constructor(
         @JvmStatic @JvmOverloads
         fun of(payloadType: Int,
                encodingName: String,
-               clockRate: Int,
+               clockRate: Int? = null,
                encodingParameters: String? = null
         ): RTPMapAttribute {
             return RTPMapAttribute(
@@ -57,7 +58,7 @@ data class RTPMapAttribute internal constructor(
             )
         }
 
-        internal fun parse(value: String): RTPMapAttribute {
+        internal fun parse(value: String): SdpAttribute {
             val values = value.split(' ', limit = 2)
             val size = values.size
             if (size < 2) {
@@ -69,17 +70,17 @@ data class RTPMapAttribute internal constructor(
 
             val parameters = values[1].split('/', limit = 3)
             val paramsSize = parameters.size
-            if (paramsSize < 2) {
-                throw SdpParseException("could not parse: $value as RTPMapAttribute")
-            }
-            val clockRate = parameters[1].toIntOrNull() ?: run {
-                throw SdpParseException("could not parse: $value as RTPMapAttribute")
-            }
+            val clockRate = if (paramsSize > 1) {
+                parameters[1].toIntOrNull() ?: run {
+                    throw SdpParseException("could not parse: $value as RTPMapAttribute")
+                }
+            } else null
+
             return RTPMapAttribute(
                 payloadType = payloadType,
                 encodingName = parameters[0],
                 clockRate = clockRate,
-                encodingParameters = if (paramsSize < 3) null else parameters[2]
+                encodingParameters = if (paramsSize > 2) parameters[2] else null
             )
         }
     }

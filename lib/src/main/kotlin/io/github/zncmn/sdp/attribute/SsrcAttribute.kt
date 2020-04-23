@@ -8,8 +8,6 @@ data class SsrcAttribute internal constructor(
     var ssrcValue: String
 ) : SdpAttribute {
     override val field = FIELD_NAME
-    override val value: String
-        get() = buildString { valueJoinTo(this) }
 
     override fun toString(): String {
         return buildString { joinTo(this) }
@@ -43,7 +41,7 @@ data class SsrcAttribute internal constructor(
             return SsrcAttribute(id, attribute, ssrcValue)
         }
 
-        internal fun parse(value: String): SsrcAttribute {
+        internal fun parse(value: String): SdpAttribute {
             val values = value.split(' ', limit = 2)
             val size = values.size
             if (size < 2) {

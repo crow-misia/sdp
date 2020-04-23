@@ -5,11 +5,9 @@ import io.github.zncmn.sdp.SdpParseException
 data class SctpMapAttribute internal constructor(
     var sctpmapNumber: Int,
     var app: String,
-    var maxMessageSize: Int
+    var maxMessageSize: Int?
 ) : SdpAttribute {
     override val field = FIELD_NAME
-    override val value: String
-        get() = buildString { valueJoinTo(this) }
 
     override fun toString(): String {
         return buildString { joinTo(this) }
@@ -30,31 +28,31 @@ data class SctpMapAttribute internal constructor(
             append(sctpmapNumber)
             append(' ')
             append(app)
-            append(' ')
-            append(maxMessageSize)
+            maxMessageSize?.also {
+                append(' ')
+                append(it)
+            }
         }
     }
 
     companion object {
         internal const val FIELD_NAME = "sctpmap"
 
-        @JvmStatic
-        fun of(sctpmapNumber: Int, app: String, maxMessageSize: Int): SctpMapAttribute {
+        @JvmStatic @JvmOverloads
+        fun of(sctpmapNumber: Int, app: String, maxMessageSize: Int? = null): SctpMapAttribute {
             return SctpMapAttribute(sctpmapNumber, app, maxMessageSize)
         }
 
-        internal fun parse(value: String): SctpMapAttribute {
+        internal fun parse(value: String): SdpAttribute {
             val values = value.split(' ', limit = 3)
             val size = values.size
-            if (size != 3) {
+            if (size < 2) {
                 throw SdpParseException("could not parse: $value as SctpMapAttribute")
             }
             val sctpmapNumber = values[0].toIntOrNull() ?: run {
                 throw SdpParseException("could not parse: $value as SctpMapAttribute")
             }
-            val maxMessageSize = values[0].toIntOrNull() ?: run {
-                throw SdpParseException("could not parse: $value as SctpMapAttribute")
-            }
+            val maxMessageSize = if (size > 2) values[2].toIntOrNull() else null
             return SctpMapAttribute(sctpmapNumber, values[1], maxMessageSize)
         }
     }

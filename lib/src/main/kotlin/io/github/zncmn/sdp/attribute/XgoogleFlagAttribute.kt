@@ -1,7 +1,7 @@
 package io.github.zncmn.sdp.attribute
 
 data class XgoogleFlagAttribute internal constructor(
-    override var value: String?
+    override var value: String
 ) : BaseSdpAttribute(FIELD_NAME, value) {
     companion object {
         internal const val FIELD_NAME = "x-google-flag"
@@ -11,7 +11,7 @@ data class XgoogleFlagAttribute internal constructor(
             return XgoogleFlagAttribute(type)
         }
 
-        internal fun parse(value: String): XgoogleFlagAttribute {
+        internal fun parse(value: String): SdpAttribute {
             return of(value)
         }
     }

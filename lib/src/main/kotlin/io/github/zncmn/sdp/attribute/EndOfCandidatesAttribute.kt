@@ -4,7 +4,6 @@ object EndOfCandidatesAttribute : SdpAttribute {
     internal const val FIELD_NAME = "end-of-candidates"
 
     override val field = FIELD_NAME
-    override val value: String? = null
 
     override fun toString(): String {
         return buildString { joinTo(this) }

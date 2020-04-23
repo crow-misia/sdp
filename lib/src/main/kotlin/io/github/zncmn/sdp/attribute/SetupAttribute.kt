@@ -3,7 +3,7 @@ package io.github.zncmn.sdp.attribute
 import java.util.*
 
 data class SetupAttribute internal constructor(
-    override var value: String?
+    override var value: String
 ) : BaseSdpAttribute(FIELD_NAME, value) {
     companion object {
         internal const val FIELD_NAME = "setup"
@@ -24,7 +24,7 @@ data class SetupAttribute internal constructor(
             return SetupAttribute(type.toLowerCase())
         }
 
-        internal fun parse(value: String): SetupAttribute {
+        internal fun parse(value: String): SdpAttribute {
             return of(value)
         }
     }

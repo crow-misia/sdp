@@ -6,8 +6,6 @@ data class PtimeAttribute internal constructor(
     var time: Long
 ) : SdpAttribute {
     override val field = FIELD_NAME
-    override val value: String
-        get() = buildString { valueJoinTo(this) }
 
     override fun toString(): String {
         return buildString { joinTo(this) }
@@ -35,7 +33,7 @@ data class PtimeAttribute internal constructor(
             return PtimeAttribute(streamId)
         }
 
-        internal fun parse(value: String): PtimeAttribute {
+        internal fun parse(value: String): SdpAttribute {
             val time = value.toLongOrNull() ?: run {
                 throw SdpParseException("could not parse: $value as PtimeAttribute")
             }

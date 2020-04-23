@@ -1,26 +1,25 @@
 package io.github.zncmn.sdp.attribute
 
-data class CNameAttribute internal constructor(
+data class RemoteCandidateAttribute internal constructor(
     override var value: String
 ) : BaseSdpAttribute(FIELD_NAME, value) {
-
     override fun joinTo(buffer: StringBuilder) {
-        if (value.isBlank()) {
+        if (value.isEmpty()) {
             return
         }
         super.joinTo(buffer)
     }
 
     companion object {
-        internal const val FIELD_NAME = "cname"
+        internal const val FIELD_NAME = "remote-candidates"
 
         @JvmStatic
-        fun of(value: String): CNameAttribute {
-            return CNameAttribute(value)
+        fun of(value: String): RemoteCandidateAttribute {
+            return RemoteCandidateAttribute(value)
         }
 
         internal fun parse(value: String): SdpAttribute {
-            return CNameAttribute(value)
+            return RemoteCandidateAttribute(value)
         }
     }
 }
