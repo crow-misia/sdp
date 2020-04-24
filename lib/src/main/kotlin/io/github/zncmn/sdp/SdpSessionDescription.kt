@@ -31,7 +31,10 @@ data class SdpSessionDescription internal constructor(
     }
 
     fun setMediaDescription(description: SdpMediaDescription) {
-        val mid = description.mid
+        setMediaDescription(description, description.mid)
+    }
+
+    fun setMediaDescription(description: SdpMediaDescription, mid: String) {
         val index = midToIndex[mid] ?: -1
         val size = mediaDescriptions.size
         if (index < 0 || index >= size) {
