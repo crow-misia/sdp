@@ -16,13 +16,31 @@ data class SdpSessionDescription internal constructor(
     val bandwidths: MutableList<SdpBandwidth>,
     val timings: MutableList<SdpTiming>,
     override val attributes: MutableList<SdpAttribute>,
-    val mediaDescriptions: MutableList<SdpMediaDescription>
+    private val mediaDescriptions: MutableList<SdpMediaDescription>
 ) : WithAttributeSdpElement, SdpElement {
-    fun addMediaScription(description: SdpMediaDescription) {
-        mediaDescriptions.add(description)
+    private val midToIndex = hashMapOf<String, Int>().also { map ->
+        mediaDescriptions.forEachIndexed { idx, desc -> map[desc.mid] = idx }
     }
 
-    fun numOfmediaScription(): Int {
+    fun getMediaDescription(mid: String): SdpMediaDescription? {
+        val index = midToIndex[mid] ?: -1
+        val size = mediaDescriptions.size
+        return if (index < 0 || index >= size) null else mediaDescriptions[index]
+    }
+
+    fun setMediaDescription(description: SdpMediaDescription) {
+        val mid = description.mid
+        val index = midToIndex[mid] ?: -1
+        val size = mediaDescriptions.size
+        if (index < 0 || index >= size) {
+            midToIndex[mid] = mediaDescriptions.size
+            mediaDescriptions.add(description)
+        } else {
+            mediaDescriptions[index] = description
+        }
+    }
+
+    fun numOfMediaDescription(): Int {
         return mediaDescriptions.size
     }
 

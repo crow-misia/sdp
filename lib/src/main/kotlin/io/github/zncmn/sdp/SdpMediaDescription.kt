@@ -2,10 +2,8 @@
 
 package io.github.zncmn.sdp
 
-import io.github.zncmn.sdp.attribute.BaseSdpAttribute
 import io.github.zncmn.sdp.attribute.MidAttribute
 import io.github.zncmn.sdp.attribute.SdpAttribute
-import kotlin.reflect.KClass
 
 data class SdpMediaDescription internal constructor(
     var type: String,
@@ -28,7 +26,7 @@ data class SdpMediaDescription internal constructor(
     var mid: String
         get() {
             return cachedMid ?: run {
-                val mid = getAttributes(MidAttribute::class).firstOrNull()?.value.orEmpty()
+                val mid = getAttribute(MidAttribute::class)?.value.orEmpty()
                 cachedMid = mid
                 mid
             }

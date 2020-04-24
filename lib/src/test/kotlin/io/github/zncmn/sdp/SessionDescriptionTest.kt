@@ -22,6 +22,7 @@ t=2873397496 2873404696
 b=AS:4000
 a=sendrecv
 m=audio 49170 RTP/AVP 0
+a=mid:123
 a=recvonly
 a=rtcp:65179 IN IP4 123.45.67.89
 a=rtcp:12345
@@ -94,6 +95,25 @@ a=source-filter: incl IN IP4 239.5.2.31 10.1.15.5
 a=ts-refclk:ptp=IEEE1588-2008:00-50-C2-FF-FE-90-04-37:0
 a=mediaclk:direct=0
         """.trimIndent())
+
+        val testMediaDescription = SdpMediaDescription.of("audio", 49170, null, listOf("RTP", "AVP"), listOf("0"),
+            attributes = listOf(
+                MidAttribute.of("123"),
+                RecvOnlyAttribute,
+                RTCPAttribute.of(65179, "IN", "IP4", "123.45.67.89"),
+                RTCPAttribute.of(12345),
+                ControlAttribute.of("streamId=0"),
+                RTCPFbAttribute.of("98", "trr-int", "100"),
+                RTCPFbAttribute.of("98", "nack", "rpsi"),
+                ExtMapAttribute.of(2, uri = "urn:ietf:params:rtp-hdrext:toffset"),
+                ExtMapAttribute.of(1, Direction.RECVONLY, uri = "URI-gps-string"),
+                ExtMapAttribute.of(3, null, "urn:ietf:params:rtp-hdrext:encrypt", "urn:ietf:params:rtp-hdrext:smpte-tc", "25@600/24"),
+                FormatAttribute.of(98).also {
+                    it.addParameter("minptime", "10")
+                    it.addParameter("useinbandfec", "1")
+                }
+            ))
+
         val expected = SdpSessionDescription.of(
             version = SdpVersion.of(),
             origin = SdpOrigin.of("jdoe", 2890844526, 2890842807, "IN", "IP4", "10.47.16.5"),
@@ -107,22 +127,7 @@ a=mediaclk:direct=0
             timings = listOf(SdpTiming.of(2873397496L, 2873404696L)),
             attributes = listOf(SendRecvAttribute),
             mediaDescriptions = listOf(
-                SdpMediaDescription.of("audio", 49170, null, listOf("RTP", "AVP"), listOf("0"),
-                    attributes = listOf(
-                        RecvOnlyAttribute,
-                        RTCPAttribute.of(65179, "IN", "IP4", "123.45.67.89"),
-                        RTCPAttribute.of(12345),
-                        ControlAttribute.of("streamId=0"),
-                        RTCPFbAttribute.of("98", "trr-int", "100"),
-                        RTCPFbAttribute.of("98", "nack", "rpsi"),
-                        ExtMapAttribute.of(2, uri = "urn:ietf:params:rtp-hdrext:toffset"),
-                        ExtMapAttribute.of(1, Direction.RECVONLY, uri = "URI-gps-string"),
-                        ExtMapAttribute.of(3, null, "urn:ietf:params:rtp-hdrext:encrypt", "urn:ietf:params:rtp-hdrext:smpte-tc", "25@600/24"),
-                        FormatAttribute.of(98).also {
-                            it.addParameter("minptime", "10")
-                            it.addParameter("useinbandfec", "1")
-                        }
-                    )),
+                testMediaDescription,
                 SdpMediaDescription.of("video", 51372, null, listOf("RTP", "AVP"), listOf("99"),
                     attributes = listOf(
                         SendOnlyAttribute,
@@ -191,9 +196,28 @@ a=mediaclk:direct=0
             )
         )
 
-        /**
-        a=source-filter: incl IN IP4 239.5.2.31 10.1.15.5
-         */
+        assertThat(actual).isEqualTo(expected)
+
+        val newMediaDescription = SdpMediaDescription.of("audio", 49170, null, listOf("RTP", "AVP"), listOf("0"),
+            attributes = listOf(
+                MidAttribute.of("123"),
+                SendOnlyAttribute,
+                RTCPAttribute.of(65179, "IN", "IP4", "123.45.67.89"),
+                RTCPAttribute.of(12345),
+                ControlAttribute.of("streamId=0"),
+                RTCPFbAttribute.of("98", "trr-int", "100"),
+                RTCPFbAttribute.of("98", "nack", "rpsi"),
+                ExtMapAttribute.of(2, uri = "urn:ietf:params:rtp-hdrext:toffset"),
+                ExtMapAttribute.of(1, Direction.RECVONLY, uri = "URI-gps-string"),
+                ExtMapAttribute.of(3, null, "urn:ietf:params:rtp-hdrext:encrypt", "urn:ietf:params:rtp-hdrext:smpte-tc", "25@600/24"),
+                FormatAttribute.of(98).also {
+                    it.addParameter("minptime", "10")
+                    it.addParameter("useinbandfec", "1")
+                }
+            ))
+
+        expected.getMediaDescription("123")?.setAttribute(SendOnlyAttribute, DirectionAttribute::class)
+        actual.setMediaDescription(newMediaDescription)
         assertThat(actual).isEqualTo(expected)
     }
 

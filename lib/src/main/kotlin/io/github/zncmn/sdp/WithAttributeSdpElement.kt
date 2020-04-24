@@ -43,8 +43,17 @@ interface WithAttributeSdpElement {
         return hasAttribute(clazz.java)
     }
 
-    fun setAttribute(attribute: SdpAttribute) {
-        val index = attributes.asSequence().indexOfFirst { attribute.field == it.field }
+    @Suppress("UNCHECKED_CAST")
+    fun <T : SdpAttribute> setAttribute(attribute: T) {
+        setAttribute(attribute, attribute::class.java as Class<T>)
+    }
+
+    fun <T : SdpAttribute> setAttribute(attribute: T, clazz: KClass<in T>) {
+        setAttribute(attribute, clazz.java)
+    }
+
+    fun <T : SdpAttribute> setAttribute(attribute: T, clazz: Class<in T>) {
+        val index = attributes.asSequence().indexOfFirst { clazz.isInstance(it) }
         if (index < 0) {
             addAttribute(attribute)
         } else {
