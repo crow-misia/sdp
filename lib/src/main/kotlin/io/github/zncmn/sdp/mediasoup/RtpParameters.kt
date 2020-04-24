@@ -236,7 +236,7 @@ data class RtpCodecParameters @JvmOverloads constructor(
 )
 
 @JsonClass(generateAdapter = true)
-data class RtcpFeedback @JvmOverloads constructor(
+data class RtcpFeedback(
     /**
      * RTCP feedback type.
      */
@@ -245,7 +245,7 @@ data class RtcpFeedback @JvmOverloads constructor(
     /**
      * RTCP feedback parameter.
      */
-    var parameter: String? = null
+    var parameter: String
 )
 
 @JsonClass(generateAdapter = true)
@@ -289,15 +289,15 @@ data class RtpEncodingParameters @JvmOverloads constructor(
     /**
      * Others.
      */
-    var active: Boolean = true,
+    var active: Boolean? = null,
     var scaleFramerateDownBy: Double? = null,
     var scaleResolutionDownBy: Double? = null,
     var minBitrate: Int? = null,
     var maxBitrate: Int? = null,
     var maxFramerate: Int? = null,
     var numTemporalLayers: Int? = null,
-    var bitratePriority: Double = 1.0,
-    var networkPriority: Int = 1
+    var bitratePriority: Double? = null,
+    var networkPriority: Int? = null
 )
 
 @JsonClass(generateAdapter = true)
@@ -344,5 +344,5 @@ data class RtcpParameters @JvmOverloads constructor(
     /**
      * Whether RTCP-mux is used. Default true.
      */
-    var mux: Boolean = true
+    var mux: Boolean? = null
 )
