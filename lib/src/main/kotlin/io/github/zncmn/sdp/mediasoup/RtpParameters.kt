@@ -2,7 +2,6 @@ package io.github.zncmn.sdp.mediasoup
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import io.github.zncmn.sdp.webrtc.RTCPriorityType
 
 /**
  * The RTP capabilities define what mediasoup or an endpoint can receive at media level.
@@ -297,8 +296,8 @@ data class RtpEncodingParameters @JvmOverloads constructor(
     var maxBitrate: Int? = null,
     var maxFramerate: Int? = null,
     var numTemporalLayers: Int? = null,
-    var priority: RTCPriorityType = RTCPriorityType.LOW,
-    var networkPriority: RTCPriorityType = RTCPriorityType.LOW
+    var bitratePriority: Double = 1.0,
+    var networkPriority: Int = 1
 )
 
 @JsonClass(generateAdapter = true)

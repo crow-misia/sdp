@@ -3,7 +3,6 @@ package io.github.zncmn.sdp.mediasoup
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.squareup.moshi.Moshi
-import io.github.zncmn.sdp.webrtc.RTCPriorityType
 import org.junit.jupiter.api.Test
 
 internal class RtpParametersTest {
@@ -55,7 +54,7 @@ internal class RtpParametersTest {
             encodings = listOf(
                 RtpEncodingParameters(
                     ssrc = 980715670,
-                    priority = RTCPriorityType.MEDIUM
+                    bitratePriority = 1.0
                 )
             ),
             rtcp = RtcpParameters(
@@ -64,7 +63,7 @@ internal class RtpParametersTest {
                 mux = true
             )
         ))).isEqualTo("""
-            {"mid":"0","codecs":[{"mimeType":"audio/opus","payloadType":100,"clockRate":48000,"channels":2,"parameters":{"minptime":10,"useinbandfec":1,"sprop-stereo":1,"usedtx":1},"rtcpFeedback":[]}],"headerExtensions":[{"uri":"urn:ietf:params:rtp-hdrext:sdes:mid","id":1,"encrypt":false,"parameters":{}},{"uri":"http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time","id":4,"encrypt":false,"parameters":{}},{"uri":"urn:ietf:params:rtp-hdrext:ssrc-audio-level","id":10,"encrypt":false,"parameters":{}}],"encodings":[{"ssrc":980715670,"dtx":false,"active":true,"priority":"medium","networkPriority":"low"}],"rtcp":{"cname":"gJYTQGm9n8z+u1ql","reducedSize":true,"mux":true}}
+            {"mid":"0","codecs":[{"mimeType":"audio/opus","payloadType":100,"clockRate":48000,"channels":2,"parameters":{"minptime":10,"useinbandfec":1,"sprop-stereo":1,"usedtx":1},"rtcpFeedback":[]}],"headerExtensions":[{"uri":"urn:ietf:params:rtp-hdrext:sdes:mid","id":1,"encrypt":false,"parameters":{}},{"uri":"http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time","id":4,"encrypt":false,"parameters":{}},{"uri":"urn:ietf:params:rtp-hdrext:ssrc-audio-level","id":10,"encrypt":false,"parameters":{}}],"encodings":[{"ssrc":980715670,"dtx":false,"active":true,"bitratePriority":1.0,"networkPriority":1}],"rtcp":{"cname":"gJYTQGm9n8z+u1ql","reducedSize":true,"mux":true}}
         """.trimIndent())
     }
 
@@ -72,7 +71,7 @@ internal class RtpParametersTest {
     fun deserializeRtpParameters() {
         val adapter = moshi.adapter(RtpParameters::class.java)
         assertThat(adapter.fromJson("""
-            {"codecs":[{"mimeType":"audio/opus","payloadType":100,"clockRate":48000,"channels":2,"parameters":{"minptime":10,"useinbandfec":1,"sprop-stereo":1,"usedtx":1},"rtcpFeedback":[]}],"headerExtensions":[{"uri":"urn:ietf:params:rtp-hdrext:sdes:mid","id":1,"encrypt":false,"parameters":{}},{"uri":"http:\/\/www.webrtc.org\/experiments\/rtp-hdrext\/abs-send-time","id":4,"encrypt":false,"parameters":{}},{"uri":"urn:ietf:params:rtp-hdrext:ssrc-audio-level","id":10,"encrypt":false,"parameters":{}}],"encodings":[{"ssrc":980715670,"priority":"high"}],"rtcp":{"cname":"gJYTQGm9n8z+u1ql","reducedSize":true,"mux":true},"mid":"0"}
+            {"codecs":[{"mimeType":"audio/opus","payloadType":100,"clockRate":48000,"channels":2,"parameters":{"minptime":10,"useinbandfec":1,"sprop-stereo":1,"usedtx":1},"rtcpFeedback":[]}],"headerExtensions":[{"uri":"urn:ietf:params:rtp-hdrext:sdes:mid","id":1,"encrypt":false,"parameters":{}},{"uri":"http:\/\/www.webrtc.org\/experiments\/rtp-hdrext\/abs-send-time","id":4,"encrypt":false,"parameters":{}},{"uri":"urn:ietf:params:rtp-hdrext:ssrc-audio-level","id":10,"encrypt":false,"parameters":{}}],"encodings":[{"ssrc":980715670,"priority":1.0}],"rtcp":{"cname":"gJYTQGm9n8z+u1ql","reducedSize":true,"mux":true},"mid":"0"}
         """.trimIndent())).isEqualTo(RtpParameters(
             mid = "0",
             codecs = listOf(
@@ -113,7 +112,7 @@ internal class RtpParametersTest {
             encodings = listOf(
                 RtpEncodingParameters(
                     ssrc = 980715670,
-                    priority = RTCPriorityType.HIGH
+                    bitratePriority = 1.0
                 )
             ),
             rtcp = RtcpParameters(
