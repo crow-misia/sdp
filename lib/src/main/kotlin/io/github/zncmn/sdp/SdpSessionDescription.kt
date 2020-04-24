@@ -22,6 +22,8 @@ data class SdpSessionDescription internal constructor(
         mediaDescriptions.forEachIndexed { idx, desc -> map[desc.mid] = idx }
     }
 
+    fun getMediaDescriptions(): Sequence<SdpMediaDescription> = mediaDescriptions.asSequence()
+
     fun getMediaDescription(mid: String): SdpMediaDescription? {
         val index = midToIndex[mid] ?: -1
         val size = mediaDescriptions.size
