@@ -38,9 +38,11 @@ data class SdpSessionDescription internal constructor(
         val index = midToIndex[mid] ?: -1
         val size = mediaDescriptions.size
         if (index < 0 || index >= size) {
-            midToIndex[mid] = mediaDescriptions.size
+            midToIndex.remove(mid)
+            midToIndex[description.mid] = mediaDescriptions.size
             mediaDescriptions.add(description)
         } else {
+            midToIndex[description.mid] = index
             mediaDescriptions[index] = description
         }
     }
