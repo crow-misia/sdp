@@ -1,7 +1,5 @@
 package io.github.zncmn.sdp.attribute
 
-import io.github.zncmn.sdp.SdpParseException
-
 data class MsidSemanticAttribute internal constructor(
     var semantic: String,
     var token: String
@@ -34,18 +32,14 @@ data class MsidSemanticAttribute internal constructor(
     companion object {
         internal const val FIELD_NAME = "msid-semantic"
 
-        @JvmStatic
-        fun of(semantic: String, token: String): MsidSemanticAttribute {
-            return MsidSemanticAttribute(semantic, token)
+        @JvmStatic @JvmOverloads
+        fun of(semantic: String, token: String? = null): MsidSemanticAttribute {
+            return MsidSemanticAttribute(semantic, token.orEmpty())
         }
 
         internal fun parse(value: String): SdpAttribute {
             val values = value.trimStart().split(' ', limit = 2)
-            val size = values.size
-            if (size < 2) {
-                throw SdpParseException("could not parse: $value as MsidSemanticAttribute")
-            }
-            return MsidSemanticAttribute(values[0], values[1])
+            return MsidSemanticAttribute(values[0], if (values.size > 1) values[1] else "")
         }
     }
 }

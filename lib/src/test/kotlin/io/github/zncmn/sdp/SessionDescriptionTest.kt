@@ -70,9 +70,11 @@ a=end-of-candidates
 a=remote-candidates:1 203.0.113.1 54400 2 203.0.113.1 54401
 a=ice-options:google-ice
 a=ssrc:2566107569 cname:t9YU8M1UxTF8Y1A1
+a=ssrc:2566107569 cname
 a=ssrc-group:FEC 1 2
 a=ssrc-group:FEC-FR 3004364195 1080772241
 a=msid-semantic: WMS Jvlam5X3SX1OP6pn20zWogvaKJz5Hjf9OnlV
+a=msid-semantic: WMS
 a=group:BUNDLE audio video
 a=rtcp-mux
 a=rtcp-rsize
@@ -162,9 +164,11 @@ a=mediaclk:direct=0
                         RemoteCandidateAttribute.of("1 203.0.113.1 54400 2 203.0.113.1 54401"),
                         IceOptionsAttribute.of("google-ice"),
                         SsrcAttribute.of(2566107569L, "cname", "t9YU8M1UxTF8Y1A1"),
+                        SsrcAttribute.of(2566107569L, "cname"),
                         SsrcGroupAttribute.of("FEC", 1, 2),
                         SsrcGroupAttribute.of("FEC-FR",  3004364195L, 1080772241L),
                         MsidSemanticAttribute.of("WMS", "Jvlam5X3SX1OP6pn20zWogvaKJz5Hjf9OnlV"),
+                        MsidSemanticAttribute.of("WMS"),
                         GroupAttribute.of("BUNDLE", "audio", "video"),
                         RTCPMuxAttribute.of(),
                         RTCPRsizeAttribute.of(),

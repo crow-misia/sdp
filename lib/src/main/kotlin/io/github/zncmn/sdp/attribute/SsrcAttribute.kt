@@ -28,17 +28,19 @@ data class SsrcAttribute internal constructor(
             append(id)
             append(' ')
             append(attribute)
-            append(':')
-            append(ssrcValue)
+            if (ssrcValue.isNotEmpty()) {
+                append(':')
+                append(ssrcValue)
+            }
         }
     }
 
     companion object {
         internal const val FIELD_NAME = "ssrc"
 
-        @JvmStatic
-        fun of(id: Long, attribute: String, ssrcValue: String): SsrcAttribute {
-            return SsrcAttribute(id, attribute, ssrcValue)
+        @JvmStatic @JvmOverloads
+        fun of(id: Long, attribute: String, ssrcValue: String? = null): SsrcAttribute {
+            return SsrcAttribute(id, attribute, ssrcValue.orEmpty())
         }
 
         internal fun parse(value: String): SdpAttribute {
@@ -51,11 +53,7 @@ data class SsrcAttribute internal constructor(
                 throw SdpParseException("could not parse: $value as SsrcAttribute")
             }
             val ssrcValues = values[1].split(':', limit = 2)
-            val ssrcSize = ssrcValues.size
-            if (ssrcSize < 2) {
-                throw SdpParseException("could not parse: $value as SsrcAttribute")
-            }
-            return SsrcAttribute(id, ssrcValues[0], ssrcValues[1])
+            return SsrcAttribute(id, ssrcValues[0], if (ssrcValues.size > 1) ssrcValues[1] else "")
         }
     }
 }
