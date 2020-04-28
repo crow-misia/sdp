@@ -2,6 +2,7 @@ package io.github.zncmn.sdp
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.isNull
 import io.github.zncmn.sdp.attribute.*
 import org.junit.jupiter.api.Test
 
@@ -369,4 +370,50 @@ a=ssrc:2814730704 label:77150781-678e-4cd3-a56d-233c01cd4ffd
         println(actual)
         assertThat(actual.toString()).isEqualTo(expected)
     }
+
+    @Test
+    fun setMediaDescription() {
+        val sessionDescription = SdpSessionDescription.of(
+            version = SdpVersion.of(0),
+            sessionName = SdpSessionName.of("a"),
+            origin = SdpOrigin.of("-", 1, 1, "IN", "IP4", "0.0.0.0")
+        )
+
+        // need empty
+        assertThat(sessionDescription.getMediaDescriptions().count()).isEqualTo(0)
+
+        // add mid=1
+        sessionDescription.setMediaDescription(SdpMediaDescription.of("audio", 1).also { it.mid = "1" })
+        assertThat(sessionDescription.getMediaDescriptions().count()).isEqualTo(1)
+        assertThat(sessionDescription.getMediaDescription("1")?.mid).isEqualTo("1")
+
+        // add mid=2
+        sessionDescription.setMediaDescription(SdpMediaDescription.of("video", 1).also { it.mid = "2" })
+        assertThat(sessionDescription.getMediaDescriptions().count()).isEqualTo(2)
+        assertThat(sessionDescription.getMediaDescription("2")?.mid).isEqualTo("2")
+
+        // replace mid=1 to mid=3
+        sessionDescription.setMediaDescription(SdpMediaDescription.of("audio", 1).also { it.mid = "3" }, "1")
+        assertThat(sessionDescription.getMediaDescriptions().count()).isEqualTo(2)
+        assertThat(sessionDescription.getMediaDescription("1")?.mid).isNull()
+        assertThat(sessionDescription.getMediaDescription("3")?.mid).isEqualTo("3")
+
+        // replace mid=3 to mid=4
+        sessionDescription.setMediaDescription(SdpMediaDescription.of("audio", 1).also { it.mid = "4" }, "3")
+        assertThat(sessionDescription.getMediaDescriptions().count()).isEqualTo(2)
+        assertThat(sessionDescription.getMediaDescription("1")?.mid).isNull()
+        assertThat(sessionDescription.getMediaDescription("3")?.mid).isNull()
+        assertThat(sessionDescription.getMediaDescription("4")?.mid).isEqualTo("4")
+
+        // replace mid=1 to mid=5 (add mid=5)
+        sessionDescription.setMediaDescription(SdpMediaDescription.of("audio", 1).also { it.mid = "5" }, "1")
+        assertThat(sessionDescription.getMediaDescriptions().count()).isEqualTo(3)
+        assertThat(sessionDescription.getMediaDescription("1")?.mid).isNull()
+        assertThat(sessionDescription.getMediaDescription("3")?.mid).isNull()
+        assertThat(sessionDescription.getMediaDescription("4")?.mid).isEqualTo("4")
+        assertThat(sessionDescription.getMediaDescription("5")?.mid).isEqualTo("5")
+        assertThat(sessionDescription.getMediaDescriptions().joinToString(",") { "${it.type}:${it.mid}" }).isEqualTo("audio:4,video:2,audio:5")
+    }
+
+
 }
