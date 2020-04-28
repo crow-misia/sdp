@@ -79,12 +79,14 @@ data class DtlsFingerprint(
     var value: String
 )
 
+@JsonClass(generateAdapter = false)
 enum class DtlsRole {
     @Json(name = "auto") AUTO,
     @Json(name = "client") CLIENT,
     @Json(name = "server") SERVER
 }
 
+@JsonClass(generateAdapter = false)
 enum class ConnectionState {
     @Json(name = "new") NEW,
     @Json(name = "connecting") CONNECTING,

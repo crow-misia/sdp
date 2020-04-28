@@ -122,6 +122,7 @@ data class ExtendedRtpCodecCapability @JvmOverloads constructor(
     var rtcpFeedback: List<RtcpFeedback> = emptyList()
 )
 
+@JsonClass(generateAdapter = false)
 enum class RtpHeaderExtensionDirection {
     @Json(name = "sendrecv") SENDRECV,
     @Json(name = "sendonly") SENDONLY,
