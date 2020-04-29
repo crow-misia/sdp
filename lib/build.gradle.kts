@@ -121,15 +121,17 @@ bintray {
     })
 }
 
-tasks {
-    withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "1.6"
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "1.6"
+        freeCompilerArgs = listOf("-Xjsr305=strict", "-progressive")
     }
-    withType<Test> {
-        useJUnitPlatform()
-        testLogging {
-            showStandardStreams = true
-            events("passed", "skipped", "failed")
-        }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+    testLogging {
+        showStandardStreams = true
+        events("passed", "skipped", "failed")
     }
 }

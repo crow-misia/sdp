@@ -2,7 +2,7 @@ package io.github.zncmn.sdp
 
 data class SdpTimeZone internal constructor(
     var adjustmentTime: Long,
-    var offset: Int
+    var offset: String
 ) {
     val value: StringBuilder
         get() = StringBuilder().apply {
@@ -13,7 +13,7 @@ data class SdpTimeZone internal constructor(
 
     companion object {
         @JvmStatic
-        fun of(adjustmentTime: Long, offset: Int): SdpTimeZone {
+        fun of(adjustmentTime: Long, offset: String): SdpTimeZone {
             return SdpTimeZone(adjustmentTime, offset)
         }
     }

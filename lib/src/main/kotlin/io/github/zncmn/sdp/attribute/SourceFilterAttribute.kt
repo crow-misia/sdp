@@ -1,7 +1,6 @@
 package io.github.zncmn.sdp.attribute
 
 import io.github.zncmn.sdp.SdpParseException
-import java.util.*
 
 data class SourceFilterAttribute internal constructor(
     var filterMode: String,
@@ -36,8 +35,10 @@ data class SourceFilterAttribute internal constructor(
             append(addressTypes)
             append(' ')
             append(destAddress)
-            append(' ')
-            append(srcList)
+            srcList.forEach {
+                append(' ')
+                append(it)
+            }
         }
     }
 
@@ -52,7 +53,7 @@ data class SourceFilterAttribute internal constructor(
         internal fun parse(value: String): SdpAttribute {
             val values = value.trimStart().split(' ')
             val size = values.size
-            if (size < 5) {
+            if (size < 4) {
                 throw SdpParseException("could not parse: $value as SourceFilterAttribute")
             }
             return SourceFilterAttribute(

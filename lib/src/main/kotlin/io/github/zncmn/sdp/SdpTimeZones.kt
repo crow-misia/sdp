@@ -3,7 +3,7 @@
 package io.github.zncmn.sdp
 
 data class SdpTimeZones internal constructor(
-    val timeZones: MutableList<SdpTimeZone>
+    var timeZones: List<SdpTimeZone>
 ) : SdpElement {
     override fun toString(): String {
         return buildString { joinTo(this) }
@@ -19,8 +19,8 @@ data class SdpTimeZones internal constructor(
 
     companion object {
         @JvmStatic
-        fun of(timeZones: List<SdpTimeZone>): SdpTimeZones {
-            return SdpTimeZones(ArrayList(timeZones))
+        fun of(vararg timeZones: SdpTimeZone): SdpTimeZones {
+            return SdpTimeZones(timeZones.toList())
         }
 
         internal fun parse(line: String): SdpTimeZones {
@@ -30,11 +30,10 @@ data class SdpTimeZones internal constructor(
                 throw SdpParseException("could not parse: $line as TimeZones")
             }
             val timeZones = (0 until size step 2).map { index ->
-                val time = values[index].toLongOrNull()
-                val offset = values[index + 1].toIntOrNull()
-                if (time == null || offset == null) {
+                val time = values[index].toLongOrNull() ?: run {
                     throw SdpParseException("could not parse: $line as TimeZones")
                 }
+                val offset = values[index + 1]
                 SdpTimeZone.of(time, offset)
             }
             return SdpTimeZones(timeZones.toMutableList())

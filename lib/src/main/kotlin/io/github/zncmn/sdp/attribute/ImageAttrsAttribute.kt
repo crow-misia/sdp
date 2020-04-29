@@ -1,6 +1,7 @@
 package io.github.zncmn.sdp.attribute
 
 import io.github.zncmn.sdp.SdpParseException
+import io.github.zncmn.sdp.Utils
 import java.util.*
 import kotlin.math.max
 
@@ -48,7 +49,7 @@ data class ImageAttrsAttribute internal constructor(
 
         @JvmStatic
         fun of(pt: String, dir1: String, attrs1: String, dir2: String? = null, attrs2: String? = null): ImageAttrsAttribute {
-            return ImageAttrsAttribute(pt, dir1.toLowerCase(Locale.ENGLISH), attrs1, dir2?.toLowerCase(Locale.ENGLISH), attrs2)
+            return ImageAttrsAttribute(pt, Utils.getName(dir1), attrs1, dir2?.toLowerCase(Locale.ENGLISH), attrs2)
         }
 
         internal fun parse(value: String): SdpAttribute {

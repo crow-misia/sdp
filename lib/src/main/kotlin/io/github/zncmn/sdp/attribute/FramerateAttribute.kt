@@ -16,7 +16,12 @@ data class FramerateAttribute internal constructor(
             append("a=")
             append(field)
             append(':')
-            append(value)
+            val valueLong = value.toLong()
+            if (value == valueLong.toDouble()) {
+                append(valueLong)
+            } else {
+                append(value)
+            }
             append("\r\n")
         }
     }

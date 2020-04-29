@@ -1,6 +1,7 @@
 package io.github.zncmn.sdp.attribute
 
 import io.github.zncmn.sdp.SdpParseException
+import io.github.zncmn.sdp.Utils
 import java.util.*
 
 data class SimulcastAttribute internal constructor(
@@ -44,7 +45,7 @@ data class SimulcastAttribute internal constructor(
 
         @JvmStatic
         fun of(dir1: String, list1: String, dir2: String? = null, list2: String? = null): SimulcastAttribute {
-            return SimulcastAttribute(dir1.toLowerCase(Locale.ENGLISH), list1, dir2?.toLowerCase(Locale.ENGLISH), list2)
+            return SimulcastAttribute(Utils.getName(dir1), list1, dir2?.let { Utils.getName(it) }, list2)
         }
 
         internal fun parse(value: String): SdpAttribute {

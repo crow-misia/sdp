@@ -10,7 +10,7 @@ internal class SessionDescriptionTest {
 
     @Test
     fun parse() {
-        val actual = SdpSessionDescription.parse("""
+        val expectedStr = """
 v=0
 o=jdoe 2890844526 2890842807 IN IP4 10.47.16.5
 s=SDP Seminar
@@ -19,8 +19,11 @@ u=http://www.example.com/seminars/sdp.pdf
 e=j.doe@example.com (Jane Doe)
 p=+81012345678
 c=IN IP4 224.2.17.12/127
-t=2873397496 2873404696
 b=AS:4000
+t=2873397496 2873404696
+r=604800 3600 0 90000
+z=2882844526 -1h 2898848070 0
+k=base64:<encoded encryption key>
 a=sendrecv
 m=audio 49170 RTP/AVP 0
 a=mid:123
@@ -36,6 +39,7 @@ a=extmap:3 urn:ietf:params:rtp-hdrext:encrypt urn:ietf:params:rtp-hdrext:smpte-t
 a=fmtp:98 minptime=10;useinbandfec=1
 m=video 51372 RTP/AVP 99
 a=sendonly
+a=cname:abc
 a=rtpmap:99 h263-1998/90000
 a=rtpmap:99 h263-1998
 a=framerate:29.97
@@ -44,6 +48,10 @@ a=rid:1 send max-width=640; max-height=360; max-fps=15
 a=rid:2 send max-width=320; max-height=180; max-fps=15
 a=simulcast: send rid=0;1;2
 m=video 51372 RTP/AVP 98
+i=media title
+c=IN IP4 224.2.17.12/127
+b=AS:500
+k=prompt
 a=simulcast:send hi,mid,low
 a=rid:hi send
 a=rid:mid send
@@ -95,7 +103,8 @@ a=framerate:29.97
 a=source-filter: incl IN IP4 239.5.2.31 10.1.15.5
 a=ts-refclk:ptp=IEEE1588-2008:00-50-C2-FF-FE-90-04-37:0
 a=mediaclk:direct=0
-        """.trimIndent())
+        """.trimIndent()
+        val actual = SdpSessionDescription.parse(expectedStr)
 
         val testMediaDescription = SdpMediaDescription.of("audio", 49170, null, listOf("RTP", "AVP"), listOf("0"),
             attributes = listOf(
@@ -123,15 +132,18 @@ a=mediaclk:direct=0
             uris = listOf(SdpUri.of("http://www.example.com/seminars/sdp.pdf")),
             emails = listOf(SdpEmail.of("j.doe@example.com (Jane Doe)")),
             phones = listOf(SdpPhone.of("+81012345678")),
-            connection = SdpConnection.of("IN", "IP4", "224.2.17.12/127"),
+            connection = SdpConnection.of("IN", "IP4", "224.2.17.12", 127),
             bandwidths = listOf(SdpBandwidth("AS", 4000)),
-            timings = listOf(SdpTiming.of(2873397496L, 2873404696L)),
+            timings = listOf(SdpTiming.of(2873397496L, 2873404696L, repeatTime = SdpRepeatTime.of("604800", "3600", "0", "90000"))),
+            timeZones = SdpTimeZones.of(SdpTimeZone.of(2882844526L, "-1h"), SdpTimeZone.of(2898848070L, "0")),
+            key = EncryptionKey.of(EncryptionKey.Method.BASE64, "<encoded encryption key>"),
             attributes = listOf(SendRecvAttribute),
             mediaDescriptions = listOf(
                 testMediaDescription,
                 SdpMediaDescription.of("video", 51372, null, listOf("RTP", "AVP"), listOf("99"),
                     attributes = listOf(
                         SendOnlyAttribute,
+                        CNameAttribute.of("abc"),
                         RTPMapAttribute.of(99, "h263-1998", 90000),
                         RTPMapAttribute.of(99, "h263-1998"),
                         FramerateAttribute.of(29.97),
@@ -141,6 +153,10 @@ a=mediaclk:direct=0
                         Simulcast03Attribute.of("send rid=0;1;2")
                     )),
                 SdpMediaDescription.of("video", 51372, null, listOf("RTP", "AVP"), listOf("98"),
+                    information = SdpSessionInformation.of("media title"),
+                    key = EncryptionKey.of(EncryptionKey.Method.PROMPT),
+                    connections = listOf(SdpConnection.of("IN", "IP4","224.2.17.12", 127)),
+                    bandwidths = listOf(SdpBandwidth.of("AS", 500)),
                     attributes = listOf(
                         SimulcastAttribute.of("send", "hi,mid,low"),
                         RidAttribute.of("hi", "send"),
@@ -198,6 +214,14 @@ a=mediaclk:direct=0
         )
 
         assertThat(actual).isEqualTo(expected)
+        assertThat(actual.toString().trimMargin())
+            .isEqualTo(
+                expectedStr
+                    .replace(";\\s+".toRegex(), ";")
+                    .replace("^a=mid:\\s+".toRegex(RegexOption.MULTILINE), "a=mid:")
+                    .replace("^a=ice-ufrag:\\s+".toRegex(RegexOption.MULTILINE), "a=ice-ufrag:")
+                    .replace("^a=ice-pwd:\\s+".toRegex(RegexOption.MULTILINE), "a=ice-pwd:")
+            )
 
         val newMediaDescription = SdpMediaDescription.of("audio", 49170, null, listOf("RTP", "AVP"), listOf("0"),
             attributes = listOf(

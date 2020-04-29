@@ -1,6 +1,6 @@
 package io.github.zncmn.sdp.attribute
 
-import java.util.*
+import io.github.zncmn.sdp.Utils
 
 enum class Direction {
     SENDONLY,
@@ -9,17 +9,14 @@ enum class Direction {
     INACTIVE
     ;
 
-    val value = getKey(name)
+    val value = Utils.getName(name)
 
     companion object {
         private val MAPPING = values().associateBy { it.value }
 
         @JvmStatic
         fun of(str: String): Direction? {
-            return MAPPING[getKey(str)]
+            return MAPPING[Utils.getName(str)]
         }
     }
 }
-
-@Suppress("NOTHING_TO_INLINE")
-private inline fun getKey(name: String) = name.toLowerCase(Locale.ENGLISH)

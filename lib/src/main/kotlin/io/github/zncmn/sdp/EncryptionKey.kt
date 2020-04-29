@@ -1,7 +1,7 @@
 package io.github.zncmn.sdp
 
 data class EncryptionKey internal constructor(
-    var method: String,
+    var method: Method,
     var key: String?
 ) : SdpElement {
     override fun toString(): String {
@@ -11,7 +11,7 @@ data class EncryptionKey internal constructor(
     override fun joinTo(buffer: StringBuilder) {
         buffer.apply {
             append("k=")
-            append(method)
+            append(method.value)
             key?.also {
                 append(':')
                 append(it)
@@ -22,7 +22,7 @@ data class EncryptionKey internal constructor(
 
     companion object {
         @JvmStatic @JvmOverloads
-        fun of(method: String, key: String? = null): EncryptionKey {
+        fun of(method: Method, key: String? = null): EncryptionKey {
             return EncryptionKey(method, key)
         }
 
@@ -32,7 +32,26 @@ data class EncryptionKey internal constructor(
             if (size <= 0 || size > 2) {
                 throw SdpParseException("could not parse: $line as EncryptionKey")
             }
-            return EncryptionKey(values[0], if (size == 1) null else values[1])
+            val method = Method.of(values[0]) ?: run {
+                throw SdpParseException("unsuported method ${values[0]} as EncryptionKey")
+            }
+            return EncryptionKey(method, if (size == 1) null else values[1])
+        }
+    }
+
+    enum class Method {
+        CLEAR,
+        PROMPT,
+        BASE64,
+        URI
+        ;
+        internal val value = Utils.getName(name)
+
+        companion object {
+            private val MAPPING = values().associateBy { it.value }
+
+            @JvmStatic
+            fun of(value: String): Method? = MAPPING[value]
         }
     }
 }

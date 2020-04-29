@@ -3,7 +3,7 @@
 package io.github.zncmn.sdp.attribute
 
 import io.github.zncmn.sdp.SdpParseException
-import java.util.*
+import io.github.zncmn.sdp.Utils
 import kotlin.collections.LinkedHashMap
 
 data class CandidateAttribute internal constructor(
@@ -20,7 +20,11 @@ data class CandidateAttribute internal constructor(
 
     var extensions: Map<String, String>
         get() = _extensions
-        set(value) { _extensions = LinkedHashMap(value) }
+        set(value) {
+            _extensions = LinkedHashMap<String, String>().also {
+                value.forEach { (k, v) -> it[k] = v }
+            }
+        }
 
     fun addExtension(name: String, value: Int) {
         addExtension(name, value.toString())
@@ -31,11 +35,11 @@ data class CandidateAttribute internal constructor(
     }
 
     fun addExtension(name: String, value: String) {
-        _extensions[getKey(name)] = value
+        _extensions[Utils.getName(name)] = value
    }
 
     fun hasExtension(name: String): Boolean {
-        return _extensions.containsKey(getKey(name))
+        return _extensions.containsKey(Utils.getName(name))
     }
 
     fun setExtension(name: String, value: Int) {
@@ -47,11 +51,11 @@ data class CandidateAttribute internal constructor(
     }
 
     fun setExtension(name: String, value: String) {
-        _extensions[getKey(name)] = value
+        _extensions[Utils.getName(name)] = value
     }
 
     fun removeExtension(name: String): Boolean {
-        return _extensions.remove(getKey(name)) != null
+        return _extensions.remove(Utils.getName(name)) != null
     }
 
     override fun toString(): String {
@@ -95,9 +99,6 @@ data class CandidateAttribute internal constructor(
     companion object {
         internal const val FIELD_NAME = "candidate"
 
-        @Suppress("NOTHING_TO_INLINE")
-        private inline fun getKey(name: String): String = name.toLowerCase(Locale.ENGLISH)
-
         @JvmStatic @JvmOverloads
         fun of(foundation: String,
                component: Long,
@@ -140,7 +141,7 @@ data class CandidateAttribute internal constructor(
                 val v = values[index + 1]
                 when (n) {
                     "typ" -> type = v
-                    else -> extensions[getKey(n)] = v
+                    else -> extensions[Utils.getName(n)] = v
                 }
             }
 

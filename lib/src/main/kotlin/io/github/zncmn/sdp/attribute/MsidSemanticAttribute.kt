@@ -24,8 +24,10 @@ data class MsidSemanticAttribute internal constructor(
         buffer.apply {
             append(' ')
             append(semantic)
-            append(' ')
-            append(token)
+            if (token.isNotEmpty()) {
+                append(' ')
+                append(token)
+            }
         }
     }
 

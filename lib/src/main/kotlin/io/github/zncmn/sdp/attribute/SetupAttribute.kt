@@ -1,5 +1,6 @@
 package io.github.zncmn.sdp.attribute
 
+import io.github.zncmn.sdp.Utils
 import java.util.*
 
 data class SetupAttribute internal constructor(
@@ -10,7 +11,7 @@ data class SetupAttribute internal constructor(
 
         private val MAPPING by lazy {
             EnumMap<Type, SetupAttribute>(Type::class.java).also {
-                Type.values().forEach { v -> it[v] = SetupAttribute(v.name.toLowerCase()) }
+                Type.values().forEach { v -> it[v] = SetupAttribute(v.value) }
             }
         }
 
@@ -21,7 +22,7 @@ data class SetupAttribute internal constructor(
 
         @JvmStatic
         fun of(type: String): SetupAttribute {
-            return SetupAttribute(type.toLowerCase())
+            return SetupAttribute(Utils.getName(type))
         }
 
         internal fun parse(value: String): SdpAttribute {
@@ -33,5 +34,7 @@ data class SetupAttribute internal constructor(
         ACTPASS,
         ACTIVE,
         PASSIVE
+        ;
+        internal val value = Utils.getName(name)
     }
 }

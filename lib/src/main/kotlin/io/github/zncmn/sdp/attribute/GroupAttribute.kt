@@ -1,7 +1,7 @@
 package io.github.zncmn.sdp.attribute
 
 import io.github.zncmn.sdp.SdpParseException
-import java.util.*
+import io.github.zncmn.sdp.Utils
 import kotlin.collections.LinkedHashSet
 
 data class GroupAttribute internal constructor(
@@ -11,21 +11,21 @@ data class GroupAttribute internal constructor(
     var mids: Set<String>
         get() = _mids
         set(value) {
-            _mids = LinkedHashSet(value.map { getKey(it) })
+            _mids = LinkedHashSet(value.map { Utils.getName(it) })
         }
 
     override val field = FIELD_NAME
 
     fun addMid(mid: String) {
-        _mids.add(getKey(mid))
+        _mids.add(Utils.getName(mid))
     }
 
     fun hasMid(mid: String): Boolean {
-        return _mids.contains(getKey(mid))
+        return _mids.contains(Utils.getName(mid))
     }
 
     fun removeMid(mid: String): Boolean {
-        return _mids.remove(getKey(mid))
+        return _mids.remove(Utils.getName(mid))
     }
 
     override fun toString(): String {
@@ -57,7 +57,7 @@ data class GroupAttribute internal constructor(
 
         @JvmStatic
         fun of(type: String, vararg mids: String): GroupAttribute {
-            return GroupAttribute(type, LinkedHashSet(mids.map { getKey(it) }))
+            return GroupAttribute(type, LinkedHashSet(mids.map { Utils.getName(it) }))
         }
 
         internal fun parse(value: String): SdpAttribute {
@@ -71,8 +71,5 @@ data class GroupAttribute internal constructor(
                 mids = *values[1].split(' ').toTypedArray()
             )
         }
-
-        @Suppress("NOTHING_TO_INLINE")
-        private inline fun getKey(name: String) = name.toLowerCase(Locale.ENGLISH)
     }
 }

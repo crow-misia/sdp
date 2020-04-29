@@ -55,7 +55,7 @@ internal object Utils {
 
     internal inline fun getFieldName(field: String) = field.toLowerCase(Locale.ENGLISH)
 
-    internal inline fun getName(field: String) = field.toLowerCase(Locale.ENGLISH)
+    internal inline fun getName(name: String) = name.toLowerCase(Locale.ENGLISH)
 
     @JvmStatic
     fun parseAttribute(line: String): SdpAttribute {

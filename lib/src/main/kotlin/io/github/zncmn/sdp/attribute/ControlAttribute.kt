@@ -15,12 +15,12 @@ data class ControlAttribute internal constructor(
         internal const val FIELD_NAME = "control"
 
         @JvmStatic
-        fun of(value: String): CNameAttribute {
-            return CNameAttribute(value)
+        fun of(value: String): ControlAttribute {
+            return ControlAttribute(value)
         }
 
         internal fun parse(value: String): SdpAttribute {
-            return CNameAttribute(value)
+            return ControlAttribute(value)
         }
     }
 }
