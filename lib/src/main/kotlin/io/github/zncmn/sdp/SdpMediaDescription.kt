@@ -17,13 +17,26 @@ data class SdpMediaDescription internal constructor(
     val bandwidths: MutableList<SdpBandwidth>,
     override val attributes: MutableList<SdpAttribute>
 ) : WithAttributeSdpElement, SdpElement {
+    private var cachedMid: String? = null
+
     var protos: List<String>
         get() = _protos
         set(value) { _protos = ArrayList(value) }
 
     var mid: String
-        get() = getAttribute(MidAttribute::class)?.value.orEmpty()
-        set(value) = setAttribute(MidAttribute.of(value))
+        get() {
+            return cachedMid ?: run {
+                val mid = getAttribute(MidAttribute::class)?.value
+                cachedMid = mid
+                mid.orEmpty()
+            }
+        }
+        set(value) {
+            if (cachedMid != value) {
+                setAttribute(MidAttribute.of(value))
+                cachedMid = value
+            }
+        }
 
     fun setProto(proto: String) {
         _protos = proto.splitToSequence('/').toMutableList()
