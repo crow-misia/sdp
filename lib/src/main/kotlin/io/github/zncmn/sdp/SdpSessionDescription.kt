@@ -24,6 +24,10 @@ data class SdpSessionDescription internal constructor(
 
     fun getMediaDescriptions(): Sequence<SdpMediaDescription> = mediaDescriptions.asSequence()
 
+    fun getMediaDescriptionAt(index: Int): SdpMediaDescription {
+        return mediaDescriptions[index]
+    }
+
     fun getMediaDescription(mid: String): SdpMediaDescription? {
         val index = midToIndex[mid] ?: -1
         val size = mediaDescriptions.size
