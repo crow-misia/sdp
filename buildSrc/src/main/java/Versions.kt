@@ -3,11 +3,9 @@ object Versions {
     const val dokkaPlugin = "0.10.1"
     const val bintrayPlugin = "1.8.5"
 
-    const val moshi = "1.9.2"
-
     const val mockk = "1.9.3"
     const val assertk = "0.22"
     const val junit5 = "5.6.2"
 
-    const val name = "0.4.6"
+    const val name = "0.5.0"
 }
