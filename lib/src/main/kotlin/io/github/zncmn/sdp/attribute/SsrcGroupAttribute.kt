@@ -4,7 +4,7 @@ import io.github.zncmn.sdp.SdpParseException
 
 data class SsrcGroupAttribute internal constructor(
     var semantics: String,
-    val ssrcs: MutableSet<Long>
+    val ssrcs: MutableList<Long>
 ) : SdpAttribute {
     override val field = FIELD_NAME
 
@@ -40,7 +40,7 @@ data class SsrcGroupAttribute internal constructor(
 
         @JvmStatic
         fun of(semantics: String, vararg ssrcs: Long): SsrcGroupAttribute {
-            return SsrcGroupAttribute(semantics, ssrcs.toMutableSet())
+            return SsrcGroupAttribute(semantics, ssrcs.toMutableList())
         }
 
         internal fun parse(value: String): SdpAttribute {
@@ -49,7 +49,7 @@ data class SsrcGroupAttribute internal constructor(
             if (size < 2) {
                 throw SdpParseException("could not parse: $value as SsrcGroupAttribute")
             }
-            return SsrcGroupAttribute(values[0], values[1].splitToSequence(' ').map { it.toLong() }.toMutableSet())
+            return SsrcGroupAttribute(values[0], values[1].splitToSequence(' ').map { it.toLong() }.toMutableList())
         }
     }
 }

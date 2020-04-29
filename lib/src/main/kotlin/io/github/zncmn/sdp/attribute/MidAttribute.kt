@@ -8,7 +8,7 @@ data class MidAttribute internal constructor(
 
         @JvmStatic
         fun of(value: String): MidAttribute {
-            return MidAttribute(value.trimStart())
+            return MidAttribute(value.trim())
         }
 
         internal fun parse(value: String): SdpAttribute {

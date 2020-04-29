@@ -1,32 +1,12 @@
 package io.github.zncmn.sdp.attribute
 
 import io.github.zncmn.sdp.SdpParseException
-import io.github.zncmn.sdp.Utils
-import kotlin.collections.LinkedHashSet
 
 data class GroupAttribute internal constructor(
     var type: String,
-    private var _mids: MutableSet<String>
+    var mids: MutableList<String>
 ) : SdpAttribute {
-    var mids: Set<String>
-        get() = _mids
-        set(value) {
-            _mids = LinkedHashSet(value.map { Utils.getName(it) })
-        }
-
     override val field = FIELD_NAME
-
-    fun addMid(mid: String) {
-        _mids.add(Utils.getName(mid))
-    }
-
-    fun hasMid(mid: String): Boolean {
-        return _mids.contains(Utils.getName(mid))
-    }
-
-    fun removeMid(mid: String): Boolean {
-        return _mids.remove(Utils.getName(mid))
-    }
 
     override fun toString(): String {
         return buildString { joinTo(this) }
@@ -57,7 +37,7 @@ data class GroupAttribute internal constructor(
 
         @JvmStatic
         fun of(type: String, vararg mids: String): GroupAttribute {
-            return GroupAttribute(type, LinkedHashSet(mids.map { Utils.getName(it) }))
+            return GroupAttribute(type, mids.toMutableList())
         }
 
         internal fun parse(value: String): SdpAttribute {
@@ -66,9 +46,9 @@ data class GroupAttribute internal constructor(
             if (size < 2) {
                 throw SdpParseException("could not parse: $value as GroupsAttribute")
             }
-            return of(
+            return GroupAttribute(
                 type = values[0],
-                mids = *values[1].split(' ').toTypedArray()
+                mids = values[1].split(' ').toMutableList()
             )
         }
     }
