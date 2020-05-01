@@ -12,7 +12,7 @@ data class SdpMediaDescription internal constructor(
     var information: SdpSessionInformation?,
     var key: EncryptionKey?,
     private var _protos: MutableList<String>,
-    val formats: MutableList<String>,
+    val formats: MutableList<Int>,
     val connections: MutableList<SdpConnection>,
     val bandwidths: MutableList<SdpBandwidth>,
     override val attributes: MutableList<SdpAttribute>
@@ -74,7 +74,7 @@ data class SdpMediaDescription internal constructor(
                port: Int,
                numberOfPorts: Int? = null,
                protos: List<String> = emptyList(),
-               formats: List<String> = emptyList(),
+               formats: List<Int> = emptyList(),
                information: SdpSessionInformation? = null,
                connections: List<SdpConnection> = emptyList(),
                bandwidths: List<SdpBandwidth> = emptyList(),
@@ -116,7 +116,7 @@ data class SdpMediaDescription internal constructor(
                 information = null,
                 key = null,
                 _protos = values[2].splitToSequence('/').toMutableList(),
-                formats = values[3].splitToSequence(' ').toMutableList(),
+                formats = values[3].splitToSequence(' ').mapNotNull { it.toIntOrNull() }.toMutableList(),
                 connections = arrayListOf(),
                 bandwidths = arrayListOf(),
                 attributes = arrayListOf())

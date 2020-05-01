@@ -106,7 +106,7 @@ a=mediaclk:direct=0
         """.trimIndent()
         val actual = SdpSessionDescription.parse(expectedStr)
 
-        val testMediaDescription = SdpMediaDescription.of("audio", 49170, null, listOf("RTP", "AVP"), listOf("0"),
+        val testMediaDescription = SdpMediaDescription.of("audio", 49170, null, listOf("RTP", "AVP"), listOf(0),
             attributes = listOf(
                 MidAttribute.of("123"),
                 RecvOnlyAttribute,
@@ -140,7 +140,7 @@ a=mediaclk:direct=0
             attributes = listOf(SendRecvAttribute),
             mediaDescriptions = listOf(
                 testMediaDescription,
-                SdpMediaDescription.of("video", 51372, null, listOf("RTP", "AVP"), listOf("99"),
+                SdpMediaDescription.of("video", 51372, null, listOf("RTP", "AVP"), listOf(99),
                     attributes = listOf(
                         SendOnlyAttribute,
                         CNameAttribute.of("abc"),
@@ -152,7 +152,7 @@ a=mediaclk:direct=0
                         RidAttribute.of("2", "send", "max-width=320; max-height=180; max-fps=15"),
                         Simulcast03Attribute.of("send rid=0;1;2")
                     )),
-                SdpMediaDescription.of("video", 51372, null, listOf("RTP", "AVP"), listOf("98"),
+                SdpMediaDescription.of("video", 51372, null, listOf("RTP", "AVP"), listOf(98),
                     information = SdpSessionInformation.of("media title"),
                     key = EncryptionKey.of(EncryptionKey.Method.PROMPT),
                     connections = listOf(SdpConnection.of("IN", "IP4","224.2.17.12", 127)),
@@ -223,7 +223,7 @@ a=mediaclk:direct=0
                     .replace("^a=ice-pwd:\\s+".toRegex(RegexOption.MULTILINE), "a=ice-pwd:")
             )
 
-        val newMediaDescription = SdpMediaDescription.of("audio", 49170, null, listOf("RTP", "AVP"), listOf("0"),
+        val newMediaDescription = SdpMediaDescription.of("audio", 49170, null, listOf("RTP", "AVP"), listOf(0),
             attributes = listOf(
                 MidAttribute.of("123"),
                 SendOnlyAttribute,
