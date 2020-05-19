@@ -119,8 +119,8 @@ a=mediaclk:direct=0
                 ExtMapAttribute.of(1, Direction.RECVONLY, uri = "URI-gps-string"),
                 ExtMapAttribute.of(3, null, "urn:ietf:params:rtp-hdrext:encrypt", "urn:ietf:params:rtp-hdrext:smpte-tc", "25@600/24"),
                 FormatAttribute.of(98).also {
-                    it.addParameter("minptime", "10")
-                    it.addParameter("useinbandfec", "1")
+                    it.addParameter("minptime", 10)
+                    it.addParameter("useinbandfec", 1)
                 }
             ))
 
@@ -236,8 +236,8 @@ a=mediaclk:direct=0
                 ExtMapAttribute.of(1, Direction.RECVONLY, uri = "URI-gps-string"),
                 ExtMapAttribute.of(3, null, "urn:ietf:params:rtp-hdrext:encrypt", "urn:ietf:params:rtp-hdrext:smpte-tc", "25@600/24"),
                 FormatAttribute.of(98).also {
-                    it.addParameter("minptime", "10")
-                    it.addParameter("useinbandfec", "1")
+                    it.addParameter("minptime", 10)
+                    it.addParameter("useinbandfec", 1)
                 }
             ))
 

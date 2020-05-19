@@ -3,12 +3,22 @@
 package io.github.zncmn.sdp.attribute
 
 abstract class WithParametersAttribute internal constructor(
-    internal open var _parameters: MutableMap<String, String?> = linkedMapOf()
+    internal open var _parameters: MutableMap<String, Any?> = linkedMapOf()
 ) : SdpAttribute {
+    companion object {
+        private val wellKnownParameters = mapOf(
+            // H264 codec parameters.
+            "profile-level-id" to "s",
+            "packetization-mode" to "d",
+            // VP9 codec parameters
+            "profile-id" to "s"
+        )
+    }
+
     val isNotEmptyParameters: Boolean
         get() = _parameters.isNotEmpty()
 
-    var parameters: Map<String, String?>
+    var parameters: Map<String, Any?>
         get() = _parameters
         set(value) { _parameters = LinkedHashMap(value) }
 
@@ -20,7 +30,8 @@ abstract class WithParametersAttribute internal constructor(
             val values = parameter.split('=')
             val size = values.size
             check(size <= 2)
-            _parameters[values[0].trim()] = if (size > 1) values[1] else null
+            val key = values[0].trim()
+            _parameters[key] = if (size > 1) normalizeParam(key, values[1]) else null
         }
     }
 
@@ -30,7 +41,7 @@ abstract class WithParametersAttribute internal constructor(
     }
 
     fun addParameter(key: String, value: Int?) {
-        _parameters[key.trim()] = value?.toString()
+        _parameters[key.trim()] = value
     }
 
     fun removeParameter(key: String) {
@@ -54,6 +65,16 @@ abstract class WithParametersAttribute internal constructor(
                     append('=')
                     append(it)
                 }
+            }
+        }
+    }
+
+    private fun normalizeParam(key: String, str: String): Any? {
+        return when (wellKnownParameters[key]) {
+            "s" -> str
+            "d" -> str.toIntOrNull()
+            else -> {
+                str.toIntOrNull() ?: str.toFloatOrNull() ?: str
             }
         }
     }
