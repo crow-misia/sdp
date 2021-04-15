@@ -1,12 +1,12 @@
-import com.jfrog.bintray.gradle.BintrayExtension
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.net.URI
 
 plugins {
     kotlin("jvm")
     `maven-publish`
+    id("signing")
     id("org.jetbrains.dokka") version Versions.dokkaPlugin
-    id("com.jfrog.bintray") version Versions.bintrayPlugin
 }
 
 group = Maven.groupId
@@ -27,90 +27,95 @@ val sourcesJar by tasks.creating(Jar::class) {
     from(sourceSets["main"].allSource)
 }
 
-val dokka by tasks.getting(DokkaTask::class) {
-    outputFormat = "html"
-    outputDirectory = "$buildDir/javadoc"
+val customDokkaTask by tasks.creating(DokkaTask::class) {
+    dokkaSourceSets.getByName("main") {
+        noAndroidSdkLink.set(false)
+    }
+    dependencies {
+        plugins("org.jetbrains.dokka:javadoc-plugin:${Versions.dokkaPlugin}")
+    }
+    inputs.dir("src/main/kotlin")
+    outputDirectory.set(buildDir.resolve("javadoc"))
 }
 
-val dokkaJar by tasks.creating(Jar::class) {
+val javadocJar by tasks.creating(Jar::class) {
+    dependsOn(customDokkaTask)
     group = JavaBasePlugin.DOCUMENTATION_GROUP
-    description = "Assembles Kotlin docs with Dokka"
+    description = "Assembles JavaDoc JAR"
     archiveClassifier.set("javadoc")
-    from(dokka)
+    from(customDokkaTask.outputDirectory)
 }
 
-val publicationName = "sdp"
-publishing {
-    publications {
-        create<MavenPublication>(publicationName) {
-            groupId = Maven.groupId
-            artifactId = Maven.artifactId
-            version = Versions.name
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("maven") {
+                groupId = Maven.groupId
+                artifactId = Maven.artifactId
+                version = Versions.name
 
-            println("""
-                    |Creating maven publication '$publicationName'
+                println("""
+                    |Creating maven publication
                     |    Group: $groupId
                     |    Artifact: $artifactId
                     |    Version: $version
                 """.trimMargin())
 
-            artifact(sourcesJar)
-            artifact(dokkaJar)
-            from(components["kotlin"])
+                artifact(sourcesJar)
+                artifact(javadocJar)
+                from(components["kotlin"])
 
-            pom {
-                name.set(Maven.name)
-                description.set(Maven.desc)
-                url.set(Maven.siteUrl)
+                pom {
+                    name.set(Maven.name)
+                    description.set(Maven.desc)
+                    url.set(Maven.siteUrl)
 
-                scm {
-                    val scmUrl = "scm:git:${Maven.gitUrl}"
-                    connection.set(scmUrl)
-                    developerConnection.set(scmUrl)
-                    url.set(this@pom.url)
-                    tag.set("HEAD")
-                }
-
-                developers {
-                    developer {
-                        id.set("crow-misia")
-                        name.set("Zenichi Amano")
-                        email.set("crow.misia@gmail.com")
-                        roles.set(listOf("Project-Administrator", "Developer"))
-                        timezone.set("+9")
+                    scm {
+                        val scmUrl = "scm:git:${Maven.gitUrl}"
+                        connection.set(scmUrl)
+                        developerConnection.set(scmUrl)
+                        url.set(this@pom.url)
+                        tag.set("HEAD")
                     }
-                }
 
-                licenses {
-                    license {
-                        name.set(Maven.licenseName)
-                        url.set(Maven.licenseUrl)
-                        distribution.set(Maven.licenseDist)
+                    developers {
+                        developer {
+                            id.set("crow-misia")
+                            name.set("Zenichi Amano")
+                            email.set("crow.misia@gmail.com")
+                            roles.set(listOf("Project-Administrator", "Developer"))
+                            timezone.set("+9")
+                        }
+                    }
+
+                    licenses {
+                        license {
+                            name.set(Maven.licenseName)
+                            url.set(Maven.licenseUrl)
+                            distribution.set(Maven.licenseDist)
+                        }
                     }
                 }
             }
         }
+        repositories {
+            maven {
+                val releasesRepoUrl = URI("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+                val snapshotsRepoUrl = URI("https://oss.sonatype.org/content/repositories/snapshots")
+                url = if (Versions.name.endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+                val sonatypeUsername: String? by project
+                val sonatypePassword: String? by project
+                credentials {
+                    username = sonatypeUsername.orEmpty()
+                    password = sonatypePassword.orEmpty()
+                }
+            }
+        }
     }
-}
 
-fun findProperty(s: String) = project.findProperty(s) as String?
-bintray {
-    user = findProperty("bintray_user")
-    key = findProperty("bintray_apikey")
-    publish = true
-    setPublications(publicationName)
-    override=true
-    pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
-        repo = "maven"
-        name = Maven.name
-        desc = Maven.desc
-        setLicenses(*Maven.licenses)
-        setLabels(*Maven.labels)
-        issueTrackerUrl = Maven.issueTrackerUrl
-        vcsUrl = Maven.gitUrl
-        githubRepo = Maven.githubRepo
-        description = Maven.desc
-    })
+    signing {
+        sign(publishing.publications.getByName("maven"))
+    }
 }
 
 tasks.withType<KotlinCompile> {

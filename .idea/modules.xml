@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/sdp.iml" filepath="$PROJECT_DIR$/.idea/sdp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sdp.buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/sdp.buildSrc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/sdp.lib.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/sdp.lib.iml" />
     </modules>
   </component>
 </project>

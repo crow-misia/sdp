@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.8">
       <module name="closure-table.closure-table.main" target="12" />
       <module name="closure-table.closure-table.test" target="12" />
       <module name="closure-table.lib.main" target="12" />
