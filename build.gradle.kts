@@ -5,7 +5,6 @@ plugins {
 allprojects {
     repositories {
         mavenCentral()
-        maven { setUrl("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven") }
     }
 }
 

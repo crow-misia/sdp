@@ -32,7 +32,7 @@ val customDokkaTask by tasks.creating(DokkaTask::class) {
         noAndroidSdkLink.set(false)
     }
     dependencies {
-        plugins("org.jetbrains.dokka:javadoc-plugin:${Versions.dokkaPlugin}")
+        plugins(Deps.dokkaJavaDocPlugin)
     }
     inputs.dir("src/main/kotlin")
     outputDirectory.set(buildDir.resolve("javadoc"))
@@ -121,6 +121,8 @@ afterEvaluate {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = "1.6"
+        apiVersion = "1.5"
+        languageVersion = "1.5"
         freeCompilerArgs = listOf("-Xjsr305=strict", "-progressive")
     }
 }
