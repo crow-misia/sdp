@@ -1,5 +1,5 @@
 object Versions {
-    const val kotlin = "1.5.10"
+    const val kotlin = "1.5.20"
     const val dokkaPlugin = "1.4.32"
 
     const val mockk = "1.11.0"
