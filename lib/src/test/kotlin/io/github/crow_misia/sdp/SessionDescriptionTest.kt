@@ -5,6 +5,7 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
 import io.github.crow_misia.sdp.attribute.*
 import org.junit.jupiter.api.Test
+import java.math.BigInteger
 
 internal class SessionDescriptionTest {
 
@@ -126,7 +127,14 @@ a=mediaclk:direct=0
 
         val expected = SdpSessionDescription.of(
             version = SdpVersion.of(),
-            origin = SdpOrigin.of("jdoe", 2890844526, 2890842807, "IN", "IP4", "10.47.16.5"),
+            origin = SdpOrigin.of(
+                "jdoe",
+                BigInteger("2890844526"),
+                BigInteger("2890842807"),
+                "IN",
+                "IP4",
+                "10.47.16.5"
+            ),
             sessionName = SdpSessionName.of("SDP Seminar"),
             information = SdpSessionInformation.of("A Seminar on the session description protocol"),
             uris = listOf(SdpUri.of("http://www.example.com/seminars/sdp.pdf")),
@@ -134,7 +142,13 @@ a=mediaclk:direct=0
             phones = listOf(SdpPhone.of("+81012345678")),
             connection = SdpConnection.of("IN", "IP4", "224.2.17.12", 127),
             bandwidths = listOf(SdpBandwidth("AS", 4000)),
-            timings = listOf(SdpTiming.of(2873397496L, 2873404696L, repeatTime = SdpRepeatTime.of("604800", "3600", "0", "90000"))),
+            timings = listOf(
+                SdpTiming.of(
+                    2873397496L,
+                    2873404696L,
+                    repeatTime = SdpRepeatTime.of("604800", "3600", "0", "90000")
+                )
+            ),
             timeZones = SdpTimeZones.of(SdpTimeZone.of(2882844526L, "-1h"), SdpTimeZone.of(2898848070L, "0")),
             key = EncryptionKey.of(EncryptionKey.Method.BASE64, "<encoded encryption key>"),
             attributes = listOf(SendRecvAttribute),
@@ -400,7 +414,7 @@ a=ssrc:2814730704 label:77150781-678e-4cd3-a56d-233c01cd4ffd
         val sessionDescription = SdpSessionDescription.of(
             version = SdpVersion.of(0),
             sessionName = SdpSessionName.of("a"),
-            origin = SdpOrigin.of("-", 1, 1, "IN", "IP4", "0.0.0.0")
+            origin = SdpOrigin.of("-", BigInteger.ONE, BigInteger.ONE, "IN", "IP4", "0.0.0.0")
         )
 
         // need empty

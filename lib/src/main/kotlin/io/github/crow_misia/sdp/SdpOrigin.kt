@@ -1,14 +1,15 @@
 package io.github.crow_misia.sdp
 
 import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
+import java.math.BigInteger
 
 data class SdpOrigin internal constructor(
-    var username: String,
-    var sessId: Long,
-    var sessVersion: Long,
-    var nettype: String,
-    var addrtype: String,
-    var unicastAddress: String
+    val username: String,
+    val sessId: BigInteger,
+    val sessVersion: BigInteger,
+    val nettype: String,
+    val addrtype: String,
+    val unicastAddress: String,
 ) : SdpElement() {
     override fun toString() = super.toString()
 
@@ -29,13 +30,17 @@ data class SdpOrigin internal constructor(
     }
 
     companion object {
-        @JvmStatic @JvmOverloads
-        fun of(username: String = "-",
-               sessId: Long,
-               sessVersion: Long,
-               nettype: String,
-               addrtype: String,
-               unicastAddress: String
+        internal const val fieldPart = "o="
+
+        @JvmStatic
+        @JvmOverloads
+        fun of(
+            username: String = "-",
+            sessId: BigInteger,
+            sessVersion: BigInteger,
+            nettype: String,
+            addrtype: String,
+            unicastAddress: String,
         ): SdpOrigin {
             return SdpOrigin(username, sessId, sessVersion, nettype, addrtype, unicastAddress)
         }
@@ -45,10 +50,10 @@ data class SdpOrigin internal constructor(
             if (values.size != 6) {
                 throw SdpParseException("could not parse: $line as Origin")
             }
-            val id = values[1].toLongOrNull() ?: run {
+            val id = values[1].toBigIntegerOrNull() ?: run {
                 throw SdpParseException("could not parse: $line as Origin")
             }
-            val version = values[2].toLongOrNull() ?: run {
+            val version = values[2].toBigIntegerOrNull() ?: run {
                 throw SdpParseException("could not parse: $line as Origin")
             }
 
