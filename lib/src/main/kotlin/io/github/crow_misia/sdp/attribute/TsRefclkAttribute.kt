@@ -4,10 +4,11 @@ import io.github.crow_misia.sdp.SdpParseException
 
 data class TsRefclkAttribute internal constructor(
     override var value: String
-) : BaseSdpAttribute(FIELD_NAME, value) {
+) : BaseSdpAttribute(fieldName, value) {
+    override fun toString() = super.toString()
 
     companion object {
-        internal const val FIELD_NAME = "ts-refclk"
+        internal const val fieldName = "ts-refclk"
 
         @JvmStatic
         fun of(value: String): TsRefclkAttribute {

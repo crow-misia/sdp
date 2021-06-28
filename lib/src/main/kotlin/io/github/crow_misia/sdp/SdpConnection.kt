@@ -1,43 +1,42 @@
 package io.github.crow_misia.sdp
 
-data class SdpConnection internal constructor(
-    var nettype: String,
-    var addrtype: String,
-    var connectionAddress: String,
-    var ttl: Int?,
-    var numberOfAddresses: Int
-) : SdpElement {
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("c=")
-            append(nettype)
-            append(' ')
-            append(addrtype)
-            append(' ')
-            append(connectionAddress)
-            ttl?.also {
-                append('/')
-                append(it)
-            }
-            if (numberOfAddresses > 1) {
-                append('/')
-                append(numberOfAddresses)
-            }
-            append("\r\n")
+data class SdpConnection internal constructor(
+    val nettype: String,
+    val addrtype: String,
+    val connectionAddress: String,
+    val ttl: Int?,
+    val numberOfAddresses: Int
+) : SdpElement() {
+    override fun toString() = super.toString()
+
+    override fun joinTo(buffer: StringBuilder) = buffer.apply {
+        append("c=")
+        append(nettype)
+        append(' ')
+        append(addrtype)
+        append(' ')
+        append(connectionAddress)
+        ttl?.also {
+            append('/')
+            append(it)
         }
+        if (numberOfAddresses > 1) {
+            append('/')
+            append(numberOfAddresses)
+        }
+        appendSdpLineSeparator()
     }
 
     companion object {
         @JvmStatic @JvmOverloads
-        fun of(nettype: String,
-               addrtype: String,
-               connectionAddress: String,
-               ttl: Int? = null,
-               numberOfAddresses: Int = 1
+        fun of(
+            nettype: String,
+            addrtype: String,
+            connectionAddress: String,
+            ttl: Int? = null,
+            numberOfAddresses: Int = 1,
         ): SdpConnection {
             return SdpConnection(nettype, addrtype, connectionAddress, ttl, numberOfAddresses)
         }

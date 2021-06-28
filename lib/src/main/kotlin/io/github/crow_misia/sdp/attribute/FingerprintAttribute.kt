@@ -4,34 +4,21 @@ import io.github.crow_misia.sdp.SdpParseException
 
 data class FingerprintAttribute internal constructor(
     var type: String,
-    var hash: String
-) : SdpAttribute {
-    override val field = FIELD_NAME
+    var hash: String,
+) : SdpAttribute() {
+    override val field = fieldName
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("a=")
-            append(field)
-            append(':')
-            valueJoinTo(this)
-            append("\r\n")
-        }
-    }
-
-    private fun valueJoinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append(type)
-            append(' ')
-            append(hash)
-        }
+    override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
+        append(':')
+        append(type)
+        append(' ')
+        append(hash)
     }
 
     companion object {
-        internal const val FIELD_NAME = "fingerprint"
+        internal const val fieldName = "fingerprint"
 
         @JvmStatic
         fun of(type: String, hash: String): FingerprintAttribute {

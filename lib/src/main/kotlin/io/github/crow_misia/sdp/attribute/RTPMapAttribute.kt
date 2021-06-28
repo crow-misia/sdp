@@ -7,42 +7,29 @@ data class RTPMapAttribute internal constructor(
     var encodingName: String,
     var clockRate: Int?,
     var encodingParameters: String?
-) : SdpAttribute {
-    override val field = FIELD_NAME
+) : SdpAttribute() {
+    override val field = fieldName
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("a=")
-            append(field)
-            append(':')
-            valueJoinTo(this)
-            append("\r\n")
-        }
-    }
-
-    private fun valueJoinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append(payloadType)
-            append(' ')
-            append(encodingName)
-            encodingParameters?.also {
-                append('/')
-                append(clockRate ?: 0)
-                append('/')
-                append(it)
-            } ?: clockRate?.also {
-                append('/')
-                append(it)
-            }
+    override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
+        append(':')
+        append(payloadType)
+        append(' ')
+        append(encodingName)
+        encodingParameters?.also {
+            append('/')
+            append(clockRate ?: 0)
+            append('/')
+            append(it)
+        } ?: clockRate?.also {
+            append('/')
+            append(it)
         }
     }
 
     companion object {
-        internal const val FIELD_NAME = "rtpmap"
+        internal const val fieldName = "rtpmap"
 
         @JvmStatic @JvmOverloads
         fun of(payloadType: Int,

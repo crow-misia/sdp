@@ -2,45 +2,33 @@ package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
 import io.github.crow_misia.sdp.Utils
+import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
 data class SimulcastAttribute internal constructor(
     var dir1: String,
     var list1: String,
     var dir2: String?,
     var list2: String?
-) : SdpAttribute {
-    override val field = FIELD_NAME
+) : SdpAttribute() {
+    override val field = fieldName
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("a=")
-            append(field)
-            append(':')
-            valueJoinTo(this)
-            append("\r\n")
-        }
-    }
-
-    private fun valueJoinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append(dir1)
+    override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
+        append(':')
+        append(dir1)
+        append(' ')
+        append(list1)
+        if (!dir2.isNullOrBlank()) {
             append(' ')
-            append(list1)
-            if (!dir2.isNullOrBlank()) {
-                append(' ')
-                append(dir2)
-                append(' ')
-                append(list2)
-            }
+            append(dir2)
+            append(' ')
+            append(list2)
         }
     }
 
     companion object {
-        internal const val FIELD_NAME = "simulcast"
+        internal const val fieldName = "simulcast"
 
         @JvmStatic
         fun of(dir1: String, list1: String, dir2: String? = null, list2: String? = null): SimulcastAttribute {

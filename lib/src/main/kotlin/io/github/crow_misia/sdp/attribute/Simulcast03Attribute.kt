@@ -2,10 +2,11 @@ package io.github.crow_misia.sdp.attribute
 
 data class Simulcast03Attribute internal constructor(
     override var value: String
-) : BaseSdpAttribute(FIELD_NAME, value) {
+) : BaseSdpAttribute(fieldName, value) {
+    override fun toString() = super.toString()
 
     companion object {
-        internal const val FIELD_NAME = "simulcast"
+        internal const val fieldName = "simulcast"
 
         @JvmStatic
         fun of(value: String): Simulcast03Attribute {

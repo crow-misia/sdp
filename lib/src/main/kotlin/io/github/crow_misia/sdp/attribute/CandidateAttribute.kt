@@ -4,7 +4,6 @@ package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
 import io.github.crow_misia.sdp.Utils
-import kotlin.collections.LinkedHashMap
 
 data class CandidateAttribute internal constructor(
     var foundation: String,
@@ -15,8 +14,8 @@ data class CandidateAttribute internal constructor(
     var port: Int,
     var type: String,
     internal var _extensions: MutableMap<String, String>
-) : SdpAttribute {
-    override val field = FIELD_NAME
+) : SdpAttribute() {
+    override val field = fieldName
 
     var extensions: Map<String, String>
         get() = _extensions
@@ -58,46 +57,33 @@ data class CandidateAttribute internal constructor(
         return _extensions.remove(Utils.getName(name)) != null
     }
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("a=")
-            append(field)
-            append(':')
-            valueJoinTo(this)
-            append("\r\n")
-        }
-    }
-
-    private fun valueJoinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append(foundation)
+    override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
+        append(':')
+        append(foundation)
+        append(' ')
+        append(component)
+        append(' ')
+        append(transport)
+        append(' ')
+        append(priority)
+        append(' ')
+        append(address)
+        append(' ')
+        append(port)
+        append(" typ ")
+        append(type)
+        _extensions.forEach {
             append(' ')
-            append(component)
+            append(it.key)
             append(' ')
-            append(transport)
-            append(' ')
-            append(priority)
-            append(' ')
-            append(address)
-            append(' ')
-            append(port)
-            append(" typ ")
-            append(type)
-            _extensions.forEach {
-                append(' ')
-                append(it.key)
-                append(' ')
-                append(it.value)
-            }
+            append(it.value)
         }
     }
 
     companion object {
-        internal const val FIELD_NAME = "candidate"
+        internal const val fieldName = "candidate"
 
         @JvmStatic @JvmOverloads
         fun of(foundation: String,

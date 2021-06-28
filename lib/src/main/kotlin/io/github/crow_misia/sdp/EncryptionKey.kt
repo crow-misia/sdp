@@ -1,23 +1,21 @@
 package io.github.crow_misia.sdp
 
+import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
+
 data class EncryptionKey internal constructor(
     var method: Method,
     var key: String?
-) : SdpElement {
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+) : SdpElement() {
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("k=")
-            append(method.value)
-            key?.also {
-                append(':')
-                append(it)
-            }
-            append("\r\n")
+    override fun joinTo(buffer: StringBuilder) = buffer.apply {
+        append("k=")
+        append(method.value)
+        key?.also {
+            append(':')
+            append(it)
         }
+        appendSdpLineSeparator()
     }
 
     companion object {
@@ -33,7 +31,7 @@ data class EncryptionKey internal constructor(
                 throw SdpParseException("could not parse: $line as EncryptionKey")
             }
             val method = Method.of(values[0]) ?: run {
-                throw SdpParseException("unsuported method ${values[0]} as EncryptionKey")
+                throw SdpParseException("unsupported method ${values[0]} as EncryptionKey")
             }
             return EncryptionKey(method, if (size == 1) null else values[1])
         }

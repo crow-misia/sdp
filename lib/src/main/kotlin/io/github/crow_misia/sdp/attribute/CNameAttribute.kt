@@ -2,17 +2,18 @@ package io.github.crow_misia.sdp.attribute
 
 data class CNameAttribute internal constructor(
     override var value: String
-) : BaseSdpAttribute(FIELD_NAME, value) {
+) : BaseSdpAttribute(fieldName, value) {
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
+    override fun joinTo(buffer: StringBuilder): StringBuilder {
         if (value.isBlank()) {
-            return
+            return buffer
         }
-        super.joinTo(buffer)
+        return super.joinTo(buffer)
     }
 
     companion object {
-        internal const val FIELD_NAME = "cname"
+        internal const val fieldName = "cname"
 
         @JvmStatic
         fun of(value: String): CNameAttribute {

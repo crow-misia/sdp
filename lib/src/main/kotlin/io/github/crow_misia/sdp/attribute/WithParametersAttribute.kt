@@ -4,7 +4,7 @@ package io.github.crow_misia.sdp.attribute
 
 abstract class WithParametersAttribute internal constructor(
     internal open var _parameters: MutableMap<String, Any?> = linkedMapOf()
-) : SdpAttribute {
+) : SdpAttribute() {
     companion object {
         private val wellKnownParameters = mapOf(
             // H264 codec parameters.
@@ -48,23 +48,17 @@ abstract class WithParametersAttribute internal constructor(
         _parameters.remove(key.trim())
     }
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
-
-   protected open fun valueJoinTo(buffer: StringBuilder) {
-        buffer.apply {
-            _parameters.entries.forEachIndexed { index, entry ->
-                if (index == 0) {
-                    append(' ')
-                } else {
-                    append(';')
-                }
-                append(entry.key)
-                entry.value?.also {
-                    append('=')
-                    append(it)
-                }
+    override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
+        _parameters.entries.forEachIndexed { index, entry ->
+            if (index == 0) {
+                append(' ')
+            } else {
+                append(';')
+            }
+            append(entry.key)
+            entry.value?.also {
+                append('=')
+                append(it)
             }
         }
     }

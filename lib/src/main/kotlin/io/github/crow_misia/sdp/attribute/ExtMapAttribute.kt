@@ -5,48 +5,35 @@ import io.github.crow_misia.sdp.SdpParseException
 data class ExtMapAttribute internal constructor(
     var id: Long,
     var direction: Direction?,
-    var uri: String?,
+    var uri: String,
     var encryptUri: String?,
-    var config: String?
-) : SdpAttribute {
-    override val field = FIELD_NAME
+    var config: String?,
+) : SdpAttribute() {
+    override val field = fieldName
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("a=")
-            append(field)
-            append(':')
-            valueJoinTo(this)
-            append("\r\n")
+    override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
+        append(':')
+        append(id)
+        direction?.also {
+            append('/')
+            append(it.value)
         }
-    }
-
-    private fun valueJoinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append(id)
-            direction?.also {
-                append('/')
-                append(it.value)
-            }
+        append(' ')
+        append(uri)
+        encryptUri?.also {
             append(' ')
-            append(uri)
-            encryptUri?.also {
-                append(' ')
-                append(it)
-            }
-            config?.also {
-                append(' ')
-                append(it)
-            }
+            append(it)
+        }
+        config?.also {
+            append(' ')
+            append(it)
         }
     }
 
     companion object {
-        internal const val FIELD_NAME = "extmap"
+        internal const val fieldName = "extmap"
 
         @JvmStatic @JvmOverloads
         fun of(value: Long, direction: Direction? = null, uri: String, encryptUri: String? = null, config: String? = null): ExtMapAttribute {

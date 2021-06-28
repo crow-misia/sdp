@@ -3,37 +3,24 @@ package io.github.crow_misia.sdp.attribute
 import io.github.crow_misia.sdp.SdpParseException
 
 data class GroupAttribute internal constructor(
-    var type: String,
-    var mids: MutableList<String>
-) : SdpAttribute {
-    override val field = FIELD_NAME
+    val type: String,
+    val mids: MutableList<String>,
+) : SdpAttribute() {
+    override val field = fieldName
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("a=")
-            append(field)
-            append(':')
-            valueJoinTo(this)
-            append("\r\n")
-        }
-    }
-
-    private fun valueJoinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append(type)
-            mids.forEach {
-                append(' ')
-                append(it)
-            }
+    override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
+        append(':')
+        append(type)
+        mids.forEach {
+            append(' ')
+            append(it)
         }
     }
 
     companion object {
-        internal const val FIELD_NAME = "group"
+        internal const val fieldName = "group"
 
         @JvmStatic
         fun of(type: String, vararg mids: String): GroupAttribute {

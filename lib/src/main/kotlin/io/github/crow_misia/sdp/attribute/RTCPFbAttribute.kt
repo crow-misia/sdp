@@ -1,42 +1,30 @@
 package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
+import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
 data class RTCPFbAttribute internal constructor(
     var payloadType: String,
     var type: String,
     var subtype: String?
-) : SdpAttribute {
-    override val field = FIELD_NAME
+) : SdpAttribute() {
+    override val field = fieldName
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("a=")
-            append(field)
-            append(':')
-            valueJoinTo(this)
-            append("\r\n")
-        }
-    }
-
-    private fun valueJoinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append(payloadType)
+    override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
+        append(':')
+        append(payloadType)
+        append(' ')
+        append(type)
+        subtype?.also {
             append(' ')
-            append(type)
-            subtype?.also {
-                append(' ')
-                append(it)
-            }
+            append(it)
         }
     }
 
     companion object {
-        internal const val FIELD_NAME = "rtcp-fb"
+        internal const val fieldName = "rtcp-fb"
 
         @JvmStatic
         fun of(payloadType: String, type: String, subtype: String?): RTCPFbAttribute {

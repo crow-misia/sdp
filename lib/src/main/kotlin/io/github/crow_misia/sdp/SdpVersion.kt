@@ -1,30 +1,30 @@
 package io.github.crow_misia.sdp
 
+import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
+
 data class SdpVersion internal constructor(
     var version: Int = 0
-) : SdpElement {
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+) : SdpElement() {
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("v=")
-            append(version)
-            append("\r\n")
-        }
+    override fun joinTo(buffer: StringBuilder) = buffer.apply {
+        append("v=")
+        append(version)
+        appendSdpLineSeparator()
     }
 
     companion object {
+        private val ZERO = SdpVersion(0)
+
         @JvmStatic @JvmOverloads
         fun of(version: Int = 0): SdpVersion {
-            return SdpVersion(version)
+            return if (version == 0) ZERO else SdpVersion(version)
         }
 
         internal fun parse(line: String): SdpVersion {
-            return of(line.substring(2).toIntOrNull() ?: run {
-                throw SdpParseException("could not parse: $line as Version")
-            })
+            val version = line.substring(2).toIntOrNull()
+                ?: throw SdpParseException("could not parse: $line as Version")
+            return of(version)
         }
     }
 }

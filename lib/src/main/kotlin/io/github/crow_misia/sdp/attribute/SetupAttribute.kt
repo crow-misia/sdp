@@ -5,9 +5,11 @@ import java.util.*
 
 data class SetupAttribute internal constructor(
     override var value: String
-) : BaseSdpAttribute(FIELD_NAME, value) {
+) : BaseSdpAttribute(fieldName, value) {
+    override fun toString() = super.toString()
+
     companion object {
-        internal const val FIELD_NAME = "setup"
+        internal const val fieldName = "setup"
 
         private val MAPPING by lazy {
             EnumMap<Type, SetupAttribute>(Type::class.java).also {

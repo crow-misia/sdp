@@ -2,6 +2,7 @@
 
 package io.github.crow_misia.sdp
 
+import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 import io.github.crow_misia.sdp.attribute.MidAttribute
 import io.github.crow_misia.sdp.attribute.SdpAttribute
 
@@ -16,7 +17,7 @@ data class SdpMediaDescription internal constructor(
     val connections: MutableList<SdpConnection>,
     val bandwidths: MutableList<SdpBandwidth>,
     override val attributes: MutableList<SdpAttribute>
-) : WithAttributeSdpElement, SdpElement {
+) : WithAttributeSdpElement, SdpElement() {
     private var cachedMid: String? = null
 
     var protos: List<String>
@@ -26,7 +27,7 @@ data class SdpMediaDescription internal constructor(
     var mid: String
         get() {
             return cachedMid ?: run {
-                val mid = getAttribute(MidAttribute::class)?.value
+                val mid = getAttribute<MidAttribute>()?.value
                 cachedMid = mid
                 mid.orEmpty()
             }
@@ -42,30 +43,26 @@ data class SdpMediaDescription internal constructor(
         _protos = proto.splitToSequence('/').toMutableList()
     }
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("m=")
-            append(type)
-            append(' ')
-            append(port)
-            numberOfPorts?.also { append('/').append(it) }
-            append(' ')
-            _protos.joinTo(this, "/")
-            append(' ')
-            formats.joinTo(this, " ")
-            append("\r\n")
+    override fun joinTo(buffer: StringBuilder) = buffer.apply {
+        append("m=")
+        append(type)
+        append(' ')
+        append(port)
+        numberOfPorts?.also { append('/').append(it) }
+        append(' ')
+        _protos.joinTo(this, "/")
+        append(' ')
+        formats.joinTo(this, " ")
+        appendSdpLineSeparator()
 
-            // lines of media
-            information?.also { it.joinTo(this) }
-            connections.forEach { it.joinTo(this) }
-            bandwidths.forEach { it.joinTo(this) }
-            key?.also { it.joinTo(this) }
-            attributes.forEach { it.joinTo(this) }
-        }
+        // lines of media
+        information?.also { it.joinTo(this) }
+        connections.forEach { it.joinTo(this) }
+        bandwidths.forEach { it.joinTo(this) }
+        key?.also { it.joinTo(this) }
+        attributes.forEach { it.joinTo(this) }
     }
 
     companion object {

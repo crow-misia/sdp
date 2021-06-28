@@ -2,9 +2,11 @@ package io.github.crow_misia.sdp.attribute
 
 data class XgoogleFlagAttribute internal constructor(
     override var value: String
-) : BaseSdpAttribute(FIELD_NAME, value) {
+) : BaseSdpAttribute(fieldName, value) {
+    override fun toString() = super.toString()
+
     companion object {
-        internal const val FIELD_NAME = "x-google-flag"
+        internal const val fieldName = "x-google-flag"
 
         @JvmStatic
         fun of(type: String): XgoogleFlagAttribute {

@@ -3,13 +3,14 @@ package io.github.crow_misia.sdp
 data class SdpTimeZone internal constructor(
     var adjustmentTime: Long,
     var offset: String
-) {
-    val value: StringBuilder
-        get() = StringBuilder().apply {
-            append(adjustmentTime)
-            append(' ')
-            append(offset)
-        }
+): SdpElement() {
+    override fun toString() = super.toString()
+
+    override fun joinTo(buffer: StringBuilder) = buffer.apply {
+        append(adjustmentTime)
+        append(' ')
+        append(offset)
+    }
 
     companion object {
         @JvmStatic
@@ -17,4 +18,5 @@ data class SdpTimeZone internal constructor(
             return SdpTimeZone(adjustmentTime, offset)
         }
     }
+
 }

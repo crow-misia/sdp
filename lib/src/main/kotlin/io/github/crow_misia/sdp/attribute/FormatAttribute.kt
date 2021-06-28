@@ -5,33 +5,20 @@ package io.github.crow_misia.sdp.attribute
 import io.github.crow_misia.sdp.SdpParseException
 
 data class FormatAttribute internal constructor(
-    var format: Int
+    var format: Int,
 ) : WithParametersAttribute() {
-    override val field = FIELD_NAME
+    override val field = fieldName
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("a=")
-            append(field)
-            append(':')
-            valueJoinTo(this)
-            append("\r\n")
-        }
-    }
-
-   override fun valueJoinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append(format)
-            super.valueJoinTo(buffer)
-        }
+    override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
+        append(':')
+        append(format)
+        super.valueJoinTo(this)
     }
 
     companion object {
-        internal const val FIELD_NAME = "fmtp"
+        internal const val fieldName = "fmtp"
 
         @JvmStatic @JvmOverloads
         fun of(format: Int, parameters: String? = null): FormatAttribute {

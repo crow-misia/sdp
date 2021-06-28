@@ -1,42 +1,30 @@
 package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
+import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
 data class SsrcAttribute internal constructor(
     var id: Long,
     var attribute: String,
     var ssrcValue: String
-) : SdpAttribute {
-    override val field = FIELD_NAME
+) : SdpAttribute() {
+    override val field = fieldName
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("a=")
-            append(field)
+    override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
+        append(':')
+        append(id)
+        append(' ')
+        append(attribute)
+        if (ssrcValue.isNotBlank()) {
             append(':')
-            valueJoinTo(this)
-            append("\r\n")
-        }
-    }
-
-    private fun valueJoinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append(id)
-            append(' ')
-            append(attribute)
-            if (ssrcValue.isNotEmpty()) {
-                append(':')
-                append(ssrcValue)
-            }
+            append(ssrcValue)
         }
     }
 
     companion object {
-        internal const val FIELD_NAME = "ssrc"
+        internal const val fieldName = "ssrc"
 
         @JvmStatic @JvmOverloads
         fun of(id: Long, attribute: String, ssrcValue: String? = null): SsrcAttribute {

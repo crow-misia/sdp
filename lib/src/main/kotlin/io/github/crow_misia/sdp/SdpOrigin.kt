@@ -1,5 +1,7 @@
 package io.github.crow_misia.sdp
 
+import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
+
 data class SdpOrigin internal constructor(
     var username: String,
     var sessId: Long,
@@ -7,27 +9,23 @@ data class SdpOrigin internal constructor(
     var nettype: String,
     var addrtype: String,
     var unicastAddress: String
-) : SdpElement {
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+) : SdpElement() {
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("o=")
-            append(username)
-            append(' ')
-            append(sessId)
-            append(' ')
-            append(sessVersion)
-            append(' ')
-            append(nettype)
-            append(' ')
-            append(addrtype)
-            append(' ')
-            append(unicastAddress)
-            append("\r\n")
-        }
+    override fun joinTo(buffer: StringBuilder) = buffer.apply {
+        append("o=")
+        append(username)
+        append(' ')
+        append(sessId)
+        append(' ')
+        append(sessVersion)
+        append(' ')
+        append(nettype)
+        append(' ')
+        append(addrtype)
+        append(' ')
+        append(unicastAddress)
+        appendSdpLineSeparator()
     }
 
     companion object {

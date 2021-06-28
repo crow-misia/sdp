@@ -1,21 +1,11 @@
 package io.github.crow_misia.sdp.attribute
 
-object ExtmapAllowMixedAttribute : SdpAttribute {
-    internal const val FIELD_NAME = "extmap-allow-mixed"
+object ExtmapAllowMixedAttribute : SdpAttribute() {
+    internal const val fieldName = "extmap-allow-mixed"
 
-    override val field = FIELD_NAME
+    override val field = fieldName
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
-
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("a=")
-            append(field)
-            append("\r\n")
-        }
-    }
+    override fun valueJoinTo(buffer: StringBuilder) = buffer
 
     @JvmStatic
     fun of() = this

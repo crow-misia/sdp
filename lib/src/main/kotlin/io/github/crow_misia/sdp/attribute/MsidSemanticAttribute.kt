@@ -3,36 +3,22 @@ package io.github.crow_misia.sdp.attribute
 data class MsidSemanticAttribute internal constructor(
     var semantic: String,
     var token: String
-) : SdpAttribute {
-    override val field = FIELD_NAME
+) : SdpAttribute() {
+    override val field = fieldName
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("a=")
-            append(field)
-            append(':')
-            valueJoinTo(this)
-            append("\r\n")
-        }
-    }
-
-    private fun valueJoinTo(buffer: StringBuilder) {
-        buffer.apply {
+    override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
+        append(": ")
+        append(semantic)
+        if (token.isNotEmpty()) {
             append(' ')
-            append(semantic)
-            if (token.isNotEmpty()) {
-                append(' ')
-                append(token)
-            }
+            append(token)
         }
     }
 
     companion object {
-        internal const val FIELD_NAME = "msid-semantic"
+        internal const val fieldName = "msid-semantic"
 
         @JvmStatic @JvmOverloads
         fun of(semantic: String, token: String? = null): MsidSemanticAttribute {

@@ -10,46 +10,33 @@ data class ImageAttrsAttribute internal constructor(
     var dir1: String,
     var attrs1: String,
     var dir2: String?,
-    var attrs2: String?
-) : SdpAttribute {
-    override val field = FIELD_NAME
+    var attrs2: String?,
+) : SdpAttribute() {
+    override val field = fieldName
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("a=")
-            append(field)
-            append(':')
-            valueJoinTo(this)
-            append("\r\n")
-        }
-    }
-
-    private fun valueJoinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append(pt)
+    override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
+        append(':')
+        append(pt)
+        append(' ')
+        append(dir1)
+        append(' ')
+        append(attrs1)
+        if (!dir2.isNullOrBlank()) {
             append(' ')
-            append(dir1)
+            append(dir2)
             append(' ')
-            append(attrs1)
-            if (!dir2.isNullOrBlank()) {
-                append(' ')
-                append(dir2)
-                append(' ')
-                append(attrs2)
-            }
+            append(attrs2)
         }
     }
 
     companion object {
-        internal const val FIELD_NAME = "imageattr"
+        internal const val fieldName = "imageattr"
 
         @JvmStatic
         fun of(pt: String, dir1: String, attrs1: String, dir2: String? = null, attrs2: String? = null): ImageAttrsAttribute {
-            return ImageAttrsAttribute(pt, Utils.getName(dir1), attrs1, dir2?.toLowerCase(Locale.ENGLISH), attrs2)
+            return ImageAttrsAttribute(pt, Utils.getName(dir1), attrs1, dir2?.lowercase(Locale.ENGLISH), attrs2)
         }
 
         internal fun parse(value: String): SdpAttribute {
@@ -60,7 +47,7 @@ data class ImageAttrsAttribute internal constructor(
             }
 
             val dir2Index = max(values.subList(3, size).indexOfFirst {
-                val dir = it.trim().toLowerCase(Locale.ENGLISH)
+                val dir = it.trim().lowercase(Locale.ENGLISH)
                 return@indexOfFirst dir == "send" || dir == "recv"
             }, 0) + 3
 

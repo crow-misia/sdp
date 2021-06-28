@@ -3,38 +3,26 @@
 package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
+import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
 data class RidAttribute internal constructor(
     var id: String,
     var direction: String
 ) : WithParametersAttribute() {
-    override val field = FIELD_NAME
+    override val field = fieldName
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("a=")
-            append(field)
-            append(':')
-            valueJoinTo(this)
-            append("\r\n")
-        }
-    }
-
-   override fun valueJoinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append(id)
-            append(' ')
-            append(direction)
-            super.valueJoinTo(buffer)
-        }
+    override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
+        append(':')
+        append(id)
+        append(' ')
+        append(direction)
+        super.valueJoinTo(this)
     }
 
     companion object {
-        internal const val FIELD_NAME = "rid"
+        internal const val fieldName = "rid"
 
         @JvmStatic @JvmOverloads
         fun of(id: String, direction: String, parameters: String? = null): RidAttribute {

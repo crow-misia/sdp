@@ -2,27 +2,25 @@
 
 package io.github.crow_misia.sdp
 
+import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
+
 data class SdpRepeatTime internal constructor(
     var repeatInterval: String,
     var activeDuration: String,
     var offsets: List<String>
-) : SdpElement {
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+) : SdpElement() {
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("r=")
-            append(repeatInterval)
+    override fun joinTo(buffer: StringBuilder) = buffer.apply {
+        append("r=")
+        append(repeatInterval)
+        append(' ')
+        append(activeDuration)
+        offsets.forEach {
             append(' ')
-            append(activeDuration)
-            offsets.forEach {
-                append(' ')
-                append(it)
-            }
-            append("\r\n")
+            append(it)
         }
+        appendSdpLineSeparator()
     }
 
     companion object {

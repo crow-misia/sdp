@@ -1,45 +1,33 @@
 package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
+import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
 data class RTCPAttribute internal constructor(
     var port: Int,
     var nettype: String,
     var addrtype: String,
     var address: String
-) : SdpAttribute {
-    override val field = FIELD_NAME
+) : SdpAttribute() {
+    override val field = fieldName
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("a=")
-            append(field)
-            append(':')
-            valueJoinTo(this)
-            append("\r\n")
-        }
-    }
-
-   private fun valueJoinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append(port)
-            if (address.isNotEmpty()) {
-                append(' ')
-                append(nettype)
-                append(' ')
-                append(addrtype)
-                append(' ')
-                append(address)
-            }
+    override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
+        append(':')
+        append(port)
+        if (address.isNotEmpty()) {
+            append(' ')
+            append(nettype)
+            append(' ')
+            append(addrtype)
+            append(' ')
+            append(address)
         }
     }
 
     companion object {
-        internal const val FIELD_NAME = "rtcp"
+        internal const val fieldName = "rtcp"
 
         @JvmStatic
         fun of(port: Int): RTCPAttribute {

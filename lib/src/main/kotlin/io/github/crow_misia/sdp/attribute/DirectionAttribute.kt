@@ -1,21 +1,11 @@
 package io.github.crow_misia.sdp.attribute
 
 sealed class DirectionAttribute(
-    type: Direction
-) : SdpAttribute {
+    type: Direction,
+) : SdpAttribute() {
     override val field: String = type.value
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
-
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("a=")
-            append(field)
-            append("\r\n")
-        }
-    }
+    override fun valueJoinTo(buffer: StringBuilder) = buffer
 }
 
 @Suppress("NOTHING_TO_INLINE")

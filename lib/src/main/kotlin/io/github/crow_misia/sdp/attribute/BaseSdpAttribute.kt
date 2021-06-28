@@ -4,9 +4,8 @@ import io.github.crow_misia.sdp.Utils
 
 open class BaseSdpAttribute internal constructor(
     override var field: String,
-    open var value: String
-) : SdpAttribute {
-
+    open var value: String,
+) : SdpAttribute() {
     override fun equals(other: Any?): Boolean {
         if (other !is BaseSdpAttribute) {
             return false
@@ -18,19 +17,10 @@ open class BaseSdpAttribute internal constructor(
         return field.hashCode() * 37 + value.hashCode()
     }
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
-
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("a=")
-            append(field)
-            if (value.isNotEmpty()) {
-                append(':')
-                append(value)
-            }
-            append("\r\n")
+    override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
+        if (value.isNotEmpty()) {
+            append(':')
+            append(value)
         }
     }
 

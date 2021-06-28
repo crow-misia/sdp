@@ -3,31 +3,24 @@ package io.github.crow_misia.sdp.attribute
 import io.github.crow_misia.sdp.SdpParseException
 
 data class FramerateAttribute internal constructor(
-    var value: Double
-) : SdpAttribute {
-    override val field = FIELD_NAME
+    var value: Double,
+) : SdpAttribute() {
+    override val field = fieldName
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            append("a=")
-            append(field)
-            append(':')
-            val valueLong = value.toLong()
-            if (value == valueLong.toDouble()) {
-                append(valueLong)
-            } else {
-                append(value)
-            }
-            append("\r\n")
+    override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
+        append(':')
+        val valueLong = value.toLong()
+        if (value == valueLong.toDouble()) {
+            append(valueLong)
+        } else {
+            append(value)
         }
     }
 
     companion object {
-        internal const val FIELD_NAME = "framerate"
+        internal const val fieldName = "framerate"
 
         @JvmStatic
         fun of(value: Int): FramerateAttribute {

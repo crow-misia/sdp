@@ -17,7 +17,7 @@ data class SdpSessionDescription internal constructor(
     val timings: MutableList<SdpTiming>,
     override val attributes: MutableList<SdpAttribute>,
     private val mediaDescriptions: MutableList<SdpMediaDescription>
-) : WithAttributeSdpElement, SdpElement {
+) : WithAttributeSdpElement, SdpElement() {
     private val midToIndex = hashMapOf<String, Int>().also { map ->
         mediaDescriptions.forEachIndexed { idx, desc -> map[desc.mid] = idx }
     }
@@ -56,27 +56,23 @@ data class SdpSessionDescription internal constructor(
         return mediaDescriptions.size
     }
 
-    override fun toString(): String {
-        return buildString { joinTo(this) }
-    }
+    override fun toString() = super.toString()
 
-    override fun joinTo(buffer: StringBuilder) {
-        buffer.apply {
-            version.joinTo(this)
-            origin.joinTo(this)
-            sessionName.joinTo(this)
-            information?.joinTo(this)
-            uris.forEach { it.joinTo(this) }
-            emails.forEach { it.joinTo(this) }
-            phones.forEach { it.joinTo(this) }
-            connection?.joinTo(this)
-            bandwidths.forEach { it.joinTo(this) }
-            timings.forEach { it.joinTo(this) }
-            timeZones?.joinTo(this)
-            key?.joinTo(this)
-            attributes.forEach { it.joinTo(this) }
-            mediaDescriptions.forEach { it.joinTo(this) }
-        }
+    override fun joinTo(buffer: StringBuilder) = buffer.apply {
+        version.joinTo(this)
+        origin.joinTo(this)
+        sessionName.joinTo(this)
+        information?.joinTo(this)
+        uris.forEach { it.joinTo(this) }
+        emails.forEach { it.joinTo(this) }
+        phones.forEach { it.joinTo(this) }
+        connection?.joinTo(this)
+        bandwidths.forEach { it.joinTo(this) }
+        timings.forEach { it.joinTo(this) }
+        timeZones?.joinTo(this)
+        key?.joinTo(this)
+        attributes.forEach { it.joinTo(this) }
+        mediaDescriptions.forEach { it.joinTo(this) }
     }
 
     companion object {
