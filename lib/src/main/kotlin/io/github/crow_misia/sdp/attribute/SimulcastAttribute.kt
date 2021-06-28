@@ -1,14 +1,12 @@
 package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
-import io.github.crow_misia.sdp.Utils
-import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
 data class SimulcastAttribute internal constructor(
-    var dir1: String,
+    var dir1: StreamDirection,
     var list1: String,
-    var dir2: String?,
-    var list2: String?
+    var dir2: StreamDirection,
+    var list2: String,
 ) : SdpAttribute() {
     override val field = fieldName
 
@@ -16,12 +14,12 @@ data class SimulcastAttribute internal constructor(
 
     override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
         append(':')
-        append(dir1)
+        append(dir1.value)
         append(' ')
         append(list1)
-        if (!dir2.isNullOrBlank()) {
+        if (dir2 != StreamDirection.NONE && list2.isNotEmpty()) {
             append(' ')
-            append(dir2)
+            append(dir2.value)
             append(' ')
             append(list2)
         }
@@ -31,8 +29,14 @@ data class SimulcastAttribute internal constructor(
         internal const val fieldName = "simulcast"
 
         @JvmStatic
-        fun of(dir1: String, list1: String, dir2: String? = null, list2: String? = null): SimulcastAttribute {
-            return SimulcastAttribute(Utils.getName(dir1), list1, dir2?.let { Utils.getName(it) }, list2)
+        @JvmOverloads
+        fun of(
+            dir1: StreamDirection,
+            list1: String,
+            dir2: StreamDirection = StreamDirection.NONE,
+            list2: String = "",
+        ): SimulcastAttribute {
+            return SimulcastAttribute(dir1, list1, dir2, list2)
         }
 
         internal fun parse(value: String): SdpAttribute {
@@ -45,10 +49,10 @@ data class SimulcastAttribute internal constructor(
                 throw SdpParseException("could not parse: $value as SimulcastAttribute")
             }
             return of(
-                dir1 = values[0],
+                dir1 = StreamDirection.of(values[0]),
                 list1 = values[1],
-                dir2 = if (size > 2) values[2] else null,
-                list2 = if (size > 3) values[3] else null
+                dir2 = if (size > 2) StreamDirection.of(values[2]) else StreamDirection.NONE,
+                list2 = if (size > 3) values[3] else ""
             )
         }
     }

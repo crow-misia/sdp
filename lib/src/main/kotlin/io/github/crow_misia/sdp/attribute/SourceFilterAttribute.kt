@@ -1,14 +1,13 @@
 package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
-import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
 data class SourceFilterAttribute internal constructor(
     var filterMode: String,
     var netType: String,
     var addressTypes: String,
     var destAddress: String,
-    val srcList: MutableSet<String>
+    var srcList: MutableSet<String>,
 ) : SdpAttribute() {
     override val field = fieldName
 
@@ -33,7 +32,24 @@ data class SourceFilterAttribute internal constructor(
         internal const val fieldName = "source-filter"
 
         @JvmStatic
-        fun of(filterMode: String, netType: String, addressTypes: String, destAddress: String, vararg srcAddress: String): SourceFilterAttribute {
+        fun of(
+            filterMode: String,
+            netType: String,
+            addressTypes: String,
+            destAddress: String,
+            srcAddress: List<String>,
+        ): SourceFilterAttribute {
+            return SourceFilterAttribute(filterMode, netType, addressTypes, destAddress, srcAddress.toMutableSet())
+        }
+
+        @JvmStatic
+        fun of(
+            filterMode: String,
+            netType: String,
+            addressTypes: String,
+            destAddress: String,
+            vararg srcAddress: String,
+        ): SourceFilterAttribute {
             return SourceFilterAttribute(filterMode, netType, addressTypes, destAddress, srcAddress.toMutableSet())
         }
 
@@ -48,7 +64,7 @@ data class SourceFilterAttribute internal constructor(
                 netType = values[1],
                 addressTypes = values[2],
                 destAddress = values[3],
-                srcList = values.subList(4, size).toMutableSet()
+                srcList = values.subList(4, size).toMutableSet(),
             )
         }
     }

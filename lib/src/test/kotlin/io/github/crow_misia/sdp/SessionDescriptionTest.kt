@@ -107,7 +107,8 @@ a=mediaclk:direct=0
         """.trimIndent()
         val actual = SdpSessionDescription.parse(expectedStr)
 
-        val testMediaDescription = SdpMediaDescription.of("audio", 49170, null, listOf("RTP", "AVP"), listOf(0),
+        val testMediaDescription = SdpMediaDescription.of(
+            "audio", 49170, null, listOf("RTP", "AVP"), listOf("0"),
             attributes = listOf(
                 MidAttribute.of("123"),
                 RecvOnlyAttribute,
@@ -154,37 +155,47 @@ a=mediaclk:direct=0
             attributes = listOf(SendRecvAttribute),
             mediaDescriptions = listOf(
                 testMediaDescription,
-                SdpMediaDescription.of("video", 51372, null, listOf("RTP", "AVP"), listOf(99),
+                SdpMediaDescription.of(
+                    "video", 51372, null, listOf("RTP", "AVP"), listOf("99"),
                     attributes = listOf(
                         SendOnlyAttribute,
                         CNameAttribute.of("abc"),
                         RTPMapAttribute.of(99, "h263-1998", 90000),
                         RTPMapAttribute.of(99, "h263-1998"),
                         FramerateAttribute.of(29.97),
-                        RidAttribute.of("0", "send", "max-width=1280; max-height=720; max-fps=30"),
-                        RidAttribute.of("1", "send", "max-width=640; max-height=360; max-fps=15"),
-                        RidAttribute.of("2", "send", "max-width=320; max-height=180; max-fps=15"),
+                        RidAttribute.of("0", StreamDirection.SEND, "max-width=1280; max-height=720; max-fps=30"),
+                        RidAttribute.of("1", StreamDirection.SEND, "max-width=640; max-height=360; max-fps=15"),
+                        RidAttribute.of("2", StreamDirection.SEND, "max-width=320; max-height=180; max-fps=15"),
                         Simulcast03Attribute.of("send rid=0;1;2")
-                    )),
-                SdpMediaDescription.of("video", 51372, null, listOf("RTP", "AVP"), listOf(98),
+                    )
+                ),
+                SdpMediaDescription.of(
+                    "video", 51372, null, listOf("RTP", "AVP"), listOf("98"),
                     information = SdpSessionInformation.of("media title"),
                     key = EncryptionKey.of(EncryptionKey.Method.PROMPT),
-                    connections = listOf(SdpConnection.of("IN", "IP4","224.2.17.12", 127)),
+                    connections = listOf(SdpConnection.of("IN", "IP4", "224.2.17.12", 127)),
                     bandwidths = listOf(SdpBandwidth.of("AS", 500)),
                     attributes = listOf(
-                        SimulcastAttribute.of("send", "hi,mid,low"),
-                        RidAttribute.of("hi", "send"),
-                        RidAttribute.of("mid", "send"),
-                        RidAttribute.of("low", "send"),
+                        SimulcastAttribute.of(StreamDirection.SEND, "hi,mid,low"),
+                        RidAttribute.of("hi", StreamDirection.SEND),
+                        RidAttribute.of("mid", StreamDirection.SEND),
+                        RidAttribute.of("low", StreamDirection.SEND),
                         SsrcGroupAttribute.of("FID", 123, 456, 789),
                         SsrcAttribute.of(123, "cname", "foo"),
                         SsrcAttribute.of(456, "cname", "foo"),
                         SsrcAttribute.of(789, "cname", "foo"),
                         ExtmapAllowMixedAttribute.of(),
-                        CryptoAttribute.of(1L, "AES_CM_128_HMAC_SHA1_80", "inline:PS1uQCVeeCFCanVmcjkpPywjNWhcYD0mXXtxaVBR|2^20|1:32"),
+                        CryptoAttribute.of(
+                            1L,
+                            "AES_CM_128_HMAC_SHA1_80",
+                            "inline:PS1uQCVeeCFCanVmcjkpPywjNWhcYD0mXXtxaVBR|2^20|1:32"
+                        ),
                         SetupAttribute.of(SetupAttribute.Type.ACTPASS),
                         MidAttribute.of("1"),
-                        MsidAttribute.of("0c8b064d-d807-43b4-b434-f92a889d8587", "98178685-d409-46e0-8e16-7ef0db0db64a"),
+                        MsidAttribute.of(
+                            "0c8b064d-d807-43b4-b434-f92a889d8587",
+                            "98178685-d409-46e0-8e16-7ef0db0db64a"
+                        ),
                         PtimeAttribute.of(20),
                         MaxPtimeAttribute.of(60),
                         IceLiteAttribute,
@@ -192,17 +203,71 @@ a=mediaclk:direct=0
                         IcePwdAttribute.of("x9cml/YzichV2+XlhiMu8g"),
                         FingerprintAttribute.of("SHA-1", "00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF:00:11:22:33"),
                         CandidateAttribute.of("0", 1, "UDP", 2113667327, "203.0.113.1", 54400, "host"),
-                        CandidateAttribute.of("1162875081", 1, "udp", 2113937151, "192.168.34.75", 60017, "host", mapOf("generation" to "0", "network-id" to "3", "network-cost" to "10")),
-                        CandidateAttribute.of("3289912957", 2, "udp", 1845501695, "193.84.77.194", 60017, "srflx", mapOf("raddr" to "192.168.34.75", "rport" to "60017", "generation" to "0", "network-id" to "3", "network-cost" to "10")),
-                        CandidateAttribute.of("229815620", 1, "tcp", 1518280447, "192.168.150.19", 60017, "host", mapOf("tcptype" to "active", "generation" to "0", "network-id" to "3", "network-cost" to "10")),
-                        CandidateAttribute.of("3289912957", 2, "tcp", 1845501695, "193.84.77.194", 60017, "srflx", mapOf("raddr" to "192.168.34.75", "rport" to "60017", "tcptype" to "passive", "generation" to "0", "network-id" to "3", "network-cost" to "10")),
+                        CandidateAttribute.of(
+                            "1162875081",
+                            1,
+                            "udp",
+                            2113937151,
+                            "192.168.34.75",
+                            60017,
+                            "host",
+                            mapOf("generation" to "0", "network-id" to "3", "network-cost" to "10")
+                        ),
+                        CandidateAttribute.of(
+                            "3289912957",
+                            2,
+                            "udp",
+                            1845501695,
+                            "193.84.77.194",
+                            60017,
+                            "srflx",
+                            mapOf(
+                                "raddr" to "192.168.34.75",
+                                "rport" to "60017",
+                                "generation" to "0",
+                                "network-id" to "3",
+                                "network-cost" to "10"
+                            )
+                        ),
+                        CandidateAttribute.of(
+                            "229815620",
+                            1,
+                            "tcp",
+                            1518280447,
+                            "192.168.150.19",
+                            60017,
+                            "host",
+                            mapOf(
+                                "tcptype" to "active",
+                                "generation" to "0",
+                                "network-id" to "3",
+                                "network-cost" to "10"
+                            )
+                        ),
+                        CandidateAttribute.of(
+                            "3289912957",
+                            2,
+                            "tcp",
+                            1845501695,
+                            "193.84.77.194",
+                            60017,
+                            "srflx",
+                            mapOf(
+                                "raddr" to "192.168.34.75",
+                                "rport" to "60017",
+                                "tcptype" to "passive",
+                                "generation" to "0",
+                                "network-id" to "3",
+                                "network-cost" to "10"
+                            )
+                        ),
                         EndOfCandidatesAttribute,
                         RemoteCandidateAttribute.of("1 203.0.113.1 54400 2 203.0.113.1 54401"),
                         IceOptionsAttribute.of("google-ice"),
                         SsrcAttribute.of(2566107569L, "cname", "t9YU8M1UxTF8Y1A1"),
                         SsrcAttribute.of(2566107569L, "cname"),
                         SsrcGroupAttribute.of("FEC", 1, 2),
-                        SsrcGroupAttribute.of("FEC-FR",  3004364195L, 1080772241L),
+                        SsrcGroupAttribute.of("FEC-FR", 3004364195L, 1080772241L),
                         MsidSemanticAttribute.of("WMS", "Jvlam5X3SX1OP6pn20zWogvaKJz5Hjf9OnlV"),
                         MsidSemanticAttribute.of("WMS"),
                         GroupAttribute.of("BUNDLE", "audio", "video"),
@@ -210,12 +275,18 @@ a=mediaclk:direct=0
                         RTCPRsizeAttribute.of(),
                         SctpMapAttribute.of(5000, "webrtc-datachannel", 1024),
                         XgoogleFlagAttribute.of("conference"),
-                        RidAttribute.of("1", "send", "max-width=1280;max-height=720;max-fps=30;depend=0"),
-                        ImageAttrsAttribute.of("97", "send", "[x=800,y=640,sar=1.1,q=0.6] [x=480,y=320]", "recv", "[x=330,y=250]"),
+                        RidAttribute.of("1", StreamDirection.SEND, "max-width=1280;max-height=720;max-fps=30;depend=0"),
+                        ImageAttrsAttribute.of(
+                            "97",
+                            "send",
+                            "[x=800,y=640,sar=1.1,q=0.6] [x=480,y=320]",
+                            "recv",
+                            "[x=330,y=250]"
+                        ),
                         ImageAttrsAttribute.of("*", "send", "[x=800,y=640]", "recv", "*"),
                         ImageAttrsAttribute.of("100", "recv", "[x=320,y=240]"),
-                        SimulcastAttribute.of("send", "1,2,3;~4,~5", "recv", "6;~7,~8"),
-                        SimulcastAttribute.of("recv", "1;4,5", "send", "6;7"),
+                        SimulcastAttribute.of(StreamDirection.SEND, "1,2,3;~4,~5", StreamDirection.RECV, "6;~7,~8"),
+                        SimulcastAttribute.of(StreamDirection.RECV, "1;4,5", StreamDirection.SEND, "6;7"),
                         Simulcast03Attribute.of("recv pt=97;98 send pt=97"),
                         Simulcast03Attribute.of("send rid=5;6;7 paused=6,7"),
                         FramerateAttribute.of(25),
@@ -237,7 +308,8 @@ a=mediaclk:direct=0
                     .replace("^a=ice-pwd:\\s+".toRegex(RegexOption.MULTILINE), "a=ice-pwd:")
             )
 
-        val newMediaDescription = SdpMediaDescription.of("audio", 49170, null, listOf("RTP", "AVP"), listOf(0),
+        val newMediaDescription = SdpMediaDescription.of(
+            "audio", 49170, null, listOf("RTP", "AVP"), listOf("0"),
             attributes = listOf(
                 MidAttribute.of("123"),
                 SendOnlyAttribute,

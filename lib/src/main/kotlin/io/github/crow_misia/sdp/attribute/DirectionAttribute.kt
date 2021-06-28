@@ -1,7 +1,7 @@
 package io.github.crow_misia.sdp.attribute
 
 sealed class DirectionAttribute(
-    type: Direction,
+    val type: Direction,
 ) : SdpAttribute() {
     override val field: String = type.value
 

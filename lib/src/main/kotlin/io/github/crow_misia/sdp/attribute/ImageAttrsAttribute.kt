@@ -35,7 +35,14 @@ data class ImageAttrsAttribute internal constructor(
         internal const val fieldName = "imageattr"
 
         @JvmStatic
-        fun of(pt: String, dir1: String, attrs1: String, dir2: String? = null, attrs2: String? = null): ImageAttrsAttribute {
+        @JvmOverloads
+        fun of(
+            pt: String,
+            dir1: String,
+            attrs1: String,
+            dir2: String? = null,
+            attrs2: String? = null,
+        ): ImageAttrsAttribute {
             return ImageAttrsAttribute(pt, Utils.getName(dir1), attrs1, dir2?.lowercase(Locale.ENGLISH), attrs2)
         }
 

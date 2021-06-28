@@ -3,7 +3,7 @@ package io.github.crow_misia.sdp.attribute
 import io.github.crow_misia.sdp.SdpParseException
 
 data class TsRefclkAttribute internal constructor(
-    override var value: String
+    override var value: String,
 ) : BaseSdpAttribute(fieldName, value) {
     override fun toString() = super.toString()
 

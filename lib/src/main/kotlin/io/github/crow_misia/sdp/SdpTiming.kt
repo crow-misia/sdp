@@ -5,12 +5,12 @@ import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 data class SdpTiming internal constructor(
     var startTime: Long,
     var stopTime: Long,
-    var repeatTime: SdpRepeatTime?
+    var repeatTime: SdpRepeatTime?,
 ) : SdpElement() {
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append("t=")
+        append(fieldPart)
         append(startTime)
         append(' ')
         append(stopTime)
@@ -19,10 +19,14 @@ data class SdpTiming internal constructor(
     }
 
     companion object {
-        @JvmStatic @JvmOverloads
-        fun of(startTime: Long = 0,
-               stopTime: Long = 0,
-               repeatTime: SdpRepeatTime? = null
+        internal const val fieldPart = "t="
+
+        @JvmStatic
+        @JvmOverloads
+        fun of(
+            startTime: Long = 0,
+            stopTime: Long = 0,
+            repeatTime: SdpRepeatTime? = null,
         ): SdpTiming {
             return SdpTiming(startTime, stopTime, repeatTime)
         }

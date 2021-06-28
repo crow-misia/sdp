@@ -7,12 +7,12 @@ import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 data class SdpRepeatTime internal constructor(
     var repeatInterval: String,
     var activeDuration: String,
-    var offsets: List<String>
+    var offsets: MutableList<String>,
 ) : SdpElement() {
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append("r=")
+        append(fieldPart)
         append(repeatInterval)
         append(' ')
         append(activeDuration)
@@ -24,12 +24,24 @@ data class SdpRepeatTime internal constructor(
     }
 
     companion object {
+        internal const val fieldPart = "r="
+
         @JvmStatic
-        fun of(repeatInterval: String,
-               activeDuration: String,
-               vararg offsets: String
+        fun of(
+            repeatInterval: String,
+            activeDuration: String,
+            offsets: List<String>,
         ): SdpRepeatTime {
-            return SdpRepeatTime(repeatInterval, activeDuration, offsets.toList())
+            return SdpRepeatTime(repeatInterval, activeDuration, offsets.toMutableList())
+        }
+
+        @JvmStatic
+        fun of(
+            repeatInterval: String,
+            activeDuration: String,
+            vararg offsets: String,
+        ): SdpRepeatTime {
+            return SdpRepeatTime(repeatInterval, activeDuration, offsets.toMutableList())
         }
 
         internal fun parse(line: String): SdpRepeatTime {
@@ -38,7 +50,7 @@ data class SdpRepeatTime internal constructor(
             if (size < 3) {
                 throw SdpParseException("could not parse: $line as RepeatTime")
             }
-            return SdpRepeatTime(values[0], values[1], values.subList(2, size))
+            return SdpRepeatTime(values[0], values[1], values.subList(2, size).toMutableList())
         }
     }
 }

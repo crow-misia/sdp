@@ -85,15 +85,17 @@ data class CandidateAttribute internal constructor(
     companion object {
         internal const val fieldName = "candidate"
 
-        @JvmStatic @JvmOverloads
-        fun of(foundation: String,
-               component: Long,
-               transport: String,
-               priority: Long,
-               address: String,
-               port: Int,
-               type: String,
-               extensions: Map<String, String> = emptyMap()
+        @JvmStatic
+        @JvmOverloads
+        fun of(
+            foundation: String,
+            component: Long,
+            transport: String,
+            priority: Long,
+            address: String,
+            port: Int,
+            type: String,
+            extensions: Map<String, String> = emptyMap(),
         ): CandidateAttribute {
             return CandidateAttribute(
                 foundation = foundation,

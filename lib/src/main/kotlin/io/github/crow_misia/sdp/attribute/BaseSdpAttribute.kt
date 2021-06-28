@@ -3,7 +3,7 @@ package io.github.crow_misia.sdp.attribute
 import io.github.crow_misia.sdp.Utils
 
 open class BaseSdpAttribute internal constructor(
-    override var field: String,
+    override val field: String,
     open var value: String,
 ) : SdpAttribute() {
     override fun equals(other: Any?): Boolean {

@@ -1,7 +1,7 @@
 package io.github.crow_misia.sdp.attribute
 
 data class XgoogleFlagAttribute internal constructor(
-    override var value: String
+    override var value: String,
 ) : BaseSdpAttribute(fieldName, value) {
     override fun toString() = super.toString()
 

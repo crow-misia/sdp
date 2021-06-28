@@ -35,8 +35,15 @@ data class ExtMapAttribute internal constructor(
     companion object {
         internal const val fieldName = "extmap"
 
-        @JvmStatic @JvmOverloads
-        fun of(value: Long, direction: Direction? = null, uri: String, encryptUri: String? = null, config: String? = null): ExtMapAttribute {
+        @JvmStatic
+        @JvmOverloads
+        fun of(
+            value: Long,
+            direction: Direction? = null,
+            uri: String,
+            encryptUri: String? = null,
+            config: String? = null,
+        ): ExtMapAttribute {
             return ExtMapAttribute(value, direction, uri, encryptUri, config)
         }
 

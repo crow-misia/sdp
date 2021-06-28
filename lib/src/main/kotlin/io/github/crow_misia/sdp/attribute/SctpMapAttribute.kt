@@ -1,12 +1,11 @@
 package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
-import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
 data class SctpMapAttribute internal constructor(
     var sctpmapNumber: Int,
     var app: String,
-    var maxMessageSize: Int?
+    var maxMessageSize: Int?,
 ) : SdpAttribute() {
     override val field = fieldName
 

@@ -2,7 +2,7 @@ package io.github.crow_misia.sdp.attribute
 
 data class MsidSemanticAttribute internal constructor(
     var semantic: String,
-    var token: String
+    var token: String,
 ) : SdpAttribute() {
     override val field = fieldName
 

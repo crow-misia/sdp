@@ -4,17 +4,17 @@ import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 import java.math.BigInteger
 
 data class SdpOrigin internal constructor(
-    val username: String,
-    val sessId: BigInteger,
-    val sessVersion: BigInteger,
-    val nettype: String,
-    val addrtype: String,
-    val unicastAddress: String,
+    var username: String,
+    var sessId: BigInteger,
+    var sessVersion: BigInteger,
+    var nettype: String,
+    var addrtype: String,
+    var unicastAddress: String,
 ) : SdpElement() {
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append("o=")
+        append(fieldPart)
         append(username)
         append(' ')
         append(sessId)

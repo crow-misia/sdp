@@ -6,7 +6,7 @@ data class RTPMapAttribute internal constructor(
     var payloadType: Int,
     var encodingName: String,
     var clockRate: Int?,
-    var encodingParameters: String?
+    var encodingParameters: String?,
 ) : SdpAttribute() {
     override val field = fieldName
 
@@ -31,11 +31,13 @@ data class RTPMapAttribute internal constructor(
     companion object {
         internal const val fieldName = "rtpmap"
 
-        @JvmStatic @JvmOverloads
-        fun of(payloadType: Int,
-               encodingName: String,
-               clockRate: Int? = null,
-               encodingParameters: String? = null
+        @JvmStatic
+        @JvmOverloads
+        fun of(
+            payloadType: Int,
+            encodingName: String,
+            clockRate: Int? = null,
+            encodingParameters: String? = null,
         ): RTPMapAttribute {
             return RTPMapAttribute(
                 payloadType = payloadType,

@@ -1,13 +1,12 @@
 package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
-import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
 data class RTCPAttribute internal constructor(
     var port: Int,
     var nettype: String,
     var addrtype: String,
-    var address: String
+    var address: String,
 ) : SdpAttribute() {
     override val field = fieldName
 

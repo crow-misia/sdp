@@ -4,12 +4,12 @@ import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
 data class EncryptionKey internal constructor(
     var method: Method,
-    var key: String?
+    var key: String?,
 ) : SdpElement() {
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append("k=")
+        append(fieldPart)
         append(method.value)
         key?.also {
             append(':')
@@ -19,7 +19,10 @@ data class EncryptionKey internal constructor(
     }
 
     companion object {
-        @JvmStatic @JvmOverloads
+        internal const val fieldPart = "k="
+
+        @JvmStatic
+        @JvmOverloads
         fun of(method: Method, key: String? = null): EncryptionKey {
             return EncryptionKey(method, key)
         }

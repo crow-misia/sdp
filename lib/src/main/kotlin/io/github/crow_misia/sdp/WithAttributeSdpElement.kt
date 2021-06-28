@@ -4,7 +4,7 @@ import io.github.crow_misia.sdp.attribute.SdpAttribute
 import kotlin.reflect.KClass
 
 interface WithAttributeSdpElement {
-   val attributes: MutableList<SdpAttribute>
+    val attributes: MutableList<SdpAttribute>
 
     fun <R : SdpAttribute> getAttribute(clazz: Class<R>): R? {
         return getAttributes(clazz).firstOrNull()

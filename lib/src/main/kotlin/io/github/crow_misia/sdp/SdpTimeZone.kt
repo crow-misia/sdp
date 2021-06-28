@@ -1,8 +1,8 @@
 package io.github.crow_misia.sdp
 
 data class SdpTimeZone internal constructor(
-    var adjustmentTime: Long,
-    var offset: String
+    val adjustmentTime: Long,
+    val offset: String,
 ): SdpElement() {
     override fun toString() = super.toString()
 

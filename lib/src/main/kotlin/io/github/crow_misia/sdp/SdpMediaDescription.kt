@@ -13,10 +13,10 @@ data class SdpMediaDescription internal constructor(
     var information: SdpSessionInformation?,
     var key: EncryptionKey?,
     private var _protos: MutableList<String>,
-    val formats: MutableList<Int>,
-    val connections: MutableList<SdpConnection>,
-    val bandwidths: MutableList<SdpBandwidth>,
-    override val attributes: MutableList<SdpAttribute>
+    var formats: MutableList<String>,
+    var connections: MutableList<SdpConnection>,
+    var bandwidths: MutableList<SdpBandwidth>,
+    override var attributes: MutableList<SdpAttribute>,
 ) : WithAttributeSdpElement, SdpElement() {
     private var cachedMid: String? = null
 
@@ -46,7 +46,7 @@ data class SdpMediaDescription internal constructor(
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append("m=")
+        append(fieldPart)
         append(type)
         append(' ')
         append(port)
@@ -66,17 +66,21 @@ data class SdpMediaDescription internal constructor(
     }
 
     companion object {
-        @JvmStatic @JvmOverloads
-        fun of(type: String,
-               port: Int,
-               numberOfPorts: Int? = null,
-               protos: List<String> = emptyList(),
-               formats: List<Int> = emptyList(),
-               information: SdpSessionInformation? = null,
-               connections: List<SdpConnection> = emptyList(),
-               bandwidths: List<SdpBandwidth> = emptyList(),
-               key: EncryptionKey? = null,
-               attributes: List<SdpAttribute> = emptyList()
+        internal const val fieldPart = "m="
+
+        @JvmStatic
+        @JvmOverloads
+        fun of(
+            type: String,
+            port: Int,
+            numberOfPorts: Int? = null,
+            protos: List<String> = emptyList(),
+            formats: List<String> = emptyList(),
+            information: SdpSessionInformation? = null,
+            connections: List<SdpConnection> = emptyList(),
+            bandwidths: List<SdpBandwidth> = emptyList(),
+            key: EncryptionKey? = null,
+            attributes: List<SdpAttribute> = emptyList(),
         ): SdpMediaDescription {
             return SdpMediaDescription(
                 type = type,
@@ -113,10 +117,11 @@ data class SdpMediaDescription internal constructor(
                 information = null,
                 key = null,
                 _protos = values[2].splitToSequence('/').toMutableList(),
-                formats = values[3].splitToSequence(' ').mapNotNull { it.toIntOrNull() }.toMutableList(),
+                formats = values[3].splitToSequence(' ').toMutableList(),
                 connections = arrayListOf(),
                 bandwidths = arrayListOf(),
-                attributes = arrayListOf())
+                attributes = arrayListOf()
+            )
         }
     }
 }

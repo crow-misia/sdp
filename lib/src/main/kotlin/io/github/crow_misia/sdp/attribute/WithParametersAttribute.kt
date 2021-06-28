@@ -3,7 +3,7 @@
 package io.github.crow_misia.sdp.attribute
 
 abstract class WithParametersAttribute internal constructor(
-    internal open var _parameters: MutableMap<String, Any?> = linkedMapOf()
+    internal open var _parameters: MutableMap<String, Any?> = linkedMapOf(),
 ) : SdpAttribute() {
     companion object {
         private val wellKnownParameters = mapOf(

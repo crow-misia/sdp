@@ -3,7 +3,7 @@ package io.github.crow_misia.sdp.attribute
 import io.github.crow_misia.sdp.SdpParseException
 
 data class MaxPtimeAttribute internal constructor(
-    var time: Long
+    var time: Long,
 ) : SdpAttribute() {
     override val field = fieldName
 
@@ -18,8 +18,8 @@ data class MaxPtimeAttribute internal constructor(
         internal const val fieldName = "maxptime"
 
         @JvmStatic
-        fun of(streamId: Long): MaxPtimeAttribute {
-            return MaxPtimeAttribute(streamId)
+        fun of(time: Long): MaxPtimeAttribute {
+            return MaxPtimeAttribute(time)
         }
 
         internal fun parse(value: String): SdpAttribute {

@@ -3,16 +3,16 @@ package io.github.crow_misia.sdp
 import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
 data class SdpConnection internal constructor(
-    val nettype: String,
-    val addrtype: String,
-    val connectionAddress: String,
-    val ttl: Int?,
-    val numberOfAddresses: Int
+    var nettype: String,
+    var addrtype: String,
+    var connectionAddress: String,
+    var ttl: Int?,
+    var numberOfAddresses: Int,
 ) : SdpElement() {
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append("c=")
+        append(fieldPart)
         append(nettype)
         append(' ')
         append(addrtype)
@@ -30,7 +30,10 @@ data class SdpConnection internal constructor(
     }
 
     companion object {
-        @JvmStatic @JvmOverloads
+        internal const val fieldPart = "c="
+
+        @JvmStatic
+        @JvmOverloads
         fun of(
             nettype: String,
             addrtype: String,

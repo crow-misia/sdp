@@ -1,11 +1,10 @@
 package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
-import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
 data class SsrcGroupAttribute internal constructor(
     var semantics: String,
-    val ssrcs: MutableList<Long>
+    var ssrcs: MutableList<Long>,
 ) : SdpAttribute() {
     override val field = fieldName
 
@@ -29,6 +28,11 @@ data class SsrcGroupAttribute internal constructor(
 
     companion object {
         internal const val fieldName = "ssrc-group"
+
+        @JvmStatic
+        fun of(semantics: String, ssrcs: List<Long>): SsrcGroupAttribute {
+            return SsrcGroupAttribute(semantics, ssrcs.toMutableList())
+        }
 
         @JvmStatic
         fun of(semantics: String, vararg ssrcs: Long): SsrcGroupAttribute {

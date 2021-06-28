@@ -28,6 +28,7 @@ internal object Utils {
         IceUfragAttribute.fieldName to { v -> IceUfragAttribute.parse(v) },
         IcePwdAttribute.fieldName to { v -> IcePwdAttribute.parse(v) },
         ImageAttrsAttribute.fieldName to { v -> ImageAttrsAttribute.parse(v) },
+        MaxMessageSizeAttribute.fieldName to { v -> MaxMessageSizeAttribute.parse(v) },
         MaxPtimeAttribute.fieldName to { v -> MaxPtimeAttribute.parse(v) },
         MediaclkAttribute.fieldName to { v -> MediaclkAttribute.parse(v) },
         MidAttribute.fieldName to { v -> MidAttribute.parse(v) },
@@ -42,6 +43,7 @@ internal object Utils {
         RTCPRsizeAttribute.fieldName to { RTCPRsizeAttribute },
         RTPMapAttribute.fieldName to { v -> RTPMapAttribute.parse(v) },
         SctpMapAttribute.fieldName to { v -> SctpMapAttribute.parse(v) },
+        SctpPortAttribute.fieldName to { v -> SctpPortAttribute.parse(v) },
         SimulcastAttribute.fieldName to { v -> SimulcastAttribute.parse(v) },
         SourceFilterAttribute.fieldName to { v -> SourceFilterAttribute.parse(v) },
         SetupAttribute.fieldName to { v -> SetupAttribute.parse(v) },
@@ -52,12 +54,12 @@ internal object Utils {
     )
 
     init {
-        assert(PARSERS.size == 41)
+        assert(PARSERS.size == 43)
     }
 
-    internal inline fun getFieldName(field: String) = field.lowercase(Locale.ENGLISH)
+    internal inline fun getFieldName(field: String?) = field?.lowercase(Locale.ENGLISH).orEmpty()
 
-    internal inline fun getName(name: String) = name.lowercase(Locale.ENGLISH)
+    internal inline fun getName(name: String?) = name?.lowercase(Locale.ENGLISH).orEmpty()
 
     @JvmStatic
     fun parseAttribute(line: String): SdpAttribute {

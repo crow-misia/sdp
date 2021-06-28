@@ -4,12 +4,12 @@ import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
 data class SdpBandwidth internal constructor(
     var type: String,
-    var bandwidth: Int
+    var bandwidth: Int,
 ) : SdpElement() {
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append("b=")
+        append(fieldPart)
         append(type)
         append(':')
         append(bandwidth)
@@ -17,6 +17,8 @@ data class SdpBandwidth internal constructor(
     }
 
     companion object {
+        internal const val fieldPart = "b="
+
         @JvmStatic
         fun of(type: String, bandwidth: Int): SdpBandwidth {
             return SdpBandwidth(type, bandwidth)

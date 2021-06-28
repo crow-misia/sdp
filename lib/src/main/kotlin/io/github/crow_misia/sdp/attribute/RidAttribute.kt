@@ -3,11 +3,10 @@
 package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
-import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
 data class RidAttribute internal constructor(
     var id: String,
-    var direction: String
+    var direction: StreamDirection,
 ) : WithParametersAttribute() {
     override val field = fieldName
 
@@ -17,15 +16,16 @@ data class RidAttribute internal constructor(
         append(':')
         append(id)
         append(' ')
-        append(direction)
+        append(direction.value)
         super.valueJoinTo(this)
     }
 
     companion object {
         internal const val fieldName = "rid"
 
-        @JvmStatic @JvmOverloads
-        fun of(id: String, direction: String, parameters: String? = null): RidAttribute {
+        @JvmStatic
+        @JvmOverloads
+        fun of(id: String, direction: StreamDirection, parameters: String? = null): RidAttribute {
             return RidAttribute(id, direction).also {
                 it.setParameter(parameters)
             }
@@ -39,7 +39,7 @@ data class RidAttribute internal constructor(
             }
             return of(
                 id = values[0],
-                direction = values[1],
+                direction = StreamDirection.of(values[1]),
                 parameters = if (size > 2) values[2] else null
             )
         }

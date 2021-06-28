@@ -1,10 +1,9 @@
 package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
-import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
 data class PtimeAttribute internal constructor(
-    var time: Long
+    var time: Long,
 ) : SdpAttribute() {
     override val field = fieldName
 
@@ -19,8 +18,8 @@ data class PtimeAttribute internal constructor(
         internal const val fieldName = "ptime"
 
         @JvmStatic
-        fun of(streamId: Long): PtimeAttribute {
-            return PtimeAttribute(streamId)
+        fun of(time: Long): PtimeAttribute {
+            return PtimeAttribute(time)
         }
 
         internal fun parse(value: String): SdpAttribute {

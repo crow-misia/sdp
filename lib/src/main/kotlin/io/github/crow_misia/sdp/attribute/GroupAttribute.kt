@@ -3,8 +3,8 @@ package io.github.crow_misia.sdp.attribute
 import io.github.crow_misia.sdp.SdpParseException
 
 data class GroupAttribute internal constructor(
-    val type: String,
-    val mids: MutableList<String>,
+    var type: String,
+    var mids: MutableList<String>,
 ) : SdpAttribute() {
     override val field = fieldName
 
@@ -21,6 +21,11 @@ data class GroupAttribute internal constructor(
 
     companion object {
         internal const val fieldName = "group"
+
+        @JvmStatic
+        fun of(type: String, mids: List<String>): GroupAttribute {
+            return GroupAttribute(type, mids.toMutableList())
+        }
 
         @JvmStatic
         fun of(type: String, vararg mids: String): GroupAttribute {
