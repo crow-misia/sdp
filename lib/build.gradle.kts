@@ -6,18 +6,32 @@ plugins {
     kotlin("jvm")
     id("maven-publish")
     id("signing")
-    id("org.jetbrains.dokka") version Versions.dokkaPlugin
+    id("org.jetbrains.dokka")
+}
+
+object Maven {
+    const val groupId = "io.github.crow-misia.sdp"
+    const val artifactId = "sdp"
+    const val name = "sdp"
+    const val desc = "SDP(Session Description Protocol) library"
+    const val version = "1.0.0"
+    const val siteUrl = "https://github.com/crow-misia/sdp"
+    const val gitUrl = "https://github.com/crow-misia/sdp.git"
+    const val githubRepo = "crow-misia/sdp"
+    const val licenseName = "The Apache Software License, Version 2.0"
+    const val licenseUrl = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+    const val licenseDist = "repo"
 }
 
 group = Maven.groupId
-version = Versions.name
+version = Maven.version
 
 dependencies {
-    api(kotlin("stdlib"))
+    api(Kotlin.stdlib)
 
-    testImplementation(Deps.mockk)
-    testImplementation(Deps.assertk)
-    testImplementation(Deps.junit5)
+    testImplementation(Testing.mockK)
+    testImplementation("com.willowtreeapps.assertk:assertk-jvm:_")
+    testImplementation(Testing.junit)
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
@@ -32,7 +46,7 @@ val customDokkaTask by tasks.creating(DokkaTask::class) {
         noAndroidSdkLink.set(false)
     }
     dependencies {
-        plugins(Deps.dokkaJavaDocPlugin)
+        plugins("org.jetbrains.dokka:javadoc-plugin:_")
     }
     inputs.dir("src/main/kotlin")
     outputDirectory.set(buildDir.resolve("javadoc"))
@@ -52,7 +66,6 @@ afterEvaluate {
             create<MavenPublication>("maven") {
                 groupId = Maven.groupId
                 artifactId = Maven.artifactId
-                version = Versions.name
 
                 println("""
                     |Creating maven publication
@@ -74,7 +87,7 @@ afterEvaluate {
                         val scmUrl = "scm:git:${Maven.gitUrl}"
                         connection.set(scmUrl)
                         developerConnection.set(scmUrl)
-                        url.set(this@pom.url)
+                        url.set(Maven.gitUrl)
                         tag.set("HEAD")
                     }
 
@@ -102,7 +115,7 @@ afterEvaluate {
             maven {
                 val releasesRepoUrl = URI("https://oss.sonatype.org/service/local/staging/deploy/maven2")
                 val snapshotsRepoUrl = URI("https://oss.sonatype.org/content/repositories/snapshots")
-                url = if (Versions.name.endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+                url = if (Maven.version.endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
                 val sonatypeUsername: String? by project
                 val sonatypePassword: String? by project
                 credentials {

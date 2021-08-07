@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version Versions.kotlin apply false
+    kotlin("jvm") apply false
 }
 
 allprojects {
@@ -9,5 +9,6 @@ allprojects {
 }
 
 val clean by tasks.creating(Delete::class) {
+    group = "build"
     delete(rootProject.buildDir)
 }
