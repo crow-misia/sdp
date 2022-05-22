@@ -1,0 +1,92 @@
+v=0
+o=jdoe 2890844526 2890842807 IN IP4 10.47.16.5
+s=SDP Seminar
+i=A Seminar on the session description protocol
+u=http://www.example.com/seminars/sdp.pdf
+e=j.doe@example.com (Jane Doe)
+p=+81012345678
+c=IN IP4 224.2.17.12/127
+b=AS:4000
+t=2873397496 2873404696
+r=604800 3600 0 90000
+z=2882844526 -1h 2898848070 0
+k=base64:<encoded encryption key>
+a=sendrecv
+m=audio 49170 RTP/AVP 0
+a=mid:123
+a=recvonly
+a=rtcp:65179 IN IP4 123.45.67.89
+a=rtcp:12345
+a=control:streamId=0
+a=rtcp-fb:98 trr-int 100
+a=rtcp-fb:98 nack rpsi
+a=extmap:2 urn:ietf:params:rtp-hdrext:toffset
+a=extmap:1/recvonly URI-gps-string
+a=extmap:3 urn:ietf:params:rtp-hdrext:encrypt urn:ietf:params:rtp-hdrext:smpte-tc 25@600/24
+a=fmtp:98 minptime=10;useinbandfec=1
+m=video 51372 RTP/AVP 99
+a=sendonly
+a=cname:abc
+a=rtpmap:99 h263-1998/90000
+a=rtpmap:99 h263-1998
+a=framerate:29.97
+a=rid:0 send max-width=1280; max-height=720; max-fps=30
+a=rid:1 send max-width=640; max-height=360; max-fps=15
+a=rid:2 send max-width=320; max-height=180; max-fps=15
+a=simulcast: send rid=0;1;2
+m=video 51372 RTP/AVP 98
+i=media title
+c=IN IP4 224.2.17.12/127
+b=AS:500
+k=prompt
+a=simulcast:send hi,mid,low
+a=rid:hi send
+a=rid:mid send
+a=rid:low send
+a=ssrc-group:FID 123 456 789
+a=ssrc:123 cname:foo
+a=ssrc:456 cname:foo
+a=ssrc:789 cname:foo
+a=extmap-allow-mixed
+a=crypto:1 AES_CM_128_HMAC_SHA1_80 inline:PS1uQCVeeCFCanVmcjkpPywjNWhcYD0mXXtxaVBR|2^20|1:32
+a=setup:actpass
+a=mid:  1
+a=msid:0c8b064d-d807-43b4-b434-f92a889d8587 98178685-d409-46e0-8e16-7ef0db0db64a
+a=ptime:20
+a=maxptime:60
+a=ice-lite
+a=ice-ufrag:  F7gI
+a=ice-pwd:  x9cml/YzichV2+XlhiMu8g
+a=fingerprint:SHA-1 00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF:00:11:22:33
+a=candidate:0 1 UDP 2113667327 203.0.113.1 54400 typ host
+a=candidate:1162875081 1 udp 2113937151 192.168.34.75 60017 typ host generation 0 network-id 3 network-cost 10
+a=candidate:3289912957 2 udp 1845501695 193.84.77.194 60017 typ srflx raddr 192.168.34.75 rport 60017 generation 0 network-id 3 network-cost 10
+a=candidate:229815620 1 tcp 1518280447 192.168.150.19 60017 typ host tcptype active generation 0 network-id 3 network-cost 10
+a=candidate:3289912957 2 tcp 1845501695 193.84.77.194 60017 typ srflx raddr 192.168.34.75 rport 60017 tcptype passive generation 0 network-id 3 network-cost 10
+a=end-of-candidates
+a=remote-candidates:1 203.0.113.1 54400 2 203.0.113.1 54401
+a=ice-options:google-ice
+a=ssrc:2566107569 cname:t9YU8M1UxTF8Y1A1
+a=ssrc:2566107569 cname
+a=ssrc-group:FEC 1 2
+a=ssrc-group:FEC-FR 3004364195 1080772241
+a=msid-semantic: WMS Jvlam5X3SX1OP6pn20zWogvaKJz5Hjf9OnlV
+a=msid-semantic: WMS
+a=group:BUNDLE audio video
+a=rtcp-mux
+a=rtcp-rsize
+a=sctpmap:5000 webrtc-datachannel 1024
+a=x-google-flag:conference
+a=rid:1 send max-width=1280;max-height=720;max-fps=30;depend=0
+a=imageattr:97 send [x=800,y=640,sar=1.1,q=0.6] [x=480,y=320] recv [x=330,y=250]
+a=imageattr:* send [x=800,y=640] recv *
+a=imageattr:100 recv [x=320,y=240]
+a=simulcast:send 1,2,3;~4,~5 recv 6;~7,~8
+a=simulcast:recv 1;4,5 send 6;7
+a=simulcast: recv pt=97;98 send pt=97
+a=simulcast: send rid=5;6;7 paused=6,7
+a=framerate:25
+a=framerate:29.97
+a=source-filter: incl IN IP4 239.5.2.31 10.1.15.5
+a=ts-refclk:ptp=IEEE1588-2008:00-50-C2-FF-FE-90-04-37:0
+a=mediaclk:direct=0

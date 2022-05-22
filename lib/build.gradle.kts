@@ -14,7 +14,7 @@ object Maven {
     const val artifactId = "sdp"
     const val name = "sdp"
     const val desc = "SDP(Session Description Protocol) library"
-    const val version = "1.0.0"
+    const val version = "1.1.0"
     const val siteUrl = "https://github.com/crow-misia/sdp"
     const val gitUrl = "https://github.com/crow-misia/sdp.git"
     const val githubRepo = "crow-misia/sdp"
@@ -27,11 +27,12 @@ group = Maven.groupId
 version = Maven.version
 
 dependencies {
-    api(Kotlin.stdlib)
+    implementation(Kotlin.stdlib.jdk8)
 
     testImplementation(Testing.mockK)
-    testImplementation("com.willowtreeapps.assertk:assertk-jvm:_")
-    testImplementation(Testing.junit)
+    testImplementation(Testing.kotest.runner.junit5)
+    testImplementation(Testing.kotest.assertions.core)
+    testImplementation(Testing.kotest.property)
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
@@ -134,14 +135,14 @@ afterEvaluate {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         javaParameters = true
-        jvmTarget = "1.8"
-        apiVersion = "1.5"
-        languageVersion = "1.5"
-        freeCompilerArgs = listOf("-Xjsr305=strict", "-progressive")
+        jvmTarget = "11"
+        apiVersion = "1.6"
+        languageVersion = "1.6"
+        freeCompilerArgs = listOf("-Xjsr305=strict")
     }
 }
 
-tasks.withType<Test> {
+tasks.withType<Test>().configureEach {
     useJUnitPlatform()
     testLogging {
         showStandardStreams = true
