@@ -2,6 +2,18 @@ package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
 
+/**
+ * RFC8841 6. SDP "max-message-size" Attribute.
+ * Name: max-message-size
+ * Value: Integer
+ * Usage Level: media
+ * Charset Dependent: no
+ * Syntax:
+ * max-message-size-value = 1*DIGIT ; DIGIT defined in RFC 4566
+ *  Leading zeroes MUST NOT be used.
+ * Example:
+ * a=max-message-size:100000
+ */
 data class MaxMessageSizeAttribute internal constructor(
     var messageSize: Long,
 ) : SdpAttribute() {

@@ -10,7 +10,6 @@ b=AS:4000
 t=2873397496 2873404696
 r=604800 3600 0 90000
 z=2882844526 -1h 2898848070 0
-k=base64:<encoded encryption key>
 a=sendrecv
 m=audio 49170 RTP/AVP 0
 a=mid:123
@@ -38,7 +37,6 @@ m=video 51372 RTP/AVP 98
 i=media title
 c=IN IP4 224.2.17.12/127
 b=AS:500
-k=prompt
 a=simulcast:send hi,mid,low
 a=rid:hi send
 a=rid:mid send
@@ -90,3 +88,10 @@ a=framerate:29.97
 a=source-filter: incl IN IP4 239.5.2.31 10.1.15.5
 a=ts-refclk:ptp=IEEE1588-2008:00-50-C2-FF-FE-90-04-37:0
 a=mediaclk:direct=0
+a=tool:foobar V3.2
+a=orient:portrait
+a=type:moderated
+a=charset:ISO-8859-1
+a=sdplang:fr
+a=lang:de
+a=quality:10

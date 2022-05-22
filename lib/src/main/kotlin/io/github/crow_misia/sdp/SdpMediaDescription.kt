@@ -6,12 +6,15 @@ import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 import io.github.crow_misia.sdp.attribute.MidAttribute
 import io.github.crow_misia.sdp.attribute.SdpAttribute
 
+/**
+ * RFC 8866 5.14. Media Descriptions.
+ * m=<media> <port> <proto> <fmt> ...
+ */
 data class SdpMediaDescription internal constructor(
     var type: String,
     var port: Int,
     var numberOfPorts: Int?,
     var information: SdpSessionInformation?,
-    var key: EncryptionKey?,
     private var _protos: MutableList<String>,
     var formats: MutableList<String>,
     var connections: MutableList<SdpConnection>,
@@ -61,7 +64,6 @@ data class SdpMediaDescription internal constructor(
         information?.also { it.joinTo(this) }
         connections.forEach { it.joinTo(this) }
         bandwidths.forEach { it.joinTo(this) }
-        key?.also { it.joinTo(this) }
         attributes.forEach { it.joinTo(this) }
     }
 
@@ -79,7 +81,6 @@ data class SdpMediaDescription internal constructor(
             information: SdpSessionInformation? = null,
             connections: List<SdpConnection> = emptyList(),
             bandwidths: List<SdpBandwidth> = emptyList(),
-            key: EncryptionKey? = null,
             attributes: List<SdpAttribute> = emptyList(),
         ): SdpMediaDescription {
             return SdpMediaDescription(
@@ -87,7 +88,6 @@ data class SdpMediaDescription internal constructor(
                 port = port,
                 numberOfPorts = numberOfPorts,
                 information = information,
-                key = key,
                 _protos = ArrayList(protos),
                 formats = ArrayList(formats),
                 connections = ArrayList(connections),
@@ -115,7 +115,6 @@ data class SdpMediaDescription internal constructor(
                 port = port,
                 numberOfPorts = numberOfPorts,
                 information = null,
-                key = null,
                 _protos = values[2].splitToSequence('/').toMutableList(),
                 formats = values[3].splitToSequence(' ').toMutableList(),
                 connections = arrayListOf(),

@@ -1,16 +1,16 @@
 package io.github.crow_misia.sdp.attribute
 
 /**
- * RFC 5245 21.1.3. ice-lite.
- * Name: ice-lite
+ * RFC 5245 21.1.4. ice-mismatch.
+ * Name: ice-mismatch
  * Value:
  * Usage Level: session
  * Charset Dependent: no
  * Syntax:
- * ice-lite               = "ice-lite"
+ * ice-mismatch           = "ice-mismatch"
  */
-object IceLiteAttribute : SdpAttribute() {
-    internal const val fieldName = "ice-lite"
+object IceMismatchAttribute : SdpAttribute() {
+    internal const val fieldName = "ice-mismatch"
 
     override val field = fieldName
 

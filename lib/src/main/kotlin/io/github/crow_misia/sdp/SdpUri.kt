@@ -1,9 +1,14 @@
 package io.github.crow_misia.sdp
 
 import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
+import java.net.URI
 
+/**
+ * RFC 8866 5.5. URI.
+ * u=<uri>
+ */
 data class SdpUri internal constructor(
-    var uri: String,
+    var uri: URI,
 ) : SdpElement() {
     override fun toString() = super.toString()
 
@@ -18,11 +23,11 @@ data class SdpUri internal constructor(
 
         @JvmStatic
         fun of(uri: String): SdpUri {
-            return SdpUri(uri)
+            return SdpUri(URI.create(uri))
         }
 
         internal fun parse(line: String): SdpUri {
-            return SdpUri(line.substring(2))
+            return of(uri = line.substring(2))
         }
     }
 }

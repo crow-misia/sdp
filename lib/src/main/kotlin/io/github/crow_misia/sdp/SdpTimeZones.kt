@@ -4,6 +4,10 @@ package io.github.crow_misia.sdp
 
 import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
+/**
+ * RFC 8866 5.11. Time Zone Adjustment.
+ * z=<adjustment time> <offset> <adjustment time> <offset> ....
+ */
 data class SdpTimeZones internal constructor(
     var timeZones: MutableList<SdpTimeZone>,
 ) : SdpElement() {

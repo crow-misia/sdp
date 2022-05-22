@@ -5,6 +5,37 @@ package io.github.crow_misia.sdp.attribute
 import io.github.crow_misia.sdp.SdpParseException
 import io.github.crow_misia.sdp.Utils
 
+/**
+ * RFC 5245 21.1.1. candidate.
+ * Name: candidate
+ * Value:
+ * Usage Level: media
+ * Charset Dependent: no
+ * Syntax:
+ * candidate-attribute   = "candidate" ":" foundation SP component-id SP
+ *                         transport SP
+ *                         priority SP
+ *                         connection-address SP     ;from RFC 4566
+ *                         port         ;port from RFC 4566
+ *                         SP cand-type
+ *                         [SP rel-addr]
+ *                         [SP rel-port]
+ *                         *(SP extension-att-name SP
+ *                              extension-att-value)
+ *
+ * foundation            = 1*32ice-char
+ * component-id          = 1*5DIGIT
+ * transport             = "UDP" / transport-extension
+ * transport-extension   = token              ; from RFC 3261
+ * priority              = 1*10DIGIT
+ * cand-type             = "typ" SP candidate-types
+ * candidate-types       = "host" / "srflx" / "prflx" / "relay" / token
+ * rel-addr              = "raddr" SP connection-address
+ * rel-port              = "rport" SP port
+ * extension-att-name    = byte-string    ;from RFC 4566
+ * extension-att-value   = byte-string
+ * ice-char              = ALPHA / DIGIT / "+" / "/"
+ */
 data class CandidateAttribute internal constructor(
     var foundation: String,
     var component: Long,

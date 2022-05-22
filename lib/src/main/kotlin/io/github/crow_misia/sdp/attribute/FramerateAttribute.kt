@@ -2,6 +2,17 @@ package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
 
+/**
+ * RFC8866 6.13. framerate (Frame Rate)
+ * Name: framerate
+ * Value: framerate-value
+ * Usage Level: media
+ * Charset Dependent: no
+ * Syntax:
+ * framerate-value = non-zero-int-or-real
+ * Example:
+ * a=framerate:60
+ */
 data class FramerateAttribute internal constructor(
     var value: Double,
 ) : SdpAttribute() {

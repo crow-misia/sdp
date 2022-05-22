@@ -2,6 +2,11 @@ package io.github.crow_misia.sdp
 
 import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
+/**
+ * RFC 8866 5.7. Connection Information.
+ * c=<nettype> <addtype> <connection-address>
+ * <connection-address>=<base multicast address>[/<ttl>]/<number of addresses>
+ */
 data class SdpConnection internal constructor(
     var nettype: String,
     var addrtype: String,
@@ -49,14 +54,30 @@ data class SdpConnection internal constructor(
             if (values.size != 3) {
                 throw SdpParseException("could not parse: $line as Connection")
             }
-            val tmp= values[2].split('/', limit = 2)
-            val ttl = if (tmp.size > 1) {
-                tmp[1].toIntOrNull() ?: run {
+            val addrtype = values[1]
+            val connectionAddress = values[2]
+            val subFields = connectionAddress.split('/')
+            // the TTL subfield is not present in "IP6" multicast
+            val baseMuticastAddress = subFields[0]
+            val (ttl, numberOfAddresses) = if (subFields.size > 1) {
+                val v = subFields[1].toIntOrNull() ?: run {
                     throw SdpParseException("could not parse: $line as Connection")
                 }
-            } else null
-
-            return SdpConnection(values[0], values[1], tmp[0], ttl, 1)
+                if (addrtype == "IP6" || subFields.size == 2) {
+                    null to v
+                } else {
+                    v to 1
+                }
+            } else {
+                null to 1
+            }
+            return SdpConnection(
+                nettype = values[0],
+                addrtype = addrtype,
+                connectionAddress = baseMuticastAddress,
+                ttl = ttl,
+                numberOfAddresses = numberOfAddresses,
+            )
         }
     }
 }

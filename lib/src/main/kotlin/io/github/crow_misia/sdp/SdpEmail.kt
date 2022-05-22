@@ -2,6 +2,10 @@ package io.github.crow_misia.sdp
 
 import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
+/**
+ * RFC 8866 5.6. Email Address.
+ * e=<email-address>
+ */
 data class SdpEmail internal constructor(
     var address: String,
 ) : SdpElement() {
@@ -18,11 +22,11 @@ data class SdpEmail internal constructor(
 
         @JvmStatic
         fun of(address: String): SdpEmail {
-            return SdpEmail(address)
+            return SdpEmail(address = address)
         }
 
         internal fun parse(line: String): SdpEmail {
-            return SdpEmail(line.substring(2))
+            return SdpEmail(address = line.substring(2))
         }
     }
 }

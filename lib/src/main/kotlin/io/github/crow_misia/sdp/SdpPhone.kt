@@ -2,6 +2,10 @@ package io.github.crow_misia.sdp
 
 import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
+/**
+ * RFC 8866 5.6. Phone Number.
+ * p=<phone-number>
+ */
 data class SdpPhone internal constructor(
     var number: String,
 ) : SdpElement() {
@@ -18,11 +22,11 @@ data class SdpPhone internal constructor(
 
         @JvmStatic
         fun of(number: String): SdpPhone {
-            return SdpPhone(number)
+            return SdpPhone(number = number)
         }
 
         internal fun parse(line: String): SdpPhone {
-            return SdpPhone(line.substring(2))
+            return SdpPhone(number = line.substring(2))
         }
     }
 }

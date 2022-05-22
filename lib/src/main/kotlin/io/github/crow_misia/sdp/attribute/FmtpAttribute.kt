@@ -4,7 +4,22 @@ package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
 
-data class FormatAttribute internal constructor(
+/**
+ * RFC8866 6.15. fmtp (Format Parameters)
+ * Name: fmtp
+ * Value: fmtp-value
+ * Usage Level: media
+ * Charset Dependent: no
+ * Syntax:
+ * fmtp-value = fmt SP format-specific-params
+ * format-specific-params = byte-string
+ * ; Notes:
+ * ; - The format parameters are media type parameters and
+ * ;   need to reflect their syntax.
+ * Example:
+ * a=fmtp:96 profile-level-id=42e016;max-mbps=108000;max-fs=3600
+ */
+data class FmtpAttribute internal constructor(
     var format: Int,
 ) : WithParametersAttribute() {
     override val field = fieldName
@@ -21,13 +36,13 @@ data class FormatAttribute internal constructor(
         internal const val fieldName = "fmtp"
 
         @JvmStatic @JvmOverloads
-        fun of(format: Int, parameters: String? = null): FormatAttribute {
-            return FormatAttribute(format).also {
+        fun of(format: Int, parameters: String? = null): FmtpAttribute {
+            return FmtpAttribute(format).also {
                 it.setParameter(parameters)
             }
         }
 
-        internal fun parse(value: String): FormatAttribute {
+        internal fun parse(value: String): FmtpAttribute {
             val values = value.split(' ', limit = 2)
             val size = values.size
             if (size < 1) {

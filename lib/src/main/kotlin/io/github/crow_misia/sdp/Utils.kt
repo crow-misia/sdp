@@ -20,10 +20,11 @@ internal object Utils {
         ExtMapAttribute.fieldName to { v -> ExtMapAttribute.parse(v) },
         ExtmapAllowMixedAttribute.fieldName to { ExtmapAllowMixedAttribute },
         FingerprintAttribute.fieldName to { v -> FingerprintAttribute.parse(v) },
-        FormatAttribute.fieldName to { v -> FormatAttribute.parse(v) },
+        FmtpAttribute.fieldName to { v -> FmtpAttribute.parse(v) },
         FramerateAttribute.fieldName to { v -> FramerateAttribute.parse(v) },
         GroupAttribute.fieldName to { v -> GroupAttribute.parse(v) },
         IceLiteAttribute.fieldName to { IceLiteAttribute },
+        IceMismatchAttribute.fieldName to { IceMismatchAttribute },
         IceOptionsAttribute.fieldName to { v -> IceOptionsAttribute.parse(v) },
         IceUfragAttribute.fieldName to { v -> IceUfragAttribute.parse(v) },
         IcePwdAttribute.fieldName to { v -> IcePwdAttribute.parse(v) },
@@ -50,11 +51,17 @@ internal object Utils {
         SsrcAttribute.fieldName to { v -> SsrcAttribute.parse(v) },
         SsrcGroupAttribute.fieldName to { v -> SsrcGroupAttribute.parse(v) },
         TsRefclkAttribute.fieldName to { v -> TsRefclkAttribute.parse(v) },
-        XgoogleFlagAttribute.fieldName to { v -> XgoogleFlagAttribute.parse(v) }
+        XgoogleFlagAttribute.fieldName to { v -> XgoogleFlagAttribute.parse(v) },
+        ToolAttribute.fieldName to { v -> ToolAttribute.parse(v) },
+        OrientAttribute.fieldName to { v -> OrientAttribute.parse(v) },
+        TypeAttribute.fieldName to { v -> TypeAttribute.parse(v) },
+        CharsetAttribute.fieldName to { v -> CharsetAttribute.parse(v) },
+        SdplangAttribute.fieldName to { v -> SdplangAttribute.parse(v) },
+        QualityAttribute.fieldName to { v -> QualityAttribute.parse(v) },
     )
 
     init {
-        assert(PARSERS.size == 43)
+        assert(PARSERS.size == 50)
     }
 
     internal inline fun getFieldName(field: String?) = field?.lowercase(Locale.ENGLISH).orEmpty()

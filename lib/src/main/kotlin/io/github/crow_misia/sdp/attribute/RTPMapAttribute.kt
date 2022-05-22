@@ -2,11 +2,27 @@ package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
 
+/**
+ * RFC8866 6.6. rtpmap
+ * Name: rtpmap
+ * Value: rtpmap-value
+ * Usage Level: media
+ * Charset Dependent: no
+ * Syntax:
+ * rtpmap-value = payload-type SP encoding-name "/" clock-rate [ "/" encoding-params ]
+ * payload-type = zero-based-integer
+ * encoding-name = token
+ * clock-rate = integer
+ * encoding-params = channels
+ * channels = integer
+ * Example:
+ * a=maxptime:20
+ */
 data class RTPMapAttribute internal constructor(
     var payloadType: Int,
     var encodingName: String,
     var clockRate: Int?,
-    var encodingParameters: String?,
+    var encodingParameters: Int?,
 ) : SdpAttribute() {
     override val field = fieldName
 
@@ -17,12 +33,11 @@ data class RTPMapAttribute internal constructor(
         append(payloadType)
         append(' ')
         append(encodingName)
-        encodingParameters?.also {
-            append('/')
-            append(clockRate ?: 0)
+        clockRate?.also {
             append('/')
             append(it)
-        } ?: clockRate?.also {
+        }
+        encodingParameters?.also {
             append('/')
             append(it)
         }
@@ -37,7 +52,7 @@ data class RTPMapAttribute internal constructor(
             payloadType: Int,
             encodingName: String,
             clockRate: Int? = null,
-            encodingParameters: String? = null,
+            encodingParameters: Int? = null,
         ): RTPMapAttribute {
             return RTPMapAttribute(
                 payloadType = payloadType,
@@ -65,11 +80,17 @@ data class RTPMapAttribute internal constructor(
                 }
             } else null
 
+            val encodingParameters = if (paramsSize > 2) {
+                parameters[2].toIntOrNull() ?: run {
+                    throw SdpParseException("could not parse: $value as RTPMapAttribute")
+                }
+            } else null
+
             return RTPMapAttribute(
                 payloadType = payloadType,
                 encodingName = parameters[0],
                 clockRate = clockRate,
-                encodingParameters = if (paramsSize > 2) parameters[2] else null
+                encodingParameters = encodingParameters,
             )
         }
     }

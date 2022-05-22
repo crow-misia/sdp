@@ -1,5 +1,9 @@
 package io.github.crow_misia.sdp
 
+/**
+ * RFC 8866 5.11. Time Zone Adjustment.
+ * z=<adjustment time> <offset> <adjustment time> <offset> ....
+ */
 data class SdpTimeZone internal constructor(
     val adjustmentTime: Long,
     val offset: String,

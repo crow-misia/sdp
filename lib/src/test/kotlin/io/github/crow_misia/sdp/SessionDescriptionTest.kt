@@ -25,7 +25,7 @@ class SessionDescriptionTest : StringSpec({
                 ExtMapAttribute.of(2, uri = "urn:ietf:params:rtp-hdrext:toffset"),
                 ExtMapAttribute.of(1, Direction.RECVONLY, uri = "URI-gps-string"),
                 ExtMapAttribute.of(3, null, "urn:ietf:params:rtp-hdrext:encrypt", "urn:ietf:params:rtp-hdrext:smpte-tc", "25@600/24"),
-                FormatAttribute.of(98).also {
+                FmtpAttribute.of(98).also {
                     it.addParameter("minptime", 10)
                     it.addParameter("useinbandfec", 1)
                 }
@@ -49,14 +49,13 @@ class SessionDescriptionTest : StringSpec({
             connection = SdpConnection.of("IN", "IP4", "224.2.17.12", 127),
             bandwidths = listOf(SdpBandwidth("AS", 4000)),
             timings = listOf(
-                SdpTiming.of(
+                SdpTimeActive.of(
                     2873397496L,
                     2873404696L,
-                    repeatTime = SdpRepeatTime.of("604800", "3600", "0", "90000")
+                    repeatTime = SdpRepeatTimes.of("604800", "3600", "0", "90000")
                 )
             ),
             timeZones = SdpTimeZones.of(SdpTimeZone.of(2882844526L, "-1h"), SdpTimeZone.of(2898848070L, "0")),
-            key = EncryptionKey.of(EncryptionKey.Method.BASE64, "<encoded encryption key>"),
             attributes = listOf(SendRecvAttribute),
             mediaDescriptions = listOf(
                 testMediaDescription,
@@ -77,7 +76,6 @@ class SessionDescriptionTest : StringSpec({
                 SdpMediaDescription.of(
                     "video", 51372, null, listOf("RTP", "AVP"), listOf("98"),
                     information = SdpSessionInformation.of("media title"),
-                    key = EncryptionKey.of(EncryptionKey.Method.PROMPT),
                     connections = listOf(SdpConnection.of("IN", "IP4", "224.2.17.12", 127)),
                     bandwidths = listOf(SdpBandwidth.of("AS", 500)),
                     attributes = listOf(
@@ -198,7 +196,14 @@ class SessionDescriptionTest : StringSpec({
                         FramerateAttribute.of(29.97),
                         SourceFilterAttribute.of("incl", "IN", "IP4", "239.5.2.31", "10.1.15.5"),
                         TsRefclkAttribute.of("ptp=IEEE1588-2008:00-50-C2-FF-FE-90-04-37:0"),
-                        MediaclkAttribute.of("direct=0")
+                        MediaclkAttribute.of("direct=0"),
+                        ToolAttribute.of("foobar V3.2"),
+                        OrientAttribute.of("portrait"),
+                        TypeAttribute.of("moderated"),
+                        CharsetAttribute.of("ISO-8859-1"),
+                        SdplangAttribute.of("fr"),
+                        LangAttribute.of("de"),
+                        QualityAttribute.of(10),
                     ))
             )
         )
@@ -223,13 +228,13 @@ class SessionDescriptionTest : StringSpec({
                 ExtMapAttribute.of(2, uri = "urn:ietf:params:rtp-hdrext:toffset"),
                 ExtMapAttribute.of(1, Direction.RECVONLY, uri = "URI-gps-string"),
                 ExtMapAttribute.of(3, null, "urn:ietf:params:rtp-hdrext:encrypt", "urn:ietf:params:rtp-hdrext:smpte-tc", "25@600/24"),
-                FormatAttribute.of(98).also {
+                FmtpAttribute.of(98).also {
                     it.addParameter("minptime", 10)
                     it.addParameter("useinbandfec", 1)
                 }
             ))
 
-        expected.getMediaDescription("123")?.setAttribute(SendOnlyAttribute, DirectionAttribute::class)
+        expected.getMediaDescription("123")?.setAttribute(SendOnlyAttribute, MediaDirectionAttribute::class)
         actual.setMediaDescription(newMediaDescription, "123")
         actual.toString() shouldBe expected.toString()
     }

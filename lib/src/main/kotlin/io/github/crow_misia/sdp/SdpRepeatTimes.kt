@@ -4,7 +4,11 @@ package io.github.crow_misia.sdp
 
 import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
-data class SdpRepeatTime internal constructor(
+/**
+ * RFC 8866 5.10. Repeat Times.
+ * r=<repeat interval> <active duration> <offsets from start-time>
+ */
+data class SdpRepeatTimes internal constructor(
     var repeatInterval: String,
     var activeDuration: String,
     var offsets: MutableList<String>,
@@ -31,8 +35,8 @@ data class SdpRepeatTime internal constructor(
             repeatInterval: String,
             activeDuration: String,
             offsets: List<String>,
-        ): SdpRepeatTime {
-            return SdpRepeatTime(repeatInterval, activeDuration, offsets.toMutableList())
+        ): SdpRepeatTimes {
+            return SdpRepeatTimes(repeatInterval, activeDuration, offsets.toMutableList())
         }
 
         @JvmStatic
@@ -40,17 +44,17 @@ data class SdpRepeatTime internal constructor(
             repeatInterval: String,
             activeDuration: String,
             vararg offsets: String,
-        ): SdpRepeatTime {
-            return SdpRepeatTime(repeatInterval, activeDuration, offsets.toMutableList())
+        ): SdpRepeatTimes {
+            return SdpRepeatTimes(repeatInterval, activeDuration, offsets.toMutableList())
         }
 
-        internal fun parse(line: String): SdpRepeatTime {
+        internal fun parse(line: String): SdpRepeatTimes {
             val values = line.substring(2).split(' ')
             val size = values.size
             if (size < 3) {
                 throw SdpParseException("could not parse: $line as RepeatTime")
             }
-            return SdpRepeatTime(values[0], values[1], values.subList(2, size).toMutableList())
+            return SdpRepeatTimes(values[0], values[1], values.subList(2, size).toMutableList())
         }
     }
 }

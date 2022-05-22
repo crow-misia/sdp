@@ -1,5 +1,15 @@
 package io.github.crow_misia.sdp.attribute
 
+/**
+ * RFC 5245 21.1.2. remote candidates.
+ * Name: remote-candidates
+ * Value:
+ * Usage Level: media
+ * Charset Dependent: no
+ * Syntax:
+ * remote-candidate-att = "remote-candidates" ":" remote-candidate 0*(SP remote-candidate)
+ * remote-candidate = component-ID SP connection-address SP por
+ */
 data class RemoteCandidateAttribute internal constructor(
     override var value: String,
 ) : BaseSdpAttribute(fieldName, value) {

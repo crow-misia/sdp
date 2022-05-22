@@ -2,10 +2,14 @@ package io.github.crow_misia.sdp
 
 import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
 
-data class SdpTiming internal constructor(
+/**
+ * RFC 8866 5.9. Time Active.
+ * t=<start-time> <stop-time>
+ */
+data class SdpTimeActive internal constructor(
     var startTime: Long,
     var stopTime: Long,
-    var repeatTime: SdpRepeatTime?,
+    var repeatTime: SdpRepeatTimes?,
 ) : SdpElement() {
     override fun toString() = super.toString()
 
@@ -26,12 +30,12 @@ data class SdpTiming internal constructor(
         fun of(
             startTime: Long = 0,
             stopTime: Long = 0,
-            repeatTime: SdpRepeatTime? = null,
-        ): SdpTiming {
-            return SdpTiming(startTime, stopTime, repeatTime)
+            repeatTime: SdpRepeatTimes? = null,
+        ): SdpTimeActive {
+            return SdpTimeActive(startTime, stopTime, repeatTime)
         }
 
-        internal fun parse(line: String): SdpTiming {
+        internal fun parse(line: String): SdpTimeActive {
             val values = line.substring(2).split(' ')
             if (values.size != 2) {
                 throw SdpParseException("could not parse: $line as Timing")
@@ -41,7 +45,7 @@ data class SdpTiming internal constructor(
             if (startTime == null || stopTime == null) {
                 throw SdpParseException("could not parse: $line as Timing")
             }
-            return SdpTiming(startTime, stopTime, null)
+            return SdpTimeActive(startTime, stopTime, null)
         }
     }
 }

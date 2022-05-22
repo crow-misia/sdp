@@ -6,3 +6,13 @@ sdp
 
 SDP(Session Description Protocol) parse / serialization
 
+## Reference
+
+* RFC5245: Interactive Connectivity Establishment (ICE): A Protocol for Network Address Translator (NAT) Traversal for Offer/Answer Protocols
+  https://datatracker.ietf.org/doc/html/rfc5245
+* RFC5761: Multiplexing RTP Data and Control Packets on a Single Port
+  https://datatracker.ietf.org/doc/html/rfc5761
+* RFC8841: Session Description Protocol (SDP) Offer/Answer Procedures for Stream Control Transmission Protocol (SCTP) over Datagram Transport Layer Security (DTLS) Transport
+  https://datatracker.ietf.org/doc/html/rfc8841
+* RFC8866: SDP: Session Description Protocol
+  https://datatracker.ietf.org/doc/html/rfc8866
