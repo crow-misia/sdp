@@ -9,7 +9,7 @@ import java.math.BigInteger
 
 class SessionDescriptionTest : StringSpec({
     "パーステスト" {
-        val expectedStr = File("src/test/data/parse_test.sdp").readText()
+        val expectedStr = File("src/test/data/parse_test.sdp").readText().lines().joinToString("\r\n")
         val actual = SdpSessionDescription.parse(expectedStr)
 
         val testMediaDescription = SdpMediaDescription.of(
