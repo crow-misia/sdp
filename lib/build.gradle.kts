@@ -1,4 +1,6 @@
 import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI
 
@@ -27,7 +29,8 @@ group = Maven.groupId
 version = Maven.version
 
 dependencies {
-    implementation(Kotlin.stdlib.jdk8)
+    implementation(platform(Kotlin.module("kotlin-bom", true)))
+    implementation(Kotlin.stdlib)
 
     testImplementation(Testing.mockK)
     testImplementation(Testing.kotest.runner.junit5)
@@ -39,7 +42,7 @@ val sourcesJar by tasks.creating(Jar::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Assembles sources JAR"
     archiveClassifier.set("sources")
-    from(sourceSets["main"].allSource)
+    from(sourceSets.getByName("main").allSource)
 }
 
 val customDokkaTask by tasks.creating(DokkaTask::class) {
@@ -50,7 +53,7 @@ val customDokkaTask by tasks.creating(DokkaTask::class) {
         plugins("org.jetbrains.dokka:javadoc-plugin:_")
     }
     inputs.dir("src/main/kotlin")
-    outputDirectory.set(buildDir.resolve("javadoc"))
+    outputDirectory.set(layout.buildDirectory.dir("javadoc"))
 }
 
 val javadocJar by tasks.creating(Jar::class) {
@@ -132,20 +135,31 @@ afterEvaluate {
     }
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        javaParameters = true
-        jvmTarget = "11"
-        apiVersion = "1.7"
-        languageVersion = "1.7"
-        freeCompilerArgs = listOf("-Xjsr305=strict")
+java {
+    toolchain {
+        setSourceCompatibility(JavaLanguageVersion.of(11))
+        setTargetCompatibility(JavaLanguageVersion.of(11))
+        languageVersion.set(JavaLanguageVersion.of(20))
     }
 }
 
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
-    testLogging {
-        showStandardStreams = true
-        events("passed", "skipped", "failed")
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll("-Xjsr305=strict")
+        javaParameters.set(true)
+        jvmTarget.set(JvmTarget.JVM_11)
+        apiVersion.set(KotlinVersion.KOTLIN_1_9)
+        languageVersion.set(KotlinVersion.KOTLIN_1_9)
+    }
+}
+
+
+tasks {
+    withType<Test> {
+        useJUnitPlatform()
+        testLogging {
+            showStandardStreams = true
+            events("passed", "skipped", "failed")
+        }
     }
 }
