@@ -120,17 +120,16 @@ afterEvaluate {
                 val releasesRepoUrl = URI("https://oss.sonatype.org/service/local/staging/deploy/maven2")
                 val snapshotsRepoUrl = URI("https://oss.sonatype.org/content/repositories/snapshots")
                 url = if (Maven.version.endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
-                val sonatypeUsername: String? by project
-                val sonatypePassword: String? by project
                 credentials {
-                    username = sonatypeUsername.orEmpty()
-                    password = sonatypePassword.orEmpty()
+                    username = project.findProperty("sona.user") as String? ?: providers.environmentVariable("SONA_USER").orNull
+                    password = project.findProperty("sona.password") as String? ?: providers.environmentVariable("SONA_PASSWORD").orNull
                 }
             }
         }
     }
 
     signing {
+        useGpgCmd()
         sign(publishing.publications.getByName("maven"))
     }
 }
