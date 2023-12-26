@@ -1,0 +1,31 @@
+build:
+  maxIssues: 0
+  weights:
+    complexity: 2
+    formatting: 1
+    LongParameterList: 1
+    comments: 1
+
+complexity:
+  TooManyFunctions:
+    active: false
+  LongParameterList:
+    active: false
+
+style:
+  ClassOrdering:
+    active: true
+  MandatoryBracesLoops:
+    active: true
+  UseEmptyCounterpart:
+    active: true
+  MagicNumber:
+    active: false
+  MaxLineLength:
+    maxLineLength: 150
+  WildcardImport:
+    active: false
+
+naming:
+  PackageNaming:
+    active: false

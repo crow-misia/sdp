@@ -5,16 +5,6 @@ package io.github.crow_misia.sdp.attribute
 abstract class WithParametersAttribute internal constructor(
     internal open var _parameters: MutableMap<String, Any?> = linkedMapOf(),
 ) : SdpAttribute() {
-    companion object {
-        private val wellKnownParameters = mapOf(
-            // H264 codec parameters.
-            "profile-level-id" to "s",
-            "packetization-mode" to "d",
-            // VP9 codec parameters
-            "profile-id" to "s"
-        )
-    }
-
     val isNotEmptyParameters: Boolean
         get() = _parameters.isNotEmpty()
 
@@ -71,5 +61,15 @@ abstract class WithParametersAttribute internal constructor(
                 str.toIntOrNull() ?: str.toFloatOrNull() ?: str
             }
         }
+    }
+
+    companion object {
+        private val wellKnownParameters = mapOf(
+            // H264 codec parameters.
+            "profile-level-id" to "s",
+            "packetization-mode" to "d",
+            // VP9 codec parameters
+            "profile-id" to "s"
+        )
     }
 }

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ConstructorParameterNaming:CandidateAttribute.kt$CandidateAttribute$internal var _extensions: MutableMap&lt;String, String></ID>
+    <ID>ConstructorParameterNaming:SdpMediaDescription.kt$SdpMediaDescription$private var _protos: MutableList&lt;String></ID>
+    <ID>ConstructorParameterNaming:WithParametersAttribute.kt$WithParametersAttribute$internal open var _parameters: MutableMap&lt;String, Any?> = linkedMapOf()</ID>
+    <ID>CyclomaticComplexMethod:SdpSessionDescription.kt$SdpSessionDescription.Companion$fun parse(text: String): SdpSessionDescription</ID>
+    <ID>LongMethod:SdpSessionDescription.kt$SdpSessionDescription.Companion$fun parse(text: String): SdpSessionDescription</ID>
+    <ID>ThrowsCount:CandidateAttribute.kt$CandidateAttribute.Companion$internal fun parse(value: String): SdpAttribute</ID>
+    <ID>ThrowsCount:RTPMapAttribute.kt$RTPMapAttribute.Companion$internal fun parse(value: String): SdpAttribute</ID>
+    <ID>ThrowsCount:SdpOrigin.kt$SdpOrigin.Companion$internal fun parse(line: String): SdpOrigin</ID>
+  </CurrentIssues>
+</SmellBaseline>

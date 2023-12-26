@@ -5,8 +5,6 @@ import java.util.*
 
 @Suppress("NOTHING_TO_INLINE")
 internal object Utils {
-    inline fun StringBuilder.appendSdpLineSeparator(): StringBuilder = append("\r\n")
-
     private val PARSERS: Map<String, (String) -> SdpAttribute> = hashMapOf(
         CandidateAttribute.fieldName to { v -> CandidateAttribute.parse(v) },
         CNameAttribute.fieldName to { v -> CNameAttribute.parse(v) },
@@ -63,6 +61,8 @@ internal object Utils {
     init {
         assert(PARSERS.size == 50)
     }
+
+    inline fun StringBuilder.appendSdpLineSeparator(): StringBuilder = append("\r\n")
 
     internal inline fun getFieldName(field: String?) = field?.lowercase(Locale.ENGLISH).orEmpty()
 

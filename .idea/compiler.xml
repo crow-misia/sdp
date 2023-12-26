@@ -10,9 +10,9 @@
       <module name="closure-table.test" target="12" />
       <module name="kdocx.lib.main" target="12" />
       <module name="kdocx.lib.test" target="12" />
-      <module name="sdp.lib" target="19" />
-      <module name="sdp.lib.main" target="19" />
-      <module name="sdp.lib.test" target="19" />
+      <module name="sdp.lib" target="11" />
+      <module name="sdp.lib.main" target="11" />
+      <module name="sdp.lib.test" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

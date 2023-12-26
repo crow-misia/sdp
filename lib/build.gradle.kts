@@ -1,14 +1,15 @@
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI
 
 plugins {
-    kotlin("jvm")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.kotlinx.kover)
+    alias(libs.plugins.detekt)
     id("maven-publish")
     id("signing")
-    id("org.jetbrains.dokka")
 }
 
 object Maven {
@@ -29,13 +30,13 @@ group = Maven.groupId
 version = Maven.version
 
 dependencies {
-    compileOnly(platform(Kotlin.module("kotlin-bom", true)))
-    compileOnly(Kotlin.stdlib)
+    compileOnly(platform(libs.kotlin.bom))
+    compileOnly(libs.kotlin.stdlib)
 
-    testImplementation(Testing.mockK)
-    testImplementation(Testing.kotest.runner.junit5)
-    testImplementation(Testing.kotest.assertions.core)
-    testImplementation(Testing.kotest.property)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotest.property)
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
@@ -50,7 +51,7 @@ val customDokkaTask by tasks.creating(DokkaTask::class) {
         noAndroidSdkLink.set(false)
     }
     dependencies {
-        plugins("org.jetbrains.dokka:javadoc-plugin:_")
+        plugins(libs.dokka.javadoc.plugin)
     }
     inputs.dir("src/main/kotlin")
     outputDirectory.set(layout.buildDirectory.dir("javadoc"))
@@ -121,8 +122,8 @@ afterEvaluate {
                 val snapshotsRepoUrl = URI("https://oss.sonatype.org/content/repositories/snapshots")
                 url = if (Maven.version.endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
                 credentials {
-                    username = project.findProperty("sona.user") as String? ?: providers.environmentVariable("SONA_USER").orNull
-                    password = project.findProperty("sona.password") as String? ?: providers.environmentVariable("SONA_PASSWORD").orNull
+                    username = providers.gradleProperty("sona.user").orElse(providers.environmentVariable("SONA_USER")).orNull
+                    password = providers.gradleProperty("sona.password").orElse(providers.environmentVariable("SONA_PASSWORD")).orNull
                 }
             }
         }
@@ -132,6 +133,14 @@ afterEvaluate {
         useGpgCmd()
         sign(publishing.publications.getByName("maven"))
     }
+}
+
+detekt {
+    parallel = true
+    buildUponDefaultConfig = true
+    allRules = false
+    autoCorrect = true
+    config.setFrom(files("$rootDir/config/detekt.yml"))
 }
 
 java {
@@ -154,6 +163,25 @@ kotlin {
 
 
 tasks {
+    withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+        jvmTarget = "19"
+        reports {
+            html.required.set(false)
+            xml.required.set(false)
+            txt.required.set(false)
+            sarif.required.set(true)
+            md.required.set(true)
+        }
+        exclude("build/")
+        exclude("resources/")
+    }
+
+    withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
+        jvmTarget = "19"
+        exclude("build/")
+        exclude("resources/")
+    }
+
     withType<Test> {
         useJUnitPlatform()
         testLogging {
