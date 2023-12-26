@@ -29,8 +29,8 @@ group = Maven.groupId
 version = Maven.version
 
 dependencies {
-    implementation(platform(Kotlin.module("kotlin-bom", true)))
-    implementation(Kotlin.stdlib)
+    compileOnly(platform(Kotlin.module("kotlin-bom", true)))
+    compileOnly(Kotlin.stdlib)
 
     testImplementation(Testing.mockK)
     testImplementation(Testing.kotest.runner.junit5)
@@ -138,7 +138,7 @@ java {
     toolchain {
         setSourceCompatibility(JavaLanguageVersion.of(11))
         setTargetCompatibility(JavaLanguageVersion.of(11))
-        languageVersion.set(JavaLanguageVersion.of(20))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
