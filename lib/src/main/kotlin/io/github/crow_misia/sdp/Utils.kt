@@ -2,6 +2,7 @@ package io.github.crow_misia.sdp
 
 import io.github.crow_misia.sdp.attribute.*
 import java.util.*
+import kotlin.math.absoluteValue
 
 @Suppress("NOTHING_TO_INLINE")
 internal object Utils {
@@ -67,6 +68,15 @@ internal object Utils {
     internal inline fun getFieldName(field: String?) = field?.lowercase(Locale.ENGLISH).orEmpty()
 
     internal inline fun getName(name: String?) = name?.lowercase(Locale.ENGLISH).orEmpty()
+
+    /**
+     * Returns String with omitted decimal part if it's zero. E.g. 42.0 -> "42", 42.4 -> "42.4".
+     */
+    internal fun Double.toCompactString() = if (this.rem(1.0).absoluteValue > 0.0) {
+        this.toString()
+    } else {
+        this.toLong().toString()
+    }
 
     @JvmStatic
     fun parseAttribute(line: String): SdpAttribute {
