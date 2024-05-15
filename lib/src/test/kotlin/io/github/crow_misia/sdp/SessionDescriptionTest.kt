@@ -99,8 +99,8 @@ class SessionDescriptionTest : StringSpec({
                             "0c8b064d-d807-43b4-b434-f92a889d8587",
                             "98178685-d409-46e0-8e16-7ef0db0db64a"
                         ),
-                        PtimeAttribute.of(20),
-                        MaxPtimeAttribute.of(60),
+                        PtimeAttribute.of(0.125),
+                        MaxPtimeAttribute.of(60.0),
                         IceLiteAttribute,
                         IceUfragAttribute.of("F7gI"),
                         IcePwdAttribute.of("x9cml/YzichV2+XlhiMu8g"),

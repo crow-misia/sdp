@@ -1,6 +1,7 @@
 package io.github.crow_misia.sdp.attribute
 
 import io.github.crow_misia.sdp.SdpParseException
+import io.github.crow_misia.sdp.Utils.toCompactString
 
 /**
  * RFC8866 6.4. ptime (Packet Time)
@@ -14,7 +15,7 @@ import io.github.crow_misia.sdp.SdpParseException
  * a=ptime:20
  */
 data class PtimeAttribute internal constructor(
-    var time: Long,
+    var time: Double,
 ) : SdpAttribute() {
     override val field = fieldName
 
@@ -22,19 +23,19 @@ data class PtimeAttribute internal constructor(
 
     override fun valueJoinTo(buffer: StringBuilder) = buffer.apply {
         append(':')
-        append(time)
+        append(time.toCompactString())
     }
 
     companion object {
         internal const val fieldName = "ptime"
 
         @JvmStatic
-        fun of(time: Long): PtimeAttribute {
+        fun of(time: Double): PtimeAttribute {
             return PtimeAttribute(time)
         }
 
         internal fun parse(value: String): SdpAttribute {
-            val time = value.toLongOrNull() ?: run {
+            val time = value.toDoubleOrNull() ?: run {
                 throw SdpParseException("could not parse: $value as PtimeAttribute")
             }
             return PtimeAttribute(time)
