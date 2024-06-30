@@ -145,19 +145,16 @@ detekt {
 
 java {
     toolchain {
-        setSourceCompatibility(JavaLanguageVersion.of(11))
-        setTargetCompatibility(JavaLanguageVersion.of(11))
+        setSourceCompatibility(JavaLanguageVersion.of(8))
+        setTargetCompatibility(JavaLanguageVersion.of(8))
         languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
 kotlin {
     compilerOptions {
-        freeCompilerArgs.addAll("-Xjsr305=strict")
         javaParameters.set(true)
-        jvmTarget.set(JvmTarget.JVM_11)
-        apiVersion.set(KotlinVersion.KOTLIN_1_9)
-        languageVersion.set(KotlinVersion.KOTLIN_1_9)
+        jvmTarget.set(JvmTarget.JVM_1_8)
     }
 }
 
