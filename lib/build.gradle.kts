@@ -17,7 +17,7 @@ object Maven {
     const val artifactId = "sdp"
     const val name = "sdp"
     const val desc = "SDP(Session Description Protocol) library"
-    const val version = "1.2.1"
+    const val version = "1.3.0"
     const val siteUrl = "https://github.com/crow-misia/sdp"
     const val gitUrl = "https://github.com/crow-misia/sdp.git"
     const val githubRepo = "crow-misia/sdp"
