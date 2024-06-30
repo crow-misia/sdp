@@ -1,0 +1,16 @@
+[bumpver]
+current_version = "1.2.1"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message = "chore: [skip build] bump version {old_version_pep440} -> {new_version_pep440}"
+tag_message = "release {new_version_pep440}"
+tag_scope = "default"
+pre_commit_hook = ""
+post_commit_hook = ""
+commit = true
+tag = true
+push = false
+
+[bumpver.file_patterns]
+"lib/build.gradle.kts" = [
+    'const val version = "{pep440_version}"',
+]
