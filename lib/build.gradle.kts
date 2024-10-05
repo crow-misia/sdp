@@ -153,8 +153,11 @@ java {
 
 kotlin {
     compilerOptions {
+        freeCompilerArgs.add("-Xconsistent-data-class-copy-visibility")
         javaParameters.set(true)
-        jvmTarget.set(JvmTarget.JVM_1_8)
+        jvmTarget = JvmTarget.JVM_1_8
+        apiVersion = KotlinVersion.KOTLIN_2_0
+        languageVersion = KotlinVersion.KOTLIN_2_0
     }
 }
 
