@@ -18,7 +18,7 @@ dokka = "2.0.0"
 
 kotest = "5.9.1"
 
-mockk = "1.13.13"
+mockk = "1.13.14"
 
 [libraries]
 
