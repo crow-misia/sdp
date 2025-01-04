@@ -6,17 +6,23 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 
-kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version = "0.9.0" }
+dokka-javadoc = { id = "org.jetbrains.dokka-javadoc", version.ref = "dokka" }
 
-detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.7" }
+kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinx-kover" }
+
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 
 [versions]
 
-kotlin = "2.1.0"
+detekt = "1.23.7"
 
 dokka = "2.0.0"
 
 kotest = "5.9.1"
+
+kotlin = "2.1.0"
+
+kotlinx-kover = "0.9.0"
 
 mockk = "1.13.14"
 
@@ -26,12 +32,12 @@ kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref 
 
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib" }
 
-dokka-javadoc-plugin = { group = "org.jetbrains.dokka", name = "javadoc-plugin", version.ref = "dokka" }
+kotest-bom = { group = "io.kotest", name = "kotest-bom", version.ref = "kotest" }
 
-kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
+kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5" }
 
-kotest-assertions-core = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
+kotest-assertions-core = { group = "io.kotest", name = "kotest-assertions-core" }
 
-kotest-property = { group = "io.kotest", name = "kotest-property", version.ref = "kotest" }
+kotest-property = { group = "io.kotest", name = "kotest-property" }
 
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
