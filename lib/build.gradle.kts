@@ -147,7 +147,7 @@ java {
     toolchain {
         setSourceCompatibility(JavaLanguageVersion.of(8))
         setTargetCompatibility(JavaLanguageVersion.of(8))
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(23))
     }
 }
 
