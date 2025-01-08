@@ -2,15 +2,17 @@
 
 [plugins]
 
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 
 dokka-javadoc = { id = "org.jetbrains.dokka-javadoc", version.ref = "dokka" }
 
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+
 kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinx-kover" }
 
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
 
 [versions]
 
@@ -23,6 +25,8 @@ kotest = "5.9.1"
 kotlin = "2.1.0"
 
 kotlinx-kover = "0.9.0"
+
+maven-publish = "0.30.0"
 
 mockk = "1.13.14"
 
