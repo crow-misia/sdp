@@ -1,5 +1,5 @@
 [bumpver]
-current_version = "1.4.0"
+current_version = "1.5.0"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "chore: [skip build] bump version {old_version_pep440} -> {new_version_pep440}"
 tag_message = "release {new_version_pep440}"
