@@ -1,11 +1,34 @@
 sdp
 =================
 
-[![Build](https://github.com/crow-misia/sdp/actions/workflows/build.yml/badge.svg)](https://github.com/crow-misia/sdp/actions/workflows/build.yml)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.crow-misia.sdp/sdp.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:io.github.crow-misia.sdp%20a:sdp)
-[![License](https://img.shields.io/github/license/crow-misia/sdp)](LICENSE)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/crow-misia/sdp/build.yml)](https://github.com/crow-misia/sdp/actions/workflows/build.yml)
+[![Maven Central Version](https://img.shields.io/maven-central/v/io.github.crow-misia.sdp/sdp)](https://central.sonatype.com/artifact/io.github.crow-misia.sdp/sdp)
+[![GitHub License](https://img.shields.io/github/license/crow-misia/sdp)](LICENSE)
 
 SDP(Session Description Protocol) parse / serialization
+
+## Get Started
+
+### Gradle
+
+Add dependencies (you can also add other modules that you need):
+
+`${latest.version}` is [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.crow-misia.sdp/sdp)](https://central.sonatype.com/artifact/io.github.crow-misia.sdp/sdp)
+
+```groovy
+dependencies {
+    implementation "io.github.crow-misia.sdp:sdp:${latest.version}"
+}
+```
+
+Make sure that you have either `mavenCentral()` in the list of repositories:
+
+```
+repository {
+    mavenCentral()
+}
+```
+
 
 ## Reference
 
