@@ -28,7 +28,7 @@ kotlinx-kover = "0.9.1"
 
 maven-publish = "0.30.0"
 
-mockk = "1.13.14"
+mockk = "1.13.16"
 
 [libraries]
 
