@@ -3,6 +3,7 @@ sdp
 
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/crow-misia/sdp/build.yml)](https://github.com/crow-misia/sdp/actions/workflows/build.yml)
 [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.crow-misia.sdp/sdp)](https://central.sonatype.com/artifact/io.github.crow-misia.sdp/sdp)
+[![javadoc](https://javadoc.io/badge2/io.github.crow-misia.sdp/sdp/javadoc.svg)](https://javadoc.io/doc/io.github.crow-misia.sdp/sdp)
 [![GitHub License](https://img.shields.io/github/license/crow-misia/sdp)](LICENSE)
 
 SDP(Session Description Protocol) parse / serialization
