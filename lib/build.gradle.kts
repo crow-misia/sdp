@@ -81,12 +81,6 @@ tasks.withType<Test>().configureEach {
     }
 }
 
-val dokkaJavadocJar by tasks.registering(Jar::class) {
-    description = "A Javadoc JAR containing Dokka Javadoc"
-    archiveClassifier = "javadoc"
-    from(tasks.dokkaGeneratePublicationJavadoc.flatMap { it.outputDirectory })
-}
-
 signing {
     useGpgCmd()
     sign(publishing.publications)
@@ -94,7 +88,7 @@ signing {
 
 mavenPublishing {
     configure(KotlinJvm(
-        javadocJar = JavadocJar.Dokka("dokkaJavadocJar"),
+        javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationJavadoc"),
         sourcesJar = true,
     ))
 
