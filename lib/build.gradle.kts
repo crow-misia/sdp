@@ -1,8 +1,9 @@
 import com.vanniktech.maven.publish.KotlinJvm
 import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.SonatypeHost
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     alias(libs.plugins.detekt)
@@ -48,12 +49,10 @@ kotlin {
         freeCompilerArgs.add("-Xconsistent-data-class-copy-visibility")
         javaParameters = true
         jvmTarget = JvmTarget.JVM_1_8
-        apiVersion = KotlinVersion.KOTLIN_2_0
-        languageVersion = KotlinVersion.KOTLIN_2_0
     }
 }
 
-tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+tasks.withType<Detekt>().configureEach {
     jvmTarget = "1.8"
     reports {
         html.required = false
@@ -66,7 +65,7 @@ tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
     exclude("resources/")
 }
 
-tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
+tasks.withType<DetektCreateBaselineTask>().configureEach {
     jvmTarget = "1.8"
     exclude("build/")
     exclude("resources/")

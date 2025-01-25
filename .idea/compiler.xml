@@ -2,9 +2,9 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
-      <module name="sdp.buildSrc" target="23" />
-      <module name="sdp.buildSrc.main" target="23" />
-      <module name="sdp.buildSrc.test" target="23" />
+      <module name="sdp.buildSrc" target="21" />
+      <module name="sdp.buildSrc.main" target="21" />
+      <module name="sdp.buildSrc.test" target="21" />
     </bytecodeTargetLevel>
   </component>
 </project>
