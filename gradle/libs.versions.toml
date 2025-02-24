@@ -16,7 +16,7 @@ maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publ
 
 [versions]
 
-detekt = "1.23.7"
+detekt = "1.23.8"
 
 dokka = "2.0.0"
 
