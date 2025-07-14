@@ -38,8 +38,8 @@ detekt {
 
 java {
     toolchain {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = Build.jvmTarget
+        targetCompatibility = Build.jvmTarget
     }
 }
 
@@ -47,12 +47,12 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xconsistent-data-class-copy-visibility")
         javaParameters = true
-        jvmTarget = JvmTarget.JVM_1_8
+        jvmTarget = JvmTarget.fromTarget(Build.jvmTarget.toString())
     }
 }
 
 tasks.withType<Detekt>().configureEach {
-    jvmTarget = "1.8"
+    jvmTarget = Build.jvmTarget.toString()
     reports {
         html.required = false
         xml.required = false
@@ -65,7 +65,7 @@ tasks.withType<Detekt>().configureEach {
 }
 
 tasks.withType<DetektCreateBaselineTask>().configureEach {
-    jvmTarget = "1.8"
+    jvmTarget = Build.jvmTarget.toString()
     exclude("build/")
     exclude("resources/")
 }
