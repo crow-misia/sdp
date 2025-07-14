@@ -139,4 +139,13 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 .idea/runConfigurations.xml
+
+# Node.js
+node_modules/
+
+# Kotlin
 .kotlin
+
+# Lefthook
+lefthook-local.*
+
