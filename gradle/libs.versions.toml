@@ -10,7 +10,7 @@ kotest = "6.0.7"
 
 kotlin = "2.2.21"
 
-kotlinx-kover = "0.9.3"
+kotlinx-kover = "0.9.4"
 
 maven-publish = "0.35.0"
 
