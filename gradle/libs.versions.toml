@@ -6,11 +6,11 @@ detekt = "1.23.8"
 
 dokka = "2.1.0"
 
-kotest = "6.1.1"
+kotest = "6.1.2"
 
 kotlin = "2.3.0"
 
-kotlinx-kover = "0.9.4"
+kotlinx-kover = "0.9.5"
 
 maven-publish = "0.36.0"
 
