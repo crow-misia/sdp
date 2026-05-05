@@ -8,7 +8,7 @@ dokka = "2.2.0"
 
 kotest = "6.1.11"
 
-kotlin = "2.3.20"
+kotlin = "2.3.21"
 
 kotlinx-kover = "0.9.8"
 
