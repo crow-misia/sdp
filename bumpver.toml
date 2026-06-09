@@ -1,13 +1,11 @@
 [bumpver]
 current_version = "v1.6.0"
 version_pattern = "vMAJOR.MINOR.PATCH"
-commit_message = "chore: [skip build] bump version {old_version_pep440} -> {new_version_pep440}"
-tag_message = "release {new_version_pep440}"
-tag_scope = "default"
+commit_message = "chore: bump version {old_version_pep440} -> {new_version_pep440}"
 pre_commit_hook = ""
 post_commit_hook = ""
 commit = true
-tag = true
+tag = false
 push = false
 
 [bumpver.file_patterns]

@@ -1,27 +1,20 @@
 name: GitHub Actions Security Analysis with zizmor 🌈
 
 on:
+  pull_request:
   push:
     branches: ['main']
-    paths:
-      - '.github/workflows/**'
-  pull_request:
-    paths:
-      - '.github/workflows/**'
 
 permissions: {}
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
   zizmor:
     timeout-minutes: 10
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
 
     steps:
       - name: Checkout repository

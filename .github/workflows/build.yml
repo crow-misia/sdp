@@ -2,26 +2,14 @@ name: Build
 
 on:
   workflow_dispatch:
+  pull_request:
   push:
     branches: ['main']
-    paths:
-      - 'config/**'
-      - 'gradle/**'
-      - 'lib/**'
-      - '*.gradle.kts'
-      - 'lint.xml'
-  pull_request:
-    paths:
-      - 'config/**'
-      - 'gradle/**'
-      - 'lib/**'
-      - '*.gradle.kts'
-      - 'lint.xml'
 
 permissions: {}
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
