@@ -1,6 +1,8 @@
 package io.github.crow_misia.sdp.attribute
 
+import io.github.crow_misia.sdp.SdpParseContext
 import io.github.crow_misia.sdp.SdpParseException
+import io.github.crow_misia.sdp.Utils.splitOnSpaces
 
 data class FingerprintAttribute internal constructor(
     var type: String,
@@ -25,8 +27,9 @@ data class FingerprintAttribute internal constructor(
             return FingerprintAttribute(type.trim(), hash.trim())
         }
 
+        context(_: SdpParseContext)
         internal fun parse(value: String): SdpAttribute {
-            val values = value.split(' ', limit = 2)
+            val values = value.splitOnSpaces(limit = 2)
             val size = values.size
             if (size != 2) {
                 throw SdpParseException("could not parse: $value as FingerprintAttribute")

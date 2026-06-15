@@ -6,7 +6,7 @@ import kotlin.math.absoluteValue
 
 @Suppress("NOTHING_TO_INLINE")
 internal object Utils {
-    private val PARSERS: Map<String, (String) -> SdpAttribute> = hashMapOf(
+    private val PARSERS: Map<String, context(SdpParseContext) (String) -> SdpAttribute> = hashMapOf(
         CandidateAttribute.fieldName to { v -> CandidateAttribute.parse(v) },
         CNameAttribute.fieldName to { v -> CNameAttribute.parse(v) },
         ControlAttribute.fieldName to { v -> ControlAttribute.parse(v) },
@@ -78,8 +78,17 @@ internal object Utils {
         this.toLong().toString()
     }
 
-    @JvmStatic
-    fun parseAttribute(line: String): SdpAttribute {
+    /**
+     * Splits the receiver on the inter-field separator using the active
+     * [SdpParseContext] (strict by default, lenient when parsing was started
+     * with `strict = false`). See [SdpParseContext.splitOnSpaces] for [limit].
+     */
+    context(ctx: SdpParseContext)
+    internal fun String.splitOnSpaces(limit: Int = 0): List<String> =
+        ctx.splitOnSpaces(this, limit)
+
+    context(ctx: SdpParseContext)
+    internal fun parseAttribute(line: String): SdpAttribute {
         val colonIndex = line.indexOf(':', 2)
         val (field, value) = if (colonIndex < 0) {
             line.substring(2) to ""
@@ -88,7 +97,7 @@ internal object Utils {
         }
 
         val lowerField = getFieldName(field)
-        return PARSERS[lowerField]?.invoke(value) ?: run {
+        return PARSERS[lowerField]?.invoke(ctx, value) ?: run {
             BaseSdpAttribute.of(lowerField, value)
         }
     }

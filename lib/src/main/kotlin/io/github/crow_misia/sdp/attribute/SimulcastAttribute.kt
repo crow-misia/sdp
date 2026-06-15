@@ -1,6 +1,8 @@
 package io.github.crow_misia.sdp.attribute
 
+import io.github.crow_misia.sdp.SdpParseContext
 import io.github.crow_misia.sdp.SdpParseException
+import io.github.crow_misia.sdp.Utils.splitOnSpaces
 
 data class SimulcastAttribute internal constructor(
     var dir1: StreamDirection,
@@ -39,11 +41,12 @@ data class SimulcastAttribute internal constructor(
             return SimulcastAttribute(dir1, list1, dir2, list2)
         }
 
+        context(_: SdpParseContext)
         internal fun parse(value: String): SdpAttribute {
             if (value.startsWith(' ')) {
                 return Simulcast03Attribute.of(value.substring(1))
             }
-            val values = value.split(' ', limit = 4)
+            val values = value.splitOnSpaces(limit = 4)
             val size = values.size
             if (size < 2) {
                 throw SdpParseException("could not parse: $value as SimulcastAttribute")

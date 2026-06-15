@@ -1,6 +1,7 @@
 package io.github.crow_misia.sdp
 
 import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
+import io.github.crow_misia.sdp.Utils.splitOnSpaces
 
 /**
  * RFC 8866 5.9. Time Active.
@@ -35,8 +36,9 @@ data class SdpTimeActive internal constructor(
             return SdpTimeActive(startTime, stopTime, repeatTime)
         }
 
+        context(_: SdpParseContext)
         internal fun parse(line: String): SdpTimeActive {
-            val values = line.substring(2).split(' ')
+            val values = line.substring(2).splitOnSpaces()
             if (values.size != 2) {
                 throw SdpParseException("could not parse: $line as Timing")
             }

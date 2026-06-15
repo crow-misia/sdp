@@ -1,7 +1,9 @@
 package io.github.crow_misia.sdp.attribute
 
+import io.github.crow_misia.sdp.SdpParseContext
 import io.github.crow_misia.sdp.SdpParseException
 import io.github.crow_misia.sdp.Utils
+import io.github.crow_misia.sdp.Utils.splitOnSpaces
 import java.util.*
 import kotlin.math.max
 
@@ -46,8 +48,9 @@ data class ImageAttrsAttribute internal constructor(
             return ImageAttrsAttribute(pt, Utils.getName(dir1), attrs1, dir2?.lowercase(Locale.ENGLISH), attrs2)
         }
 
+        context(_: SdpParseContext)
         internal fun parse(value: String): SdpAttribute {
-            val values = value.split(' ')
+            val values = value.splitOnSpaces()
             val size = values.size
             if (size < 3) {
                 throw SdpParseException("could not parse: $value as ImageAttrsAttribute")
