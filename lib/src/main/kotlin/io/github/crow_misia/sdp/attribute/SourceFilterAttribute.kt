@@ -1,6 +1,8 @@
 package io.github.crow_misia.sdp.attribute
 
+import io.github.crow_misia.sdp.SdpParseContext
 import io.github.crow_misia.sdp.SdpParseException
+import io.github.crow_misia.sdp.Utils.splitOnSpaces
 
 data class SourceFilterAttribute internal constructor(
     var filterMode: String,
@@ -53,8 +55,9 @@ data class SourceFilterAttribute internal constructor(
             return SourceFilterAttribute(filterMode, netType, addressTypes, destAddress, srcAddress.toMutableSet())
         }
 
+        context(_: SdpParseContext)
         internal fun parse(value: String): SdpAttribute {
-            val values = value.trimStart().split(' ')
+            val values = value.splitOnSpaces()
             val size = values.size
             if (size < 4) {
                 throw SdpParseException("could not parse: $value as SourceFilterAttribute")

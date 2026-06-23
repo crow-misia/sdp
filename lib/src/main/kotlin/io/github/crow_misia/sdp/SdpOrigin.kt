@@ -1,6 +1,7 @@
 package io.github.crow_misia.sdp
 
 import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
+import io.github.crow_misia.sdp.Utils.splitOnSpaces
 import java.math.BigInteger
 
 /**
@@ -56,8 +57,9 @@ data class SdpOrigin internal constructor(
             )
         }
 
+        context(_: SdpParseContext)
         internal fun parse(line: String): SdpOrigin {
-            val values = line.substring(2).split(' ')
+            val values = line.substring(2).splitOnSpaces()
             if (values.size != 6) {
                 throw SdpParseException("could not parse: $line as Origin")
             }

@@ -3,6 +3,7 @@
 package io.github.crow_misia.sdp
 
 import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
+import io.github.crow_misia.sdp.Utils.splitOnSpaces
 
 /**
  * RFC 8866 5.11. Time Zone Adjustment.
@@ -35,8 +36,9 @@ data class SdpTimeZones internal constructor(
             return SdpTimeZones(timeZones.toMutableList())
         }
 
+        context(_: SdpParseContext)
         internal fun parse(line: String): SdpTimeZones {
-            val values = line.substring(2).split(' ')
+            val values = line.substring(2).splitOnSpaces()
             val size = values.size
             if (size % 2 != 0) {
                 throw SdpParseException("could not parse: $line as TimeZones")

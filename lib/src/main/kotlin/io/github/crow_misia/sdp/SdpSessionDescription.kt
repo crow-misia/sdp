@@ -331,7 +331,23 @@ data class SdpSessionDescription internal constructor(
             )
         }
 
-        fun parse(text: String): SdpSessionDescription {
+        /**
+         * Parses [text] into an [SdpSessionDescription].
+         *
+         * By default ([strict] = true) the positional fields must be separated
+         * by exactly one `SP`, per RFC 4566 / 4570; non-conforming runs of
+         * spaces are rejected. Pass [strict] = false to tolerate extra
+         * whitespace by collapsing runs of `SP`.
+         */
+        @JvmStatic
+        @JvmOverloads
+        fun parse(text: String, strict: Boolean = true): SdpSessionDescription {
+            val context: SdpParseContext = if (strict) StrictSdpContext else LenientSdpContext
+            return with(context) { parseWithContext(text) }
+        }
+
+        context(_: SdpParseContext)
+        private fun parseWithContext(text: String): SdpSessionDescription {
             var version: SdpVersion? = null
             var origin: SdpOrigin? = null
             var sessionName: SdpSessionName? = null

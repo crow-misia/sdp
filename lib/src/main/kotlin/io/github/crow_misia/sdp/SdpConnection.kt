@@ -1,6 +1,7 @@
 package io.github.crow_misia.sdp
 
 import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
+import io.github.crow_misia.sdp.Utils.splitOnSpaces
 
 /**
  * RFC 8866 5.7. Connection Information.
@@ -49,8 +50,9 @@ data class SdpConnection internal constructor(
             return SdpConnection(nettype, addrtype, connectionAddress, ttl, numberOfAddresses)
         }
 
+        context(_: SdpParseContext)
         internal fun parse(line: String): SdpConnection {
-            val values = line.substring(2).split(' ')
+            val values = line.substring(2).splitOnSpaces()
             if (values.size != 3) {
                 throw SdpParseException("could not parse: $line as Connection")
             }

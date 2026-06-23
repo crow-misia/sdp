@@ -1,6 +1,8 @@
 package io.github.crow_misia.sdp.attribute
 
+import io.github.crow_misia.sdp.SdpParseContext
 import io.github.crow_misia.sdp.SdpParseException
+import io.github.crow_misia.sdp.Utils.splitOnSpaces
 
 data class RTCPAttribute internal constructor(
     var port: Int,
@@ -38,8 +40,9 @@ data class RTCPAttribute internal constructor(
             return RTCPAttribute(port, nettype, addrtype, address)
         }
 
+        context(_: SdpParseContext)
         internal fun parse(value: String): SdpAttribute {
-            val values = value.split(' ', limit = 4)
+            val values = value.splitOnSpaces(limit = 4)
             val port = values[0].toIntOrNull() ?: run {
                 throw SdpParseException("could not parse: $value as RtcpAttribute")
             }

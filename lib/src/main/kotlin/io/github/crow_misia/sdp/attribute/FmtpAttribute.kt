@@ -2,7 +2,9 @@
 
 package io.github.crow_misia.sdp.attribute
 
+import io.github.crow_misia.sdp.SdpParseContext
 import io.github.crow_misia.sdp.SdpParseException
+import io.github.crow_misia.sdp.Utils.splitOnSpaces
 
 /**
  * RFC8866 6.15. fmtp (Format Parameters)
@@ -42,8 +44,9 @@ data class FmtpAttribute internal constructor(
             }
         }
 
+        context(_: SdpParseContext)
         internal fun parse(value: String): FmtpAttribute {
-            val values = value.split(' ', limit = 2)
+            val values = value.splitOnSpaces(limit = 2)
             val size = values.size
             if (size < 1) {
                 throw SdpParseException("could not parse: $value as FormatAttribute")

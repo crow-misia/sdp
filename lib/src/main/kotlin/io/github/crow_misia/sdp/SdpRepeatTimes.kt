@@ -3,6 +3,7 @@
 package io.github.crow_misia.sdp
 
 import io.github.crow_misia.sdp.Utils.appendSdpLineSeparator
+import io.github.crow_misia.sdp.Utils.splitOnSpaces
 
 /**
  * RFC 8866 5.10. Repeat Times.
@@ -48,8 +49,9 @@ data class SdpRepeatTimes internal constructor(
             return SdpRepeatTimes(repeatInterval, activeDuration, offsets.toMutableList())
         }
 
+        context(_: SdpParseContext)
         internal fun parse(line: String): SdpRepeatTimes {
-            val values = line.substring(2).split(' ')
+            val values = line.substring(2).splitOnSpaces()
             val size = values.size
             if (size < 3) {
                 throw SdpParseException("could not parse: $line as RepeatTime")
