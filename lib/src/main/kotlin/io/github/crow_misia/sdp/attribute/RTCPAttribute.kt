@@ -43,6 +43,9 @@ data class RTCPAttribute internal constructor(
         context(_: SdpParseContext)
         internal fun parse(value: String): SdpAttribute {
             val values = value.splitOnSpaces(limit = 4)
+            if (values.isEmpty()) {
+                throw SdpParseException("could not parse: $value as RtcpAttribute")
+            }
             val port = values[0].toIntOrNull() ?: run {
                 throw SdpParseException("could not parse: $value as RtcpAttribute")
             }
