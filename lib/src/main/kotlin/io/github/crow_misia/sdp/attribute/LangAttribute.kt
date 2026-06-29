@@ -1,7 +1,5 @@
 package io.github.crow_misia.sdp.attribute
 
-import io.github.crow_misia.sdp.SdpParseException
-
 /**
  * RFC8866 6.12. lang (Language)
  * Name: lang
