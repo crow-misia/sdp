@@ -16,7 +16,7 @@ import io.github.crow_misia.sdp.SdpParseException
 data class FramerateAttribute internal constructor(
     var value: Double,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -31,7 +31,7 @@ data class FramerateAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "framerate"
+        internal const val FIELD_NAME = "framerate"
 
         @JvmStatic
         fun of(value: Int): FramerateAttribute {

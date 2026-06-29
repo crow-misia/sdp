@@ -13,13 +13,13 @@ data class SdpUri internal constructor(
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append(fieldPart)
+        append(FIELD_PART)
         append(uri)
         appendSdpLineSeparator()
     }
 
     companion object {
-        internal const val fieldPart = "u="
+        internal const val FIELD_PART = "u="
 
         @JvmStatic
         fun of(uri: String): SdpUri {

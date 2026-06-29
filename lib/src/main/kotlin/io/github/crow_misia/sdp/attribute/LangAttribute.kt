@@ -1,7 +1,5 @@
 package io.github.crow_misia.sdp.attribute
 
-import io.github.crow_misia.sdp.SdpParseException
-
 /**
  * RFC8866 6.12. lang (Language)
  * Name: lang
@@ -15,9 +13,9 @@ import io.github.crow_misia.sdp.SdpParseException
  */
 data class LangAttribute internal constructor(
     override var value: String,
-) : BaseSdpAttribute(fieldName, value) {
+) : BaseSdpAttribute(FIELD_NAME, value) {
     companion object {
-        internal const val fieldName = "lang"
+        internal const val FIELD_NAME = "lang"
 
         @JvmStatic
         fun of(value: String): LangAttribute {

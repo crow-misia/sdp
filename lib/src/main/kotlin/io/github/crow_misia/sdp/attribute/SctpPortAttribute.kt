@@ -9,7 +9,7 @@ import io.github.crow_misia.sdp.SdpParseException
  * Usage Level: media
  * Charset Dependent: no
  * Syntax:
- * sctp-port-value = 1*5(DIGIT) ; DIGIT defined in RFC 4566
+ * sctp-port-value = 1*5(DIGIT) ; DIGIT defined in RFC 8866
  *  The SCTP port range is between 0 and 65535 (both included).
  *  Leading zeroes MUST NOT be used.
  * Example:
@@ -18,7 +18,7 @@ import io.github.crow_misia.sdp.SdpParseException
 data class SctpPortAttribute internal constructor(
     var portNumber: Int,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -28,7 +28,7 @@ data class SctpPortAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "sctp-port"
+        internal const val FIELD_NAME = "sctp-port"
 
         @JvmStatic
         fun of(portNumber: Int): SctpPortAttribute {

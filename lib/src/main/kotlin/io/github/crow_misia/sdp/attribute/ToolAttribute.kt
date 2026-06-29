@@ -15,11 +15,11 @@ package io.github.crow_misia.sdp.attribute
  */
 data class ToolAttribute internal constructor(
     override var value: String
-) : BaseSdpAttribute(fieldName, value) {
+) : BaseSdpAttribute(FIELD_NAME, value) {
     override fun toString() = super.toString()
 
     companion object {
-        internal const val fieldName = "tool"
+        internal const val FIELD_NAME = "tool"
 
         @JvmStatic
         fun of(value: String): ToolAttribute {

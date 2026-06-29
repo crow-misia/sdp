@@ -10,7 +10,7 @@ data class RTCPAttribute internal constructor(
     var addrtype: String,
     var address: String,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -28,7 +28,7 @@ data class RTCPAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "rtcp"
+        internal const val FIELD_NAME = "rtcp"
 
         @JvmStatic
         fun of(port: Int): RTCPAttribute {
@@ -43,6 +43,9 @@ data class RTCPAttribute internal constructor(
         context(_: SdpParseContext)
         internal fun parse(value: String): SdpAttribute {
             val values = value.splitOnSpaces(limit = 4)
+            if (values.isEmpty()) {
+                throw SdpParseException("could not parse: $value as RtcpAttribute")
+            }
             val port = values[0].toIntOrNull() ?: run {
                 throw SdpParseException("could not parse: $value as RtcpAttribute")
             }

@@ -4,6 +4,7 @@ import com.vanniktech.maven.publish.SourcesJar
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.detekt)
@@ -46,7 +47,7 @@ java {
 
 kotlin {
     compilerOptions {
-        freeCompilerArgs.add("-Xconsistent-data-class-copy-visibility")
+        freeCompilerArgs.addAll(listOf("-Xconsistent-data-class-copy-visibility", "-Xcontext-parameters"))
         javaParameters = true
         jvmTarget = JvmTarget.fromTarget(Build.jvmTarget.toString())
     }

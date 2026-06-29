@@ -2,11 +2,11 @@ package io.github.crow_misia.sdp.attribute
 
 data class MsidAttribute internal constructor(
     override var value: String,
-) : BaseSdpAttribute(fieldName, value) {
+) : BaseSdpAttribute(FIELD_NAME, value) {
     override fun toString() = super.toString()
 
     companion object {
-        internal const val fieldName = "msid"
+        internal const val FIELD_NAME = "msid"
 
         @JvmStatic
         fun of(vararg value: String): MsidAttribute {

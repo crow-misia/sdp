@@ -9,7 +9,7 @@ import io.github.crow_misia.sdp.SdpParseException
  * Usage Level: media
  * Charset Dependent: no
  * Syntax:
- * max-message-size-value = 1*DIGIT ; DIGIT defined in RFC 4566
+ * max-message-size-value = 1*DIGIT ; DIGIT defined in RFC 8866
  *  Leading zeroes MUST NOT be used.
  * Example:
  * a=max-message-size:100000
@@ -17,7 +17,7 @@ import io.github.crow_misia.sdp.SdpParseException
 data class MaxMessageSizeAttribute internal constructor(
     var messageSize: Long,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -27,7 +27,7 @@ data class MaxMessageSizeAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "max-message-size"
+        internal const val FIELD_NAME = "max-message-size"
 
         @JvmStatic
         fun of(messageSize: Long): MaxMessageSizeAttribute {

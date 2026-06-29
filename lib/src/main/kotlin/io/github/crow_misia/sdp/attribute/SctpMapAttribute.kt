@@ -9,7 +9,7 @@ data class SctpMapAttribute internal constructor(
     var app: String,
     var maxMessageSize: Int?,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -25,7 +25,7 @@ data class SctpMapAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "sctpmap"
+        internal const val FIELD_NAME = "sctpmap"
 
         @JvmStatic @JvmOverloads
         fun of(sctpmapNumber: Int, app: String, maxMessageSize: Int? = null): SctpMapAttribute {

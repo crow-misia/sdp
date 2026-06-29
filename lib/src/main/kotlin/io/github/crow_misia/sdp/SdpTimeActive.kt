@@ -15,7 +15,7 @@ data class SdpTimeActive internal constructor(
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append(fieldPart)
+        append(FIELD_PART)
         append(startTime)
         append(' ')
         append(stopTime)
@@ -24,7 +24,7 @@ data class SdpTimeActive internal constructor(
     }
 
     companion object {
-        internal const val fieldPart = "t="
+        internal const val FIELD_PART = "t="
 
         @JvmStatic
         @JvmOverloads
@@ -38,7 +38,7 @@ data class SdpTimeActive internal constructor(
 
         context(_: SdpParseContext)
         internal fun parse(line: String): SdpTimeActive {
-            val values = line.substring(2).splitOnSpaces()
+            val values = line.splitOnSpaces(startIndex = 2)
             if (values.size != 2) {
                 throw SdpParseException("could not parse: $line as Timing")
             }

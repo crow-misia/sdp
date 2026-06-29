@@ -17,7 +17,7 @@ data class SdpRepeatTimes internal constructor(
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append(fieldPart)
+        append(FIELD_PART)
         append(repeatInterval)
         append(' ')
         append(activeDuration)
@@ -29,7 +29,7 @@ data class SdpRepeatTimes internal constructor(
     }
 
     companion object {
-        internal const val fieldPart = "r="
+        internal const val FIELD_PART = "r="
 
         @JvmStatic
         fun of(
@@ -51,7 +51,7 @@ data class SdpRepeatTimes internal constructor(
 
         context(_: SdpParseContext)
         internal fun parse(line: String): SdpRepeatTimes {
-            val values = line.substring(2).splitOnSpaces()
+            val values = line.splitOnSpaces(startIndex = 2)
             val size = values.size
             if (size < 3) {
                 throw SdpParseException("could not parse: $line as RepeatTime")

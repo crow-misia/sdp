@@ -18,7 +18,7 @@ data class SdpConnection internal constructor(
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append(fieldPart)
+        append(FIELD_PART)
         append(nettype)
         append(' ')
         append(addrtype)
@@ -36,7 +36,7 @@ data class SdpConnection internal constructor(
     }
 
     companion object {
-        internal const val fieldPart = "c="
+        internal const val FIELD_PART = "c="
 
         @JvmStatic
         @JvmOverloads
@@ -52,7 +52,7 @@ data class SdpConnection internal constructor(
 
         context(_: SdpParseContext)
         internal fun parse(line: String): SdpConnection {
-            val values = line.substring(2).splitOnSpaces()
+            val values = line.splitOnSpaces(startIndex = 2)
             if (values.size != 3) {
                 throw SdpParseException("could not parse: $line as Connection")
             }

@@ -8,7 +8,7 @@ data class SsrcGroupAttribute internal constructor(
     var semantics: String,
     var ssrcs: MutableList<Long>,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -29,7 +29,7 @@ data class SsrcGroupAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "ssrc-group"
+        internal const val FIELD_NAME = "ssrc-group"
 
         @JvmStatic
         fun of(semantics: String, ssrcs: List<Long>): SsrcGroupAttribute {

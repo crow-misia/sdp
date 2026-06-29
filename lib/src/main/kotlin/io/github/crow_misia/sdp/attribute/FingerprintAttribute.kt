@@ -8,7 +8,7 @@ data class FingerprintAttribute internal constructor(
     var type: String,
     var hash: String,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -20,7 +20,7 @@ data class FingerprintAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "fingerprint"
+        internal const val FIELD_NAME = "fingerprint"
 
         @JvmStatic
         fun of(type: String, hash: String): FingerprintAttribute {

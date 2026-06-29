@@ -253,7 +253,7 @@ data class SdpSessionDescription internal constructor(
     fun getMediaDescription(mid: String): SdpMediaDescription? {
         val index = midToIndex[mid] ?: -1
         val size = mediaDescriptions.size
-        return if (index < 0 || index >= size) null else mediaDescriptions[index]
+        return if (index in 0..<size) mediaDescriptions[index] else null
     }
 
     fun addMediaDescription(description: SdpMediaDescription) {
@@ -265,12 +265,12 @@ data class SdpSessionDescription internal constructor(
     fun setMediaDescription(description: SdpMediaDescription, mid: String) {
         val index = midToIndex.remove(mid) ?: -1
         val size = mediaDescriptions.size
-        if (index < 0 || index >= size) {
-            midToIndex[description.mid] = size
-            mediaDescriptions.add(description)
-        } else {
+        if (index in 0..<size) {
             midToIndex[description.mid] = index
             mediaDescriptions[index] = description
+        } else {
+            midToIndex[description.mid] = size
+            mediaDescriptions.add(description)
         }
     }
 
@@ -335,7 +335,7 @@ data class SdpSessionDescription internal constructor(
          * Parses [text] into an [SdpSessionDescription].
          *
          * By default ([strict] = true) the positional fields must be separated
-         * by exactly one `SP`, per RFC 4566 / 4570; non-conforming runs of
+         * by exactly one `SP`, per RFC 8866 / 4570; non-conforming runs of
          * spaces are rejected. Pass [strict] = false to tolerate extra
          * whitespace by collapsing runs of `SP`.
          */
@@ -365,49 +365,48 @@ data class SdpSessionDescription internal constructor(
             var lastMediaDescription: SdpMediaDescription? = null
 
             text.splitToSequence("\r\n", "\n", "\r")
-                .map { it.trim() }
                 .forEach { line ->
                     if (line.isBlank()) {
                         return@forEach
                     }
                     when (line.substring(0, 2)) {
-                        SdpVersion.lineType -> version = SdpVersion.parse(line)
-                        SdpOrigin.lineType -> origin = SdpOrigin.parse(line)
-                        SdpSessionName.lineType -> sessionName = SdpSessionName.parse(line)
-                        SdpSessionInformation.lineType -> {
+                        SdpVersion.LINE_TYPE -> version = SdpVersion.parse(line)
+                        SdpOrigin.LINE_TYPE -> origin = SdpOrigin.parse(line)
+                        SdpSessionName.LINE_TYPE -> sessionName = SdpSessionName.parse(line)
+                        SdpSessionInformation.LINE_TYPE -> {
                             SdpSessionInformation.parse(line).also { v ->
                                 lastMediaDescription?.also { it.information = v } ?: run {
                                     information = v
                                 }
                             }
                         }
-                        SdpUri.fieldPart -> uris.add(SdpUri.parse(line))
-                        SdpEmail.fieldPart -> emails.add(SdpEmail.parse(line))
-                        SdpPhone.fieldPart -> phones.add(SdpPhone.parse(line))
-                        SdpConnection.fieldPart -> {
+                        SdpUri.FIELD_PART -> uris.add(SdpUri.parse(line))
+                        SdpEmail.FIELD_PART -> emails.add(SdpEmail.parse(line))
+                        SdpPhone.FIELD_PART -> phones.add(SdpPhone.parse(line))
+                        SdpConnection.FIELD_PART -> {
                             SdpConnection.parse(line).also { v ->
                                 lastMediaDescription?.connections?.add(v) ?: run {
                                     connection = v
                                 }
                             }
                         }
-                        SdpBandwidth.fieldPart -> {
+                        SdpBandwidth.FIELD_PART -> {
                             val list = lastMediaDescription?.bandwidths ?: bandwidths
                             list.add(SdpBandwidth.parse(line))
                         }
-                        SdpTimeActive.fieldPart -> {
+                        SdpTimeActive.FIELD_PART -> {
                             SdpTimeActive.parse(line).also { v ->
                                 lastTiming = v
                                 timings.add(v)
                             }
                         }
-                        SdpTimeZones.fieldPart -> timeZones = SdpTimeZones.parse(line)
-                        SdpRepeatTimes.fieldPart -> lastTiming?.repeatTime = SdpRepeatTimes.parse(line)
-                        SdpAttribute.fieldPart -> {
+                        SdpTimeZones.FIELD_PART -> timeZones = SdpTimeZones.parse(line)
+                        SdpRepeatTimes.FIELD_PART -> lastTiming?.repeatTime = SdpRepeatTimes.parse(line)
+                        SdpAttribute.FIELD_PART -> {
                             val list = lastMediaDescription?.attributes ?: attributes
                             list.add(Utils.parseAttribute(line))
                         }
-                        SdpMediaDescription.fieldPart -> {
+                        SdpMediaDescription.FIELD_PART -> {
                             SdpMediaDescription.parse(line).also {
                                 lastMediaDescription = it
                                 mediaDescriptions.add(it)

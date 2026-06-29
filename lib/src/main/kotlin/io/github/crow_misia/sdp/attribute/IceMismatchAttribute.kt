@@ -10,9 +10,9 @@ package io.github.crow_misia.sdp.attribute
  * ice-mismatch           = "ice-mismatch"
  */
 object IceMismatchAttribute : SdpAttribute() {
-    internal const val fieldName = "ice-mismatch"
+    internal const val FIELD_NAME = "ice-mismatch"
 
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun valueJoinTo(buffer: StringBuilder) = buffer
 

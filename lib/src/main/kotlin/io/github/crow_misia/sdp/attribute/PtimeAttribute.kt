@@ -17,7 +17,7 @@ import io.github.crow_misia.sdp.Utils.toCompactString
 data class PtimeAttribute internal constructor(
     var time: Double,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -27,7 +27,7 @@ data class PtimeAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "ptime"
+        internal const val FIELD_NAME = "ptime"
 
         @JvmStatic
         fun of(time: Double): PtimeAttribute {

@@ -12,7 +12,7 @@ abstract class SdpAttribute : SdpElement() {
     abstract val field: String
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append(fieldPart)
+        append(FIELD_PART)
         append(field)
         valueJoinTo(this)
         appendSdpLineSeparator()
@@ -21,6 +21,6 @@ abstract class SdpAttribute : SdpElement() {
     protected abstract fun valueJoinTo(buffer: StringBuilder): StringBuilder
 
     companion object {
-        internal const val fieldPart = "a="
+        internal const val FIELD_PART = "a="
     }
 }

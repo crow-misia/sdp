@@ -2,11 +2,11 @@ package io.github.crow_misia.sdp.attribute
 
 data class MediaclkAttribute internal constructor(
     override var value: String,
-) : BaseSdpAttribute(fieldName, value) {
+) : BaseSdpAttribute(FIELD_NAME, value) {
     override fun toString() = super.toString()
 
     companion object {
-        internal const val fieldName = "mediaclk"
+        internal const val FIELD_NAME = "mediaclk"
 
         @JvmStatic
         fun of(value: String): MediaclkAttribute {

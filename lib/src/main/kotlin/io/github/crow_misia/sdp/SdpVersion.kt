@@ -12,13 +12,13 @@ data class SdpVersion internal constructor(
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append(lineType)
+        append(LINE_TYPE)
         append(version)
         appendSdpLineSeparator()
     }
 
     companion object {
-        internal const val lineType = "v="
+        internal const val LINE_TYPE = "v="
 
         private val ZERO = SdpVersion(0)
 

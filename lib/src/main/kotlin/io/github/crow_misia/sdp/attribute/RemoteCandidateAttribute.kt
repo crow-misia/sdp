@@ -12,7 +12,7 @@ package io.github.crow_misia.sdp.attribute
  */
 data class RemoteCandidateAttribute internal constructor(
     override var value: String,
-) : BaseSdpAttribute(fieldName, value) {
+) : BaseSdpAttribute(FIELD_NAME, value) {
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder): StringBuilder {
@@ -23,7 +23,7 @@ data class RemoteCandidateAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "remote-candidates"
+        internal const val FIELD_NAME = "remote-candidates"
 
         @JvmStatic
         fun of(value: String): RemoteCandidateAttribute {

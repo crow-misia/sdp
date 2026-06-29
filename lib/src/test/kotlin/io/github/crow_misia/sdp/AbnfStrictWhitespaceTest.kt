@@ -8,7 +8,7 @@ import io.kotest.matchers.shouldNotBe
 
 /**
  * Strict whitespace handling is the default ([StrictSdpContext]): positional
- * fields must be separated by exactly one `SP` per RFC 4566/4570. Non-conforming
+ * fields must be separated by exactly one `SP` per RFC 8866/4570. Non-conforming
  * runs of spaces are not silently repaired -- arity-checked fields reject them,
  * and others end up misaligned. Callers that need to tolerate extra whitespace
  * opt in with `strict = false` (see [AbnfLenientWhitespaceTest]).

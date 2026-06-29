@@ -1,7 +1,5 @@
 package io.github.crow_misia.sdp.attribute
 
-import io.github.crow_misia.sdp.SdpParseException
-
 /**
  * RFC8866 6.10. charset (Character Set)
  * Name: charset
@@ -13,9 +11,9 @@ import io.github.crow_misia.sdp.SdpParseException
  */
 data class CharsetAttribute internal constructor(
     override var value: String,
-) : BaseSdpAttribute(fieldName, value) {
+) : BaseSdpAttribute(FIELD_NAME, value) {
     companion object {
-        internal const val fieldName = "charset"
+        internal const val FIELD_NAME = "charset"
 
         @JvmStatic
         fun of(value: String): CharsetAttribute {

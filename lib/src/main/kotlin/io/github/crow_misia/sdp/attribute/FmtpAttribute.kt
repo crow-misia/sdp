@@ -24,7 +24,7 @@ import io.github.crow_misia.sdp.Utils.splitOnSpaces
 data class FmtpAttribute internal constructor(
     var format: Int,
 ) : WithParametersAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -35,7 +35,7 @@ data class FmtpAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "fmtp"
+        internal const val FIELD_NAME = "fmtp"
 
         @JvmStatic @JvmOverloads
         fun of(format: Int, parameters: String? = null): FmtpAttribute {
