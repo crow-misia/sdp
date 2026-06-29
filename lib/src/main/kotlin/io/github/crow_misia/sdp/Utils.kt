@@ -84,8 +84,7 @@ internal object Utils {
      * with `strict = false`). See [SdpParseContext.splitOnSpaces] for [limit].
      */
     context(ctx: SdpParseContext)
-    internal fun String.splitOnSpaces(limit: Int = 0): List<String> =
-        ctx.splitOnSpaces(this, limit)
+    internal fun String.splitOnSpaces(startIndex: Int = 0, limit: Int = 0) = ctx.splitOnSpaces(input = this, startIndex = startIndex, limit = limit)
 
     context(ctx: SdpParseContext)
     internal fun parseAttribute(line: String): SdpAttribute {
@@ -96,9 +95,11 @@ internal object Utils {
             line.substring(2, colonIndex) to line.substring(colonIndex + 1)
         }
 
-        val lowerField = getFieldName(field)
-        return PARSERS[lowerField]?.invoke(ctx, value) ?: run {
-            BaseSdpAttribute.of(lowerField, value)
+        return with(SdpAttributeSdpContext(ctx)) {
+            val lowerField = getFieldName(field)
+            PARSERS[lowerField]?.invoke(this, value) ?: run {
+                BaseSdpAttribute.of(lowerField, value)
+            }
         }
     }
 }

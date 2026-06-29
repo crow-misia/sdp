@@ -59,7 +59,7 @@ data class SdpOrigin internal constructor(
 
         context(_: SdpParseContext)
         internal fun parse(line: String): SdpOrigin {
-            val values = line.substring(2).splitOnSpaces()
+            val values = line.splitOnSpaces(startIndex = 2)
             if (values.size != 6) {
                 throw SdpParseException("could not parse: $line as Origin")
             }

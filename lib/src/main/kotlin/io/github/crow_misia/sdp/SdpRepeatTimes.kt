@@ -51,7 +51,7 @@ data class SdpRepeatTimes internal constructor(
 
         context(_: SdpParseContext)
         internal fun parse(line: String): SdpRepeatTimes {
-            val values = line.substring(2).splitOnSpaces()
+            val values = line.splitOnSpaces(startIndex = 2)
             val size = values.size
             if (size < 3) {
                 throw SdpParseException("could not parse: $line as RepeatTime")

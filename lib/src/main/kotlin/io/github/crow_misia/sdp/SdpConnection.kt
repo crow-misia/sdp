@@ -52,7 +52,7 @@ data class SdpConnection internal constructor(
 
         context(_: SdpParseContext)
         internal fun parse(line: String): SdpConnection {
-            val values = line.substring(2).splitOnSpaces()
+            val values = line.splitOnSpaces(startIndex = 2)
             if (values.size != 3) {
                 throw SdpParseException("could not parse: $line as Connection")
             }

@@ -98,7 +98,7 @@ data class SdpMediaDescription internal constructor(
 
         context(_: SdpParseContext)
         internal fun parse(line: String): SdpMediaDescription {
-            val values = line.substring(2).splitOnSpaces(limit = 4)
+            val values = line.splitOnSpaces(startIndex = 2, limit = 4)
             if (values.size != 4) {
                 throw SdpParseException("could not parse: $line as MediaDescription")
             }
@@ -118,7 +118,7 @@ data class SdpMediaDescription internal constructor(
                 numberOfPorts = numberOfPorts,
                 information = null,
                 _protos = values[2].splitToSequence('/').toMutableList(),
-                formats = values[3].splitOnSpaces().toMutableList(),
+                formats = values[3].splitOnSpaces(startIndex = 0).toMutableList(),
                 connections = arrayListOf(),
                 bandwidths = arrayListOf(),
                 attributes = arrayListOf()

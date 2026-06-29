@@ -38,7 +38,7 @@ data class SdpTimeZones internal constructor(
 
         context(_: SdpParseContext)
         internal fun parse(line: String): SdpTimeZones {
-            val values = line.substring(2).splitOnSpaces()
+            val values = line.splitOnSpaces(startIndex = 2)
             val size = values.size
             if (size < 2 || size % 2 != 0) {
                 throw SdpParseException("could not parse: $line as TimeZones")
