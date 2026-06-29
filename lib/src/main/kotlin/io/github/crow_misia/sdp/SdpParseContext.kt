@@ -3,7 +3,7 @@ package io.github.crow_misia.sdp
 /**
  * Whitespace-handling policy for the positional, `SP`-delimited SDP fields.
  *
- * SDP/RFC 4566 and RFC 4570 ABNF require exactly one `SP` between fields, but
+ * SDP/RFC 8866 and RFC 4570 ABNF require exactly one `SP` between fields, but
  * real-world producers sometimes emit several. The two policies differ only in
  * how a run of spaces is treated; everything else about parsing is identical.
  *

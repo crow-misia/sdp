@@ -9,7 +9,7 @@ import io.github.crow_misia.sdp.SdpParseException
  * Usage Level: media
  * Charset Dependent: no
  * Syntax:
- * sctp-port-value = 1*5(DIGIT) ; DIGIT defined in RFC 4566
+ * sctp-port-value = 1*5(DIGIT) ; DIGIT defined in RFC 8866
  *  The SCTP port range is between 0 and 65535 (both included).
  *  Leading zeroes MUST NOT be used.
  * Example:

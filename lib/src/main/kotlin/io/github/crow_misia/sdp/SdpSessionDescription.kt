@@ -335,7 +335,7 @@ data class SdpSessionDescription internal constructor(
          * Parses [text] into an [SdpSessionDescription].
          *
          * By default ([strict] = true) the positional fields must be separated
-         * by exactly one `SP`, per RFC 4566 / 4570; non-conforming runs of
+         * by exactly one `SP`, per RFC 8866 / 4570; non-conforming runs of
          * spaces are rejected. Pass [strict] = false to tolerate extra
          * whitespace by collapsing runs of `SP`.
          */

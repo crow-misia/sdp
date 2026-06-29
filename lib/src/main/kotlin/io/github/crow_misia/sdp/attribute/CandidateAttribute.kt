@@ -17,8 +17,8 @@ import io.github.crow_misia.sdp.Utils.splitOnSpaces
  * candidate-attribute   = "candidate" ":" foundation SP component-id SP
  *                         transport SP
  *                         priority SP
- *                         connection-address SP     ;from RFC 4566
- *                         port         ;port from RFC 4566
+ *                         connection-address SP     ;from RFC 8866
+ *                         port         ;port from RFC 8866
  *                         SP cand-type
  *                         [SP rel-addr]
  *                         [SP rel-port]
@@ -34,7 +34,7 @@ import io.github.crow_misia.sdp.Utils.splitOnSpaces
  * candidate-types       = "host" / "srflx" / "prflx" / "relay" / token
  * rel-addr              = "raddr" SP connection-address
  * rel-port              = "rport" SP port
- * extension-att-name    = byte-string    ;from RFC 4566
+ * extension-att-name    = byte-string    ;from RFC 8866
  * extension-att-value   = byte-string
  * ice-char              = ALPHA / DIGIT / "+" / "/"
  */

@@ -10,7 +10,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
 /**
- * RFC 4566/4570 ABNF requires exactly one `SP` between fields, but real-world
+ * RFC 8866/4570 ABNF requires exactly one `SP` between fields, but real-world
  * payloads sometimes emit runs of spaces. Under the opt-in lenient policy
  * ([LenientSdpContext], selected by `SdpSessionDescription.parse(text, strict =
  * false)`) parsing collapses those runs instead of producing empty tokens that
