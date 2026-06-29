@@ -365,7 +365,6 @@ data class SdpSessionDescription internal constructor(
             var lastMediaDescription: SdpMediaDescription? = null
 
             text.splitToSequence("\r\n", "\n", "\r")
-                .map { it.trim() }
                 .forEach { line ->
                     if (line.isBlank()) {
                         return@forEach
