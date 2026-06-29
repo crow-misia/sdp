@@ -17,7 +17,7 @@ data class SdpRepeatTimes internal constructor(
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append(fieldPart)
+        append(FIELD_PART)
         append(repeatInterval)
         append(' ')
         append(activeDuration)
@@ -29,7 +29,7 @@ data class SdpRepeatTimes internal constructor(
     }
 
     companion object {
-        internal const val fieldPart = "r="
+        internal const val FIELD_PART = "r="
 
         @JvmStatic
         fun of(

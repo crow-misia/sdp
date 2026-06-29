@@ -15,9 +15,9 @@ import io.github.crow_misia.sdp.SdpParseException
  */
 data class SdplangAttribute internal constructor(
     override var value: String,
-) : BaseSdpAttribute(fieldName, value) {
+) : BaseSdpAttribute(FIELD_NAME, value) {
     companion object {
-        internal const val fieldName = "sdplang"
+        internal const val FIELD_NAME = "sdplang"
 
         @JvmStatic
         fun of(value: String): SdplangAttribute {

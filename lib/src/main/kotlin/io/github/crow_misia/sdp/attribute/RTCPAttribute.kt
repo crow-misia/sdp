@@ -10,7 +10,7 @@ data class RTCPAttribute internal constructor(
     var addrtype: String,
     var address: String,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -28,7 +28,7 @@ data class RTCPAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "rtcp"
+        internal const val FIELD_NAME = "rtcp"
 
         @JvmStatic
         fun of(port: Int): RTCPAttribute {

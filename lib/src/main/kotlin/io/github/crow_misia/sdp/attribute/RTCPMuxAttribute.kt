@@ -8,9 +8,9 @@ package io.github.crow_misia.sdp.attribute
  * Charset Dependent: no
  */
 object RTCPMuxAttribute : SdpAttribute() {
-    internal const val fieldName = "rtcp-mux"
+    internal const val FIELD_NAME = "rtcp-mux"
 
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun valueJoinTo(buffer: StringBuilder) = buffer
 

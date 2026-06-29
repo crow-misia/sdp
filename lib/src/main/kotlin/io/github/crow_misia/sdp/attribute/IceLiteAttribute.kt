@@ -10,9 +10,9 @@ package io.github.crow_misia.sdp.attribute
  * ice-lite               = "ice-lite"
  */
 object IceLiteAttribute : SdpAttribute() {
-    internal const val fieldName = "ice-lite"
+    internal const val FIELD_NAME = "ice-lite"
 
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun valueJoinTo(buffer: StringBuilder) = buffer
 

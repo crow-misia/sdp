@@ -14,7 +14,7 @@ data class ImageAttrsAttribute internal constructor(
     var dir2: String?,
     var attrs2: String?,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -34,7 +34,7 @@ data class ImageAttrsAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "imageattr"
+        internal const val FIELD_NAME = "imageattr"
 
         @JvmStatic
         @JvmOverloads

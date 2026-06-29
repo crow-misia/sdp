@@ -9,7 +9,7 @@ data class RTCPFbAttribute internal constructor(
     var type: String,
     var subtype: String?,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -25,7 +25,7 @@ data class RTCPFbAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "rtcp-fb"
+        internal const val FIELD_NAME = "rtcp-fb"
 
         @JvmStatic
         fun of(payloadType: String, type: String, subtype: String?): RTCPFbAttribute {

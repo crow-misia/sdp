@@ -371,43 +371,43 @@ data class SdpSessionDescription internal constructor(
                         return@forEach
                     }
                     when (line.substring(0, 2)) {
-                        SdpVersion.lineType -> version = SdpVersion.parse(line)
-                        SdpOrigin.lineType -> origin = SdpOrigin.parse(line)
-                        SdpSessionName.lineType -> sessionName = SdpSessionName.parse(line)
-                        SdpSessionInformation.lineType -> {
+                        SdpVersion.LINE_TYPE -> version = SdpVersion.parse(line)
+                        SdpOrigin.LINE_TYPE -> origin = SdpOrigin.parse(line)
+                        SdpSessionName.LINE_TYPE -> sessionName = SdpSessionName.parse(line)
+                        SdpSessionInformation.LINE_TYPE -> {
                             SdpSessionInformation.parse(line).also { v ->
                                 lastMediaDescription?.also { it.information = v } ?: run {
                                     information = v
                                 }
                             }
                         }
-                        SdpUri.fieldPart -> uris.add(SdpUri.parse(line))
-                        SdpEmail.fieldPart -> emails.add(SdpEmail.parse(line))
-                        SdpPhone.fieldPart -> phones.add(SdpPhone.parse(line))
-                        SdpConnection.fieldPart -> {
+                        SdpUri.FIELD_PART -> uris.add(SdpUri.parse(line))
+                        SdpEmail.FIELD_PART -> emails.add(SdpEmail.parse(line))
+                        SdpPhone.FIELD_PART -> phones.add(SdpPhone.parse(line))
+                        SdpConnection.FIELD_PART -> {
                             SdpConnection.parse(line).also { v ->
                                 lastMediaDescription?.connections?.add(v) ?: run {
                                     connection = v
                                 }
                             }
                         }
-                        SdpBandwidth.fieldPart -> {
+                        SdpBandwidth.FIELD_PART -> {
                             val list = lastMediaDescription?.bandwidths ?: bandwidths
                             list.add(SdpBandwidth.parse(line))
                         }
-                        SdpTimeActive.fieldPart -> {
+                        SdpTimeActive.FIELD_PART -> {
                             SdpTimeActive.parse(line).also { v ->
                                 lastTiming = v
                                 timings.add(v)
                             }
                         }
-                        SdpTimeZones.fieldPart -> timeZones = SdpTimeZones.parse(line)
-                        SdpRepeatTimes.fieldPart -> lastTiming?.repeatTime = SdpRepeatTimes.parse(line)
-                        SdpAttribute.fieldPart -> {
+                        SdpTimeZones.FIELD_PART -> timeZones = SdpTimeZones.parse(line)
+                        SdpRepeatTimes.FIELD_PART -> lastTiming?.repeatTime = SdpRepeatTimes.parse(line)
+                        SdpAttribute.FIELD_PART -> {
                             val list = lastMediaDescription?.attributes ?: attributes
                             list.add(Utils.parseAttribute(line))
                         }
-                        SdpMediaDescription.fieldPart -> {
+                        SdpMediaDescription.FIELD_PART -> {
                             SdpMediaDescription.parse(line).also {
                                 lastMediaDescription = it
                                 mediaDescriptions.add(it)

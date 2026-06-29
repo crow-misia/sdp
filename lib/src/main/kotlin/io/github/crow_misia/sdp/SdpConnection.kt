@@ -18,7 +18,7 @@ data class SdpConnection internal constructor(
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append(fieldPart)
+        append(FIELD_PART)
         append(nettype)
         append(' ')
         append(addrtype)
@@ -36,7 +36,7 @@ data class SdpConnection internal constructor(
     }
 
     companion object {
-        internal const val fieldPart = "c="
+        internal const val FIELD_PART = "c="
 
         @JvmStatic
         @JvmOverloads

@@ -11,7 +11,7 @@ data class ExtMapAttribute internal constructor(
     var encryptUri: String?,
     var config: String?,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -35,7 +35,7 @@ data class ExtMapAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "extmap"
+        internal const val FIELD_NAME = "extmap"
 
         @JvmStatic
         @JvmOverloads

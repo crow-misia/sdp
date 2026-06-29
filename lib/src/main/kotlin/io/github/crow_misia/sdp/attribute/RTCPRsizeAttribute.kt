@@ -8,9 +8,9 @@ package io.github.crow_misia.sdp.attribute
  * Charset Dependent: no
  */
 object RTCPRsizeAttribute : SdpAttribute() {
-    internal const val fieldName = "rtcp-rsize"
+    internal const val FIELD_NAME = "rtcp-rsize"
 
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun valueJoinTo(buffer: StringBuilder) = buffer
 

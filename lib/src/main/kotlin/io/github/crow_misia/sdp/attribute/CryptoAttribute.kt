@@ -10,7 +10,7 @@ data class CryptoAttribute internal constructor(
     var config: String,
     var sessionConfig: String?,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -28,7 +28,7 @@ data class CryptoAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "crypto"
+        internal const val FIELD_NAME = "crypto"
 
         @JvmStatic @JvmOverloads
         fun of(id: Long, suite: String, config: String, sessionConfig: String? = null): CryptoAttribute {

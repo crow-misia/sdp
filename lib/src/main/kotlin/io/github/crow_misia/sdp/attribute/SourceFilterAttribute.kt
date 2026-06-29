@@ -11,7 +11,7 @@ data class SourceFilterAttribute internal constructor(
     var destAddress: String,
     var srcList: MutableSet<String>,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -31,7 +31,7 @@ data class SourceFilterAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "source-filter"
+        internal const val FIELD_NAME = "source-filter"
 
         @JvmStatic
         fun of(

@@ -12,13 +12,13 @@ data class SdpPhone internal constructor(
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append(fieldPart)
+        append(FIELD_PART)
         append(number)
         appendSdpLineSeparator()
     }
 
     companion object {
-        internal const val fieldPart = "p="
+        internal const val FIELD_PART = "p="
 
         @JvmStatic
         fun of(number: String): SdpPhone {

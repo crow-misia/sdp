@@ -50,7 +50,7 @@ data class SdpMediaDescription internal constructor(
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append(fieldPart)
+        append(FIELD_PART)
         append(type)
         append(' ')
         append(port)
@@ -69,7 +69,7 @@ data class SdpMediaDescription internal constructor(
     }
 
     companion object {
-        internal const val fieldPart = "m="
+        internal const val FIELD_PART = "m="
 
         @JvmStatic
         @JvmOverloads

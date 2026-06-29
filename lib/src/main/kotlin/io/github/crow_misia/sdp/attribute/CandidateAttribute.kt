@@ -48,7 +48,7 @@ data class CandidateAttribute internal constructor(
     var type: String,
     internal var _extensions: MutableMap<String, String>
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     var extensions: Map<String, String>
         get() = _extensions
@@ -116,7 +116,7 @@ data class CandidateAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "candidate"
+        internal const val FIELD_NAME = "candidate"
 
         @JvmStatic
         @JvmOverloads

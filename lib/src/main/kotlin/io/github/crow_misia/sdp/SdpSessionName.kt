@@ -12,13 +12,13 @@ data class SdpSessionName internal constructor(
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append(lineType)
+        append(LINE_TYPE)
         append(name)
         appendSdpLineSeparator()
     }
 
     companion object {
-        internal const val lineType = "s="
+        internal const val LINE_TYPE = "s="
 
         @JvmStatic
         @JvmOverloads

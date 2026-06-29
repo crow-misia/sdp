@@ -10,7 +10,7 @@ data class RidAttribute internal constructor(
     var id: String,
     var direction: StreamDirection,
 ) : WithParametersAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -23,7 +23,7 @@ data class RidAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "rid"
+        internal const val FIELD_NAME = "rid"
 
         @JvmStatic
         @JvmOverloads

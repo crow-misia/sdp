@@ -26,7 +26,7 @@ data class RTPMapAttribute internal constructor(
     var clockRate: Int?,
     var encodingParameters: Int?,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -46,7 +46,7 @@ data class RTPMapAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "rtpmap"
+        internal const val FIELD_NAME = "rtpmap"
 
         @JvmStatic
         @JvmOverloads

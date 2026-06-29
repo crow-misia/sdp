@@ -17,7 +17,7 @@ import io.github.crow_misia.sdp.SdpParseException
 data class MaxMessageSizeAttribute internal constructor(
     var messageSize: Long,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -27,7 +27,7 @@ data class MaxMessageSizeAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "max-message-size"
+        internal const val FIELD_NAME = "max-message-size"
 
         @JvmStatic
         fun of(messageSize: Long): MaxMessageSizeAttribute {

@@ -15,7 +15,7 @@ data class SdpTimeZones internal constructor(
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append(fieldPart)
+        append(FIELD_PART)
         timeZones.forEachIndexed { index, timeZone ->
             if (index > 0) append(' ')
             timeZone.joinTo(this)
@@ -24,7 +24,7 @@ data class SdpTimeZones internal constructor(
     }
 
     companion object {
-        internal const val fieldPart = "z="
+        internal const val FIELD_PART = "z="
 
         @JvmStatic
         fun of(timeZones: List<SdpTimeZone>): SdpTimeZones {

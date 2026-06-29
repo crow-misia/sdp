@@ -18,7 +18,7 @@ import io.github.crow_misia.sdp.SdpParseException
 data class SctpPortAttribute internal constructor(
     var portNumber: Int,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -28,7 +28,7 @@ data class SctpPortAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "sctp-port"
+        internal const val FIELD_NAME = "sctp-port"
 
         @JvmStatic
         fun of(portNumber: Int): SctpPortAttribute {

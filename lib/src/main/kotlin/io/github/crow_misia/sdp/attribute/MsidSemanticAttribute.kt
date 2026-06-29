@@ -7,7 +7,7 @@ data class MsidSemanticAttribute internal constructor(
     var semantic: String,
     var token: String,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -21,7 +21,7 @@ data class MsidSemanticAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "msid-semantic"
+        internal const val FIELD_NAME = "msid-semantic"
 
         @JvmStatic @JvmOverloads
         fun of(semantic: String, token: String? = null): MsidSemanticAttribute {

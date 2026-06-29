@@ -9,7 +9,7 @@ data class SsrcAttribute internal constructor(
     var attribute: String,
     var ssrcValue: String,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -25,7 +25,7 @@ data class SsrcAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "ssrc"
+        internal const val FIELD_NAME = "ssrc"
 
         @JvmStatic @JvmOverloads
         fun of(id: Long, attribute: String, ssrcValue: String? = null): SsrcAttribute {

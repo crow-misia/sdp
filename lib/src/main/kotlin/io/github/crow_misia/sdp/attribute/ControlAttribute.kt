@@ -2,7 +2,7 @@ package io.github.crow_misia.sdp.attribute
 
 data class ControlAttribute internal constructor(
     override var value: String,
-) : BaseSdpAttribute(fieldName, value) {
+) : BaseSdpAttribute(FIELD_NAME, value) {
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder): StringBuilder {
@@ -13,7 +13,7 @@ data class ControlAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "control"
+        internal const val FIELD_NAME = "control"
 
         @JvmStatic
         fun of(value: String): ControlAttribute {

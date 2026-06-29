@@ -19,9 +19,9 @@ import io.github.crow_misia.sdp.SdpParseException
  */
 data class OrientAttribute internal constructor(
     override var value: String,
-) : BaseSdpAttribute(fieldName, value) {
+) : BaseSdpAttribute(FIELD_NAME, value) {
     companion object {
-        internal const val fieldName = "orient"
+        internal const val FIELD_NAME = "orient"
 
         @JvmStatic
         fun of(value: String): OrientAttribute {

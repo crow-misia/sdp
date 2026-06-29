@@ -13,7 +13,7 @@ data class SdpBandwidth internal constructor(
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append(fieldPart)
+        append(FIELD_PART)
         append(bwtype)
         append(':')
         append(bandwidth)
@@ -21,7 +21,7 @@ data class SdpBandwidth internal constructor(
     }
 
     companion object {
-        internal const val fieldPart = "b="
+        internal const val FIELD_PART = "b="
 
         @JvmStatic
         fun of(bwtype: String, bandwidth: Int): SdpBandwidth {

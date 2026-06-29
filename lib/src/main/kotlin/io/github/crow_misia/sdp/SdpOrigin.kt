@@ -19,7 +19,7 @@ data class SdpOrigin internal constructor(
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append(lineType)
+        append(LINE_TYPE)
         append(username)
         append(' ')
         append(sessId)
@@ -35,7 +35,7 @@ data class SdpOrigin internal constructor(
     }
 
     companion object {
-        internal const val lineType = "o="
+        internal const val LINE_TYPE = "o="
 
         @JvmStatic
         @JvmOverloads

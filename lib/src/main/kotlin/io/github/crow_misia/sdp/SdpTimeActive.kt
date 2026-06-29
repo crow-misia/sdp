@@ -15,7 +15,7 @@ data class SdpTimeActive internal constructor(
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append(fieldPart)
+        append(FIELD_PART)
         append(startTime)
         append(' ')
         append(stopTime)
@@ -24,7 +24,7 @@ data class SdpTimeActive internal constructor(
     }
 
     companion object {
-        internal const val fieldPart = "t="
+        internal const val FIELD_PART = "t="
 
         @JvmStatic
         @JvmOverloads

@@ -10,7 +10,7 @@ data class SimulcastAttribute internal constructor(
     var dir2: StreamDirection,
     var list2: String,
 ) : SdpAttribute() {
-    override val field = fieldName
+    override val field = FIELD_NAME
 
     override fun toString() = super.toString()
 
@@ -28,7 +28,7 @@ data class SimulcastAttribute internal constructor(
     }
 
     companion object {
-        internal const val fieldName = "simulcast"
+        internal const val FIELD_NAME = "simulcast"
 
         @JvmStatic
         @JvmOverloads

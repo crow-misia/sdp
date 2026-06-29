@@ -12,11 +12,11 @@ package io.github.crow_misia.sdp.attribute
  */
 data class IcePwdAttribute internal constructor(
     override var value: String,
-) : BaseSdpAttribute(fieldName, value) {
+) : BaseSdpAttribute(FIELD_NAME, value) {
     override fun toString() = super.toString()
 
     companion object {
-        internal const val fieldName = "ice-pwd"
+        internal const val FIELD_NAME = "ice-pwd"
 
         @JvmStatic
         fun of(value: String): IcePwdAttribute {

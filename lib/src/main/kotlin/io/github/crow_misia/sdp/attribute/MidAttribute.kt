@@ -2,11 +2,11 @@ package io.github.crow_misia.sdp.attribute
 
 data class MidAttribute internal constructor(
     override var value: String,
-) : BaseSdpAttribute(fieldName, value) {
+) : BaseSdpAttribute(FIELD_NAME, value) {
     override fun toString() = super.toString()
 
     companion object {
-        internal const val fieldName = "mid"
+        internal const val FIELD_NAME = "mid"
 
         @JvmStatic
         fun of(value: String): MidAttribute {

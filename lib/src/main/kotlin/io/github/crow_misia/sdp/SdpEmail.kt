@@ -12,13 +12,13 @@ data class SdpEmail internal constructor(
     override fun toString() = super.toString()
 
     override fun joinTo(buffer: StringBuilder) = buffer.apply {
-        append(fieldPart)
+        append(FIELD_PART)
         append(address)
         appendSdpLineSeparator()
     }
 
     companion object {
-        internal const val fieldPart = "e="
+        internal const val FIELD_PART = "e="
 
         @JvmStatic
         fun of(address: String): SdpEmail {
